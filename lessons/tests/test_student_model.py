@@ -6,7 +6,7 @@ import uuid
 
 class StudentModelTest(TestCase):
     def setUp(self):
-        self.user=Student.objects.create_user(
+        self.user=Student.objects.create(
             first_name='John',
             last_name='Doe',
             email='johndoe@example.com',
@@ -15,7 +15,7 @@ class StudentModelTest(TestCase):
             
         )
     def _create_second_user(self):
-        self.user=Student.objects.create_user(
+        self.user=Student.objects.create(
             first_name='Jane',
             last_name='Doe',
             email='janedoe@example.com',
