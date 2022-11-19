@@ -100,8 +100,9 @@ class StudentModelTest(TestCase):
     
     def test_uniqueness_of_id(self):
         second_user=self._create_second_user()
-        self.user.id==second_user.id
+        self.user.id=second_user.id
         self._assert_student_user_is_invalid()
+        
     
     
         
