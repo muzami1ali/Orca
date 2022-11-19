@@ -12,6 +12,7 @@ class Student(AbstractUser):
         default=uuid.uuid4,
         editable=False
     )
+
     
     
     
