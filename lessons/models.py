@@ -13,11 +13,3 @@ class Student(AbstractBaseUser):
         editable=False
     )
     USERNAME_FIELD='id'
-
-    
-    
-    
-    
-
-
-
