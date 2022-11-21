@@ -17,7 +17,7 @@ class CustomUserManager(BaseUserManager):
           extra_fields.setdefault('is_superuser',False)
           return self._create_user(email,first_name,last_name,id,password,**extra_fields)
       
-      def create_superuser(self, email, first_name, last_name, id, password=None, **extra_fields):
+      def create_superuser(self, email, first_name=None, last_name=None, id=None, password=None, **extra_fields):
           extra_fields.setdefault('is_staff', True)
           extra_fields.setdefault('is_superuser', True)
 
@@ -32,7 +32,7 @@ class CustomUserManager(BaseUserManager):
 #Student model
 class Student(AbstractUser):
    
-    username=None
+    username=''
     first_name=models.CharField(max_length=50,blank=False)
     last_name=models.CharField(max_length=50,blank=False)
     email=models.EmailField(unique=True, blank=False)
