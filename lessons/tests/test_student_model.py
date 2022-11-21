@@ -6,11 +6,11 @@ import uuid
 
 class StudentModelTest(TestCase):
     def setUp(self):
-        self.user=Student.objects.create(
+        self.user=Student.objects.create_user( 
+            email='johndoe@example.com', 
+            id=uuid.uuid4(),
             first_name='John',
             last_name='Doe',
-            email='johndoe@example.com',
-            id=uuid.uuid4(),
             password='Password123'
             
         )
@@ -117,11 +117,12 @@ class StudentModelTest(TestCase):
    
             
     def _create_second_user(self):
-        self.user=Student.objects.create(
-            first_name='Jane',
-            last_name='Doe',
+        self.user=Student.objects.create_user(
             email='janedoe@example.com',
             id=uuid.uuid4(),
+            first_name='Jane',
+            last_name='Doe',
+            
             password ='Password123'
         )
         return self.user

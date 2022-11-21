@@ -20,6 +20,7 @@ class SignUpForms(forms.ModelForm):
         )
     password_confirmation=forms.CharField(label="Password confirmation",widget=forms.PasswordInput())
     
+
     
     
     def clean(self):
