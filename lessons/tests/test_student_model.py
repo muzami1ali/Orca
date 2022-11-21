@@ -26,13 +26,13 @@ class StudentModelTest(TestCase):
     
     def _assert_student_user_is_valid(self):
         try:
-            self.user.full_clean()
+            return self.user.full_clean()
         except(ValidationError):
-            self.fail("Test user should be valid")
+            return self.fail("Test user should be valid")
             
     def _assert_student_user_is_invalid(self):
         with self.assertRaises(ValidationError):
-            self.user.full_clean()
+            return self.user.full_clean()
     
     def test_valid_student_user(self):
         self._assert_student_user_is_valid()
