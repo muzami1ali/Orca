@@ -6,7 +6,8 @@ import uuid
 
 class StudentModelTest(TestCase):
     def setUp(self):
-        self.user=Student.objects.create(
+        self.user=Student.objects.create_user(
+            username='@johndoe',
             first_name='John',
             last_name='Doe',
             email='johndoe@example.com',
@@ -15,14 +16,15 @@ class StudentModelTest(TestCase):
             
         )
     def _create_second_user(self):
-        self.user=Student.objects.create(
+        user=Student.objects.create_user(
+            username='@janedoe',
             first_name='Jane',
             last_name='Doe',
             email='janedoe@example.com',
             id=uuid.uuid4(),
             password ='Password123'
         )
-        return self.user
+        return user
     
     def _assert_student_user_is_valid(self):
         try:
