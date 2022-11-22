@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 import uuid
-#from datetime import timedelta
 from django.core.validators import MinValueValidator, RegexValidator
 
 
