@@ -35,7 +35,7 @@ class LogInViewTestCase(TestCase,LogInTester):
         self.assertEqual(len(messages_list), 0)
 
     def test_unsuccesful_log_in(self):
-        form_input = { 'username': '@johndoe', 'password': 'WrongPassword123' }
+        form_input = { 'first_name': '@johndoe', 'password': 'WrongPassword123' }
         response = self.client.post(self.url, form_input)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'log_in.html')
@@ -47,7 +47,7 @@ class LogInViewTestCase(TestCase,LogInTester):
         self.assertEqual(len(messages_list), 1)
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
-        def test_log_in_with_blank_username(self):
+    def test_log_in_with_blank_username(self):
         form_input = { 'username': '', 'password': 'Password123' }
         response = self.client.post(self.url, form_input)
         self.assertEqual(response.status_code, 200)
@@ -61,7 +61,7 @@ class LogInViewTestCase(TestCase,LogInTester):
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
     def test_log_in_with_blank_password(self):
-        form_input = { 'username': '@johndoe', 'password': '' }
+        form_input = { 'first_name': '@johndoe', 'password': '' }
         response = self.client.post(self.url, form_input)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'log_in.html')
@@ -74,7 +74,7 @@ class LogInViewTestCase(TestCase,LogInTester):
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
     def test_succesful_log_in(self):
-        form_input = { 'username': '@johndoe', 'password': 'Password123' }
+        form_input = { 'first_name': '@johndoe', 'password': 'Password123' }
         response = self.client.post(self.url, form_input, follow=True)
         self.assertTrue(self._is_logged_in())
         response_url = reverse('feed')

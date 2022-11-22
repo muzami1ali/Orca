@@ -14,10 +14,5 @@ class Student(AbstractBaseUser):
     )
     USERNAME_FIELD='id'
 
-    
-    
-    
-    
-
-
-
+#class LessonRequest(AbstractBaseUser):
+#    number_of_lessons = models.IntegerField()

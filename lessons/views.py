@@ -16,12 +16,7 @@ def log_in(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('booking')
-        messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
+                #return redirect('booking')
+        #messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
     form = LogInForm()
     return render(request, 'log_in.html', {'form': form})
-
-    #return render(request,'log_in.html')
-
-def booking(request):
-    return render(request,'booking.html')
