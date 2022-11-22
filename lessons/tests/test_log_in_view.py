@@ -19,8 +19,7 @@ class LogInViewTestCase(TestCase,LogInTester):
             last_name='Doe',
             email='johndoe@example.com',
             id=uuid.uuid4(),
-            password='Password123',
-            is_active = True
+            password='Password123'
         )
 
     def test_log_in_url(self):
