@@ -9,7 +9,7 @@ import uuid
 #Student model
 class Student(AbstractUser):
     username= models.CharField(
-        default='@nu11',
+        default='',
         max_length=30,
         unique=True,
         validators=[RegexValidator(
