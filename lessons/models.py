@@ -31,8 +31,6 @@ class Student(AbstractUser):
 
     
     
-    
-    
 
 
 
