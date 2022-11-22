@@ -1,10 +1,7 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
-from random import random
 from django import forms
 from .models import Student
 from django.core.validators import RegexValidator
-import uuid
+
 
 
 class SignUpForms(forms.ModelForm):
@@ -12,6 +9,7 @@ class SignUpForms(forms.ModelForm):
         model=Student
         fields=['first_name','last_name','email']
     username=forms.HiddenInput()
+    
 
     
     new_password=forms.CharField(
@@ -39,7 +37,7 @@ class SignUpForms(forms.ModelForm):
     
     def save(self):
           super().save(commit=False)
-        
+          
           student=Student.objects.create_user(
                 self.cleaned_data.get('username'),
                 email=self.cleaned_data.get('email'),
