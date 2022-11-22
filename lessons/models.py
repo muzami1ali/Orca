@@ -31,6 +31,10 @@ class Student(AbstractUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
+
+#class LessonRequest(AbstractBaseUser):
+#    number_of_lessons = models.IntegerField()
+
 class Lesson(models.Model):
     lesson_name = models.CharField(
             # look into 'choices' field option during refactor
