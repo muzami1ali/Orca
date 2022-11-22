@@ -10,7 +10,6 @@ class SignUpFormTestCase(TestCase):
         self.form_input={
             'first_name':'John',
             'last_name':'Doe',
-            'username':'@johndoe',
             'email':'johndoe@example.com',
             'new_password':'Password123',
             'password_confirmation':'Password123'
@@ -28,7 +27,6 @@ class SignUpFormTestCase(TestCase):
         form=SignUpForms()
         self.assertIn("first_name",form.fields)
         self.assertIn("last_name",form.fields)
-        self.assertIn("username",form.fields)
         self.assertIn("email",form.fields)
         email_field=form.fields['email']
         self.assertTrue(isinstance(email_field,forms.EmailField))
@@ -40,11 +38,7 @@ class SignUpFormTestCase(TestCase):
         self.assertTrue(isinstance(password_confirmation_widget,forms.PasswordInput))
         
     
-    #Form users model Validation
-    def test_user_model_validation(self):
-        self.form_input['username']='badusername'
-        form=SignUpForms(data=self.form_input)
-        self.assertFalse(form.is_valid())
+    
     #New password has correct format
     def test_password_must_contain_uppercase_character(self):
         self.form_input['new_password']='password123'
@@ -79,7 +73,7 @@ class SignUpFormTestCase(TestCase):
         form.save()
         after_count=Student.objects.count()
         self.assertEqual(after_count,before_count+1)
-        user=Student.objects.get(username='@johndoe')
+        user=Student.objects.get(email='johndoe@example.com')
         self.assertEqual(user.first_name,'John')
         self.assertEqual(user.last_name,'Doe')
         self.assertEqual(user.email,'johndoe@example.com')

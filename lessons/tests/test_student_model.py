@@ -3,25 +3,32 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 from lessons.models import Student
 import uuid
+    # username=models.BigAutoField(unique=True,editable=False,primary_key=True)
+    # first_name=models.CharField(max_length=50,blank=False)
+    # last_name=models.CharField(max_length=50,blank=False)
+    # email=models.EmailField(unique=True, blank=False)
+    # USERNAME_FIELD='email'
+    # REQUIRED_FIELDS=[]
+    # is_staff = models.BooleanField(default=False)
+    # is_superuser = models.BooleanField(default=False)
+
 
 class StudentModelTest(TestCase):
     def setUp(self):
         self.user=Student.objects.create_user(
-            username='@johndoe',
+            username='1',
             first_name='John',
             last_name='Doe',
             email='johndoe@example.com',
-            id=uuid.uuid4(),
             password='Password123'
             
         )
     def _create_second_user(self):
         user=Student.objects.create_user(
-            username='@janedoe',
+            username='2',
             first_name='Jane',
             last_name='Doe',
             email='janedoe@example.com',
-            id=uuid.uuid4(),
             password ='Password123'
         )
         return user
@@ -95,13 +102,4 @@ class StudentModelTest(TestCase):
         self.user.email='johndoe@@example'
         self._assert_student_user_is_invalid()
      
-    """Unique id tests"""
-    def test_unique_id_is_not_blank(self):
-        self.user.id=''
-        self._assert_student_user_is_invalid()
-    
-    def test_uniqueness_of_id(self):
-        second_user=self._create_second_user()
-        self.user.id=second_user.id
-        self._assert_student_user_is_invalid()
-        
+   
