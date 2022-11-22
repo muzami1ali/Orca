@@ -13,12 +13,14 @@ class LogInViewTestCase(TestCase,LogInTester):
 
     def setUp(self):
         self.url = reverse('log_in')
-        self.user = Student.objects.create(
+        self.user = Student.objects.create_user(
+            username = "@johndoe",
             first_name='John',
             last_name='Doe',
             email='johndoe@example.com',
             id=uuid.uuid4(),
             password='Password123',
+            is_active = True
         )
 
     def test_log_in_url(self):
@@ -35,7 +37,7 @@ class LogInViewTestCase(TestCase,LogInTester):
         self.assertEqual(len(messages_list), 0)
 
     def test_unsuccesful_log_in(self):
-        form_input = { 'first_name': '@johndoe', 'password': 'WrongPassword123' }
+        form_input = { 'username': '@johndoe', 'password': 'WrongPassword123' }
         response = self.client.post(self.url, form_input)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'log_in.html')
@@ -61,7 +63,7 @@ class LogInViewTestCase(TestCase,LogInTester):
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
     def test_log_in_with_blank_password(self):
-        form_input = { 'first_name': '@johndoe', 'password': '' }
+        form_input = { 'username': '@johndoe', 'password': '' }
         response = self.client.post(self.url, form_input)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'log_in.html')
@@ -74,11 +76,11 @@ class LogInViewTestCase(TestCase,LogInTester):
         self.assertEqual(messages_list[0].level, messages.ERROR)
 
     def test_succesful_log_in(self):
-        form_input = { 'first_name': '@johndoe', 'password': 'Password123' }
+        form_input = { 'username': '@johndoe', 'password': 'Password123' }
         response = self.client.post(self.url, form_input, follow=True)
         self.assertTrue(self._is_logged_in())
-        response_url = reverse('feed')
+        response_url = reverse('booking')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
-        self.assertTemplateUsed(response, 'feed.html')
+        self.assertTemplateUsed(response, 'booking.html')
         messages_list = list(response.context['messages'])
         self.assertEqual(len(messages_list), 0)
