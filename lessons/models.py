@@ -3,10 +3,13 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 import uuid
 
+#Custom UserManager
+
+
 #Student model
 class Student(AbstractUser):
     username= models.CharField(
-        default='@nu11',
+        default='',
         max_length=30,
         unique=True,
         validators=[RegexValidator(

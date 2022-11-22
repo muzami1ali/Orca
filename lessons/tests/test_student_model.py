@@ -105,8 +105,3 @@ class StudentModelTest(TestCase):
         self.user.id=second_user.id
         self._assert_student_user_is_invalid()
         
-    
-    
-        
-   
-            
