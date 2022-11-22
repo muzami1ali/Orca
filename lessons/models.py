@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 import uuid
+from django.core.validators import MinValueValidator, RegexValidator
+
 
 #Custom UserManager
 
@@ -29,5 +31,24 @@ class Student(AbstractUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
+
 #class LessonRequest(AbstractBaseUser):
 #    number_of_lessons = models.IntegerField()
+
+class Lesson(models.Model):
+    lesson_name = models.CharField(
+            # look into 'choices' field option during refactor
+            max_length=50,
+            validators = [RegexValidator(r'^[a-zA-Z ]+$')]
+        )
+    duration = models.PositiveSmallIntegerField(
+        default = 30,
+        validators = [
+            MinValueValidator(30, message="Minimum value of 30 minutes not set.")
+        ])
+    date = models.DateField(auto_now=False, auto_now_add=False)
+    price = models.PositiveSmallIntegerField(
+        default = 30,
+        validators = [
+            MinValueValidator(1, message="Price field must be set to a value greater than zero.")
+        ])

@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from lessons.forms import LogInForm
 from lessons.models import Student
-from .helpers import LogInTester
+from lessons.tests.helpers import LogInTester
 import uuid
 
 

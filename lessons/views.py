@@ -25,7 +25,9 @@ def log_in(request):
     form = LogInForm()
     return render(request, 'log_in.html', {'form': form})
 
-
+def log_out(request):
+    logout(request)
+    return redirect('home')
 
 def sign_up(request):
     context={}
