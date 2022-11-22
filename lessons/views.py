@@ -9,13 +9,13 @@ def home(request):
 
     
 def sign_up(request):
-    form =SignUpForms()
-    if request.method == 'POST':
-        form = SignUpForms(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
+    context={}
+    if request.method =='POST':
+        context['form']= SignUpForms(request.POST)
+        if context['form'].is_valid():
+            user=context['form'].save()
+            login=(request,user)
             return redirect('sign_up')
-    return render(request, 'sign_up.html', {'form': form})
-
-
+    else:
+        context['form'] =SignUpForms()
+    return render(request,'sign_up.html',context)

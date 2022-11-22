@@ -6,15 +6,35 @@ import uuid
 
 class StudentModelTest(TestCase):
     def setUp(self):
-        self.user=Student.objects.create_user( 
-            email='johndoe@example.com', 
-            id=uuid.uuid4(),
+        self.user=Student.objects.create_user(
+            username='@johndoe',
             first_name='John',
             last_name='Doe',
+            email='johndoe@example.com',
+            id=uuid.uuid4(),
             password='Password123'
             
         )
-
+    def _create_second_user(self):
+        user=Student.objects.create_user(
+            username='@janedoe',
+            first_name='Jane',
+            last_name='Doe',
+            email='janedoe@example.com',
+            id=uuid.uuid4(),
+            password ='Password123'
+        )
+        return user
+    
+    def _assert_student_user_is_valid(self):
+        try:
+            self.user.full_clean()
+        except(ValidationError):
+            self.fail("Test user should be valid")
+            
+    def _assert_student_user_is_invalid(self):
+        with self.assertRaises(ValidationError):
+            self.user.full_clean()
     
     def test_valid_student_user(self):
         self._assert_student_user_is_valid()
@@ -85,54 +105,3 @@ class StudentModelTest(TestCase):
         self.user.id=second_user.id
         self._assert_student_user_is_invalid()
         
-    
-    """Password tests"""
-    def test_password_must_not_be_blank(self):
-        self.user.password=''
-        self._assert_student_user_is_invalid
-    
-    def test_password_must_be_at_least_8_characters_long(self):
-        self.user.password='x'*7
-        self._assert_student_user_is_invalid
-    
-    def test_password_must_contain_at_least_1_capital_letter(self):
-        self.user.password='erroneous@password1'
-        self._assert_student_user_is_invalid
-    
-    def test_password_must_contain_at_least_1_symbol(self):
-        self.user.password='erroneouspassword1'
-        self._assert_student_user_is_invalid
-    
-    def test_password_must_contain_at_least_1_number(self):
-        self.user.password='erroneous#password'
-        self._assert_student_user_is_invalid
-    
-    
-    
-        
-    
-    
-        
-   
-   
-            
-    def _create_second_user(self):
-        self.user=Student.objects.create_user(
-            email='janedoe@example.com',
-            id=uuid.uuid4(),
-            first_name='Jane',
-            last_name='Doe',
-            
-            password ='Password123'
-        )
-        return self.user
-    
-    def _assert_student_user_is_valid(self):
-        try:
-             self.user.full_clean()
-        except(ValidationError):
-             self.fail("Test user should be valid")
-            
-    def _assert_student_user_is_invalid(self):
-        with self.assertRaises(ValidationError):
-                self.user.full_clean()
