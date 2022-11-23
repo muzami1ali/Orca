@@ -4,11 +4,12 @@ from django.core.validators import RegexValidator
 
 
 
+
 class SignUpForms(forms.ModelForm):
     class Meta:
         model=Student
-        fields=['first_name','last_name','email']
-    username=forms.HiddenInput()
+        fields=['username','first_name','last_name']
+
     
 
     
@@ -37,10 +38,8 @@ class SignUpForms(forms.ModelForm):
     
     def save(self):
           super().save(commit=False)
-          
           student=Student.objects.create_user(
                 self.cleaned_data.get('username'),
-                email=self.cleaned_data.get('email'),
                 first_name=self.cleaned_data.get('first_name'),
                 last_name=self.cleaned_data.get('last_name'),
                 password=self.cleaned_data.get('new_password'),
