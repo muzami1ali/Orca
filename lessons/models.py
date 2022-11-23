@@ -32,9 +32,6 @@ class Student(AbstractUser):
     is_superuser = models.BooleanField(default=False)
 
 
-#class LessonRequest(AbstractBaseUser):
-#    number_of_lessons = models.IntegerField()
-
 class Lesson(models.Model):
     lesson_name = models.CharField(
             # look into 'choices' field option during refactor
@@ -52,3 +49,8 @@ class Lesson(models.Model):
         validators = [
             MinValueValidator(1, message="Price field must be set to a value greater than zero.")
         ])
+
+class LessonRequest(models.Model):
+    student = models.ForeignKey(Student,on_delete = models.CASCADE)
+    lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
+    is_authorised = models.BooleanField(default = False)
