@@ -15,23 +15,11 @@
   color: black;
   border: 2px solid #000000;
   transition-duration: 0.2;
+  font-size: 25px;
 
 
 }
 .custom-button:hover {
   background: black;
   color: white
-}
-
-.cover-card {
-  background-color: rgba(245, 245, 245, 0.4);
-}
-
-.center {
-  position: absolute;
-  top:50%;
-  width: 100%;
-  padding: 20px;
-  text-align: center;
-  font-size: 18px;
 }
