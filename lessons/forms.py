@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
 from django import forms
-from .models import Student
+from .models import Student, Lesson
 from django.core.validators import RegexValidator
 import uuid
 
@@ -48,3 +48,15 @@ class SignUpForms(forms.ModelForm):
 class LogInForm(forms.Form):
     username = forms.CharField(label="Username")
     password = forms.CharField(label="Password", widget=forms.PasswordInput())
+
+# class LessonRequest(forms.ModelForm):
+#     class Meta:
+#         model = Lesson
+#         fields = ['date']
+
+class StudentLessonRequest(forms.Form):
+    class Meta:
+        model = Lesson
+        fields = ['term']
+        widgets = {'term': forms.ChoiceField()}
+        label = {'term': 'Select Term'}

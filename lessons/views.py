@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
-from .forms import SignUpForms,LogInForm
+from .forms import SignUpForms, LogInForm, StudentLessonRequest
 from django.contrib import messages
 
 def home(request):
@@ -40,3 +40,8 @@ def sign_up(request):
     else:
         context['form'] =SignUpForms()
     return render(request,'sign_up.html',context)
+
+def request_lessons(request):
+    context = {}
+    context['form'] = StudentLessonRequest()
+    return render(request, 'student_request_lessons.html', context)

@@ -1,4 +1,7 @@
-'''Unit tests for the request lessons model'''
+''' Unit tests for the request lessons model'''
+''' @author Dean Whitbread'''
+''' @version 22-11-2022'''
+
 from django.test import TestCase
 from lessons.models import Lesson
 from django.core.exceptions import ValidationError
