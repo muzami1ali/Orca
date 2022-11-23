@@ -37,18 +37,25 @@ class Student(AbstractUser):
 
 class Lesson(models.Model):
     lesson_name = models.CharField(
-            # look into 'choices' field option during refactor
             max_length=50,
             validators = [RegexValidator(r'^[a-zA-Z ]+$')]
         )
     duration = models.PositiveSmallIntegerField(
         default = 30,
-        validators = [
-            MinValueValidator(30, message="Minimum value of 30 minutes not set.")
-        ])
+        validators = [MinValueValidator(30, message="Minimum value of 30 minutes not set.")]
+        )
     date = models.DateField(auto_now=False, auto_now_add=False)
     price = models.PositiveSmallIntegerField(
         default = 30,
-        validators = [
-            MinValueValidator(1, message="Price field must be set to a value greater than zero.")
-        ])
+        validators = [MinValueValidator(1, message="Price field must be set to a value greater than zero.")]
+        )
+
+    TERM_PERIOD_CHOICES =[
+        ("TERM1", "Term 1"),
+        ("TERM2", "Term 2"),
+        ("TERM3", "Term 3"),
+        ("TERM4", "Term 4"),
+        ("TERM5", "Term 5"),
+        ("TERM6", "Term 6")
+    ]
+    term_period = models.CharField(max_length = 6, choices = TERM_PERIOD_CHOICES, default = "TERM1")

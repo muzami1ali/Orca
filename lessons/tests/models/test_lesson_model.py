@@ -11,7 +11,8 @@ class LessonModelTestCase(TestCase):
             lesson_name = "Piano Practice",
             duration = 30,
             date = "2022-11-22",
-            price = 50
+            price = 50,
+            term_period = "TERM1"
         )
 
     '''Test Cases'''
@@ -60,6 +61,21 @@ class LessonModelTestCase(TestCase):
 
     def test_price_is_positive(self):
         self._lesson_is_valid()
+
+    def test_term_period_is_valid(self):
+        self._lesson_is_valid()
+
+    def test_term_period_is_invalid(self):
+        self.lesson.term_period = "TERM7"
+        self._lesson_is_invalid()
+
+    def test_term_period_is_not_blank(self):
+        self.lesson.term_period = ""
+        self._lesson_is_invalid()
+
+    def test_term_period_cannot_contain_special_characters(self):
+        self.lesson.term_period = "T£RM!"
+        self._lesson_is_invalid()
 
     '''Functions for valid/invalid object'''
     def _lesson_is_valid(self):
