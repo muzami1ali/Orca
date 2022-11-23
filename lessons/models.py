@@ -32,9 +32,6 @@ class Student(AbstractUser):
     is_superuser = models.BooleanField(default=False)
 
 
-#class LessonRequest(AbstractBaseUser):
-#    number_of_lessons = models.IntegerField()
-
 class Lesson(models.Model):
     lesson_name = models.CharField(
             max_length=50,
@@ -59,3 +56,8 @@ class Lesson(models.Model):
         ("TERM6", "Term 6")
     ]
     term_period = models.CharField(max_length = 6, choices = TERM_PERIOD_CHOICES, default = "TERM1")
+
+class LessonRequest(models.Model):
+    student = models.ForeignKey(Student,on_delete = models.CASCADE)
+    lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
+    is_authorised = models.BooleanField(default = False)
