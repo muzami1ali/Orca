@@ -49,14 +49,8 @@ class LogInForm(forms.Form):
     username = forms.CharField(label="Username")
     password = forms.CharField(label="Password", widget=forms.PasswordInput())
 
-# class LessonRequest(forms.ModelForm):
-#     class Meta:
-#         model = Lesson
-#         fields = ['date']
-
-class StudentLessonRequest(forms.Form):
+class StudentLessonRequest(forms.ModelForm):
     class Meta:
         model = Lesson
-        fields = ['term']
-        widgets = {'term': forms.ChoiceField()}
-        label = {'term': 'Select Term'}
+        fields = ['term_period']
+        labels = {'term_period': 'Select Term'}
