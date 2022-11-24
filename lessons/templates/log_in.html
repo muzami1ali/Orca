@@ -1,7 +1,5 @@
-<html>
-<head>
-  <title>Orca</title>
-</head>
+{% extends 'base.html' %}
+{% block body%}
 <body>
   <h1>Log in please</h1>
   {%for message in messages %}
@@ -12,5 +10,4 @@
     {{ form.as_p}}
     <input type = "submit" value = "Log in">
   </form>
-</body>
-</html>
+    {% endblock%}
