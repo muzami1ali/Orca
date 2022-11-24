@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block body%}
 
-<div class="container">
+<div class="container vh-100">
   <div class="row h-100">
     <div class="col-12 my-auto">
       <h1>Sign up</h1>
@@ -9,7 +9,7 @@
         {% csrf_token %}
         {% load widget_tweaks %}
         {%for field in form %}
-          <div class="mb-3">
+          <div class="mb-3" >
             {{field.label_tag}}
             {% if form.is_bound %}
               {% if field.errors %}
@@ -28,7 +28,7 @@
             </div>
           </div>
         {% endfor %}
-        <input type="submit" value="Sign up" >
+        <input type="submit" value="Sign up" class = "btn btn-lg custom-button" >
       </form>
     </div>
   </div>
