@@ -2,7 +2,6 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from lessons.models import Student,Lesson, LessonRequest
-import uuid
 
 
 class LessonRequestModelTest(TestCase):
@@ -19,8 +18,6 @@ class LessonRequestModelTest(TestCase):
             username='@johndoe',
             first_name='John',
             last_name='Doe',
-            email='johndoe@example.com',
-            id=uuid.uuid4(),
             password='Password123'
         )
         student.save()
