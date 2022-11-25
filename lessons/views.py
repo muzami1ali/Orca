@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 from .forms import SignUpForms, LogInForm, StudentLessonRequest
 from django.contrib import messages
+from .models import Lesson
 
 def home(request):
     return render(request,'index.html')
@@ -42,6 +43,8 @@ def sign_up(request):
     return render(request,'sign_up.html',context)
 
 def request_lessons(request):
-    context = {}
-    context['form'] = StudentLessonRequest()
-    return render(request, 'student_request_lessons.html', context)
+    choice_form = StudentLessonRequest()
+    if request.method == 'GET':
+        term_lesson = Lesson.objects.filter(term_period=request)
+        return render(request, 'student_request_lessons.html', {'choice_form' : choice_form, 'term_lessons' : term_lesson})
+    return render(request, 'student_request_lessons.html', {'choice_form' : choice_form})
