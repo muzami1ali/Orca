@@ -8,9 +8,9 @@ from django.contrib.auth.hashers import check_password
 class SignUpFormTestCase(TestCase):
     def setUp(self):
         self.form_input={
+            'username':'johndoe@example.com',
             'first_name':'John',
             'last_name':'Doe',
-            'email':'johndoe@example.com',
             'new_password':'Password123',
             'password_confirmation':'Password123'
             
@@ -27,8 +27,8 @@ class SignUpFormTestCase(TestCase):
         form=SignUpForms()
         self.assertIn("first_name",form.fields)
         self.assertIn("last_name",form.fields)
-        self.assertIn("email",form.fields)
-        email_field=form.fields['email']
+        self.assertIn("username",form.fields)
+        email_field=form.fields['username']
         self.assertTrue(isinstance(email_field,forms.EmailField))
         self.assertIn("new_password",form.fields)
         new_password_widget=form.fields['new_password'].widget
@@ -73,10 +73,10 @@ class SignUpFormTestCase(TestCase):
         form.save()
         after_count=Student.objects.count()
         self.assertEqual(after_count,before_count+1)
-        user=Student.objects.get(email='johndoe@example.com')
+        user=Student.objects.get(username='johndoe@example.com')
         self.assertEqual(user.first_name,'John')
         self.assertEqual(user.last_name,'Doe')
-        self.assertEqual(user.email,'johndoe@example.com')
+        self.assertEqual(user.username,'johndoe@example.com')
         is_password_correct=check_password('Password123',user.password)
         self.assertTrue(is_password_correct)
       
