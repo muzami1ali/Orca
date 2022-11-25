@@ -14,49 +14,31 @@ class Command(BaseCommand):
         Faker.seed(20)
 
     def handle(self, *args, **options):
-        self.create_all_users()
+        self.seed_database()
 
-    def create_student_user(self, unique_id):
-        first_name=self.faker.first_name(),
-        last_name=self.faker.last_name(),
-        email = self.generate_email(first_name, last_name)
+    def seed_database(self):
+        try:
+            self.seed_user_accounts()
+            print('Database seeding complete.')
+        except IntegrityError:
+            print('An error occurred. Unseed the database and then try again.')
+
+    def seed_user_accounts(self):
+        # create three accounts (student, administrator, and director)
+        self.create_new_student('John', 'Doe')
+        print('Seeding John Doe student account...')
+
+        # generate 99 student accounts (100 in total with John Doe)
+        counter = 0
+        while counter < Command.STUDENT_COUNT:
+            print(f'Seeding student accounts...{counter}',  end='\r')
+            self.create_new_student(self.faker.first_name(), self.faker.last_name())
+            counter += 1
+
+    def create_new_student(self, f_name, l_name):
         Student.objects.create_user(
-            username=email,
-            first_name = first_name,
-            last_name = last_name,
-            email=email,
-            id=self.generate_id_number(unique_id),
+            username=f'{f_name}.{l_name}@example.org',
+            first_name = f_name,
+            last_name = l_name,
             password=Command.PASSWORD
         )
-
-    def generate_email(self, first_name, last_name):
-        email = f'{first_name}.{last_name}@example.org'
-        return email
-
-    def generate_id_number(self, unique_id):
-        unique_id += 1
-        return unique_id
-
-    def create_all_users(self):
-        # create three accounts
-        Student.objects.create_user(
-            username='john.doe@example.org',
-            first_name = 'John',
-            last_name = 'Doe',
-            email='john.doe@example.org',
-            id=1,
-            password=Command.PASSWORD
-        )
-
-        # generate 100 students
-        unique_id = 3
-        student_user_count = 0
-        while student_user_count < Command.STUDENT_COUNT:
-            print(f'Seeding student user {student_user_count}',  end='\r')
-            try:
-                self.create_student_user(unique_id)
-            except (IntegrityError):
-                continue
-            student_user_count += 1
-
-        print('User seeding complete')
