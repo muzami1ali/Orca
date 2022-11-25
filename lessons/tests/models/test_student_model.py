@@ -86,17 +86,17 @@ class StudentModelTest(TestCase):
     def test_user_must_contain_domain(self):
         self.user.username='johndoe@example'
         self._assert_student_user_is_invalid()
-        
+
     def test_user_must_not_contain_more_than_one_at(self):
         self.user.username='johndoe@@example'
         self._assert_student_user_is_invalid()
 
-    """Unique id tests"""
-    def test_unique_id_is_not_blank(self):
-        self.user.id=''
-        self._assert_student_user_is_invalid()
-
-    def test_uniqueness_of_id(self):
-        second_user=self._create_second_user()
-        self.user.id=second_user.id
-        self._assert_student_user_is_invalid()
+    # """Unique id tests"""
+    # def test_unique_id_is_not_blank(self):
+    #     self.user.id=''
+    #     self._assert_student_user_is_invalid()
+    #
+    # def test_uniqueness_of_id(self):
+    #     second_user=self._create_second_user()
+    #     self.user.id=second_user.id
+    #     self._assert_student_user_is_invalid()
