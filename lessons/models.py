@@ -1,19 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import RegexValidator
-import uuid
-from django.core.validators import MinValueValidator, RegexValidator
+from django.core.validators import RegexValidator, MinValueValidator
 
 
-#Custom UserManager
-
-
-#Student model
 class Student(AbstractUser):
-    username = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-
+    username=models.EmailField(unique=True,verbose_name='Email')
+    first_name=models.CharField(max_length=50,blank=False)
+    last_name=models.CharField(max_length=50,blank=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
@@ -42,6 +35,7 @@ class Lesson(models.Model):
         ("TERM6", "Term 6")
     ]
     term_period = models.CharField(max_length = 6, choices = TERM_PERIOD_CHOICES, default = "TERM1")
+
 
 class LessonRequest(models.Model):
     student = models.ForeignKey(Student,on_delete = models.CASCADE)
