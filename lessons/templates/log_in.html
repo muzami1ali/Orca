@@ -1,13 +1,19 @@
 {% extends 'base.html' %}
 {% block body%}
-<body>
-  <h1>Log in please</h1>
-  {%for message in messages %}
-    <p><b> {{message}}</b></p>
-  {% endfor %}
-  <form action = "{%url 'log_in' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p}}
-    <input type = "submit" value = "Log in">
-  </form>
-    {% endblock%}
+<div class="container vh-100">
+  <div class="row h-100">
+    <div class="col-12 my-auto">
+      <h1>Log in please</h1>
+      {%for message in messages %}
+        <p><b> {{message}}</b></p>
+      {% endfor %}
+      <form action = "{%url 'log_in' %}" method="post">
+        {% csrf_token %}
+        {% include 'partials/bootsrap_form.html' with form=form %}
+        <input type = "submit" value = "Log in" class = "btn btn-lg custom-button" >
+      </form>
+    </div>
+  </div>
+</div>
+
+  {% endblock%}
