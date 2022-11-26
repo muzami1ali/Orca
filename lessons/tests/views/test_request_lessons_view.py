@@ -21,41 +21,43 @@ class RequestLessonsViewTestCase(TestCase):
             password = 'Password123'
         )
         self.form_data = {'TERM2':'Term 2'}
+        self._create_valid_term_2_lesson()
+
 
     ''' Unit test cases '''
     def test_webpage_redirects_when_not_logged_in(self):
         if not self._authenticate_student():
-            lesson_count_before = Lesson.objects.count()
             redirect_url = reverse('log_in')
             response = self.client.post(self.url, self.form_data, follow=True)
             self.assertRedirects(response, redirect_url,
                 status_code=302, target_status_code=200, fetch_redirect_response=True
             )
-            lesson_count_after = Lesson.objects.count()
-            self.assertEqual(lesson_count_before, lesson_count_after)
-        else:
-            self.fail('Account should be unauthenticated for this test.')
 
     def test_lessons_show_when_valid_term_selected(self):
         self._authenticate_student()
-        lessons_count_before = Lesson.objects.count()
-        response = self.client.get(self.url, self.form_data, follow=True)
-        lessons_count_after = Lesson.objects.count()
-        self.assertNotEqual(lessons_count_before, lessons_count_after)
+        lessons_count = 0
+        response = self.client.post(self.url, self.form_data, follow=True)
+        term_2_lessons = response.context['term_lessons']
+
+        lessons_count = len(term_2_lessons)
+
+        self.assertEqual(lessons_count, 1)
+        #lessons_count_after = Lesson.objects.count()
+        #self.assertNotEqual(lessons_count_before, lessons_count_after)
 
     def test_lessons_not_show_when_invalid_term_selected(self):
         self._authenticate_student()
-        lessons_count_before = Lesson.objects.count()
+        #lessons_count_before = Lesson.objects.count()
         self.form_data = {'TERM7': 'Term 7'}
-        response = self.client.get(self.url, self.form_data, follow=True)
-        lessons_count_after = Lesson.objects.count()
-        self.assertNotEqual(lessons_count_before, lessons_count_after)
+        response = self.client.post(self.url, self.form_data, follow=True)
+        #lessons_count_after = Lesson.objects.count()
+        #self.assertNotEqual(lessons_count_before, lessons_count_after)
 
     def test_visible_lessons_are_valid(self):
         self._authenticate_student()
-        lesson_count_before = Lesson.objects.count()
+        #lesson_count_before = Lesson.objects.count()
         response = self.client.get(self.url, self.form_data, follow=True)
-        lesson_count_after = Lesson.objects.count()
+        #lesson_count_after = Lesson.objects.count()
         if lesson_count_before != lesson_count_after:
             for lesson in Lesson.objects.all():
                 try:
@@ -69,3 +71,13 @@ class RequestLessonsViewTestCase(TestCase):
     def _authenticate_student(self):
         if not self.client.login(username=self.student.username, password='Password123'):
             self.fail('Account is unauthenticated.')
+
+    def _create_valid_term_2_lesson(self):
+        self.lesson = Lesson(
+            lesson_name = "Piano Practice",
+            duration = 30,
+            date = "2022-11-26",
+            price = 50,
+            term_period = "TERM2"
+        )
+        self.lesson.save()

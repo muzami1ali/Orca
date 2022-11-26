@@ -43,7 +43,8 @@ def sign_up(request):
 
 def request_lessons(request):
     choice_form = StudentLessonRequest()
-    if request.method == 'GET':
-        term_lesson = Lesson.objects.filter(term_period=request)
+    if request.method == 'POST':
+        term_lesson = Lesson.objects.filter(term_period=request.POST)
+        choice_form = StudentLessonRequest(request.POST)
         return render(request, 'student_request_lessons.html', {'choice_form' : choice_form, 'term_lessons' : term_lesson})
     return render(request, 'student_request_lessons.html', {'choice_form' : choice_form})
