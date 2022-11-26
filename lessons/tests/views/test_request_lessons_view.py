@@ -35,30 +35,20 @@ class RequestLessonsViewTestCase(TestCase):
 
     def test_lessons_show_when_valid_term_selected(self):
         self._authenticate_student()
-        lessons_count = 0
         response = self.client.post(self.url, self.form_data, follow=True)
-        term_2_lessons = response.context['term_lessons']
-
-        lessons_count = len(term_2_lessons)
-
-        self.assertEqual(lessons_count, 1)
-        #lessons_count_after = Lesson.objects.count()
-        #self.assertNotEqual(lessons_count_before, lessons_count_after)
+        #self.assertNotEqual(len(response.content), 0)
+        self.assertNotEqual(response.context['term_lessons'].count(), 0)
 
     def test_lessons_not_show_when_invalid_term_selected(self):
         self._authenticate_student()
-        #lessons_count_before = Lesson.objects.count()
         self.form_data = {'TERM7': 'Term 7'}
         response = self.client.post(self.url, self.form_data, follow=True)
-        #lessons_count_after = Lesson.objects.count()
-        #self.assertNotEqual(lessons_count_before, lessons_count_after)
+        self.assertEqual(response.context['term_lessons'].count(), 0)
 
     def test_visible_lessons_are_valid(self):
         self._authenticate_student()
-        #lesson_count_before = Lesson.objects.count()
         response = self.client.get(self.url, self.form_data, follow=True)
-        #lesson_count_after = Lesson.objects.count()
-        if lesson_count_before != lesson_count_after:
+        if len(response.content):
             for lesson in Lesson.objects.all():
                 try:
                     lesson.full_clean()
