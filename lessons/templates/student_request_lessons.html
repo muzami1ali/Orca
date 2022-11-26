@@ -28,7 +28,11 @@
             <td>Cost: </td><td>£{{ lesson.price }}</td>
           </tr>
           <tr>
-            <td><input type="button" value="Book"></td>
+            <td>
+              <a href="{{ lesson.id }}">
+                  <button type="button" formmethod="post">Book</button>
+              </a>
+            </td>
           </tr>
         </table>
       {% endfor %}

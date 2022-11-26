@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Student, Lesson
+from .models import Student, LessonRequest
 
 @admin.register(Student)
 class UserAdmin(admin.ModelAdmin):
@@ -7,8 +7,8 @@ class UserAdmin(admin.ModelAdmin):
        'id','username','first_name','last_name','is_active','password',
    ]
 
-@admin.register(Lesson)
-class LessonAdmin(admin.ModelAdmin):
+@admin.register(LessonRequest)
+class LessonRequestAdmin(admin.ModelAdmin):
     list_display = [
-        field.name for field in Lesson._meta.get_fields()
+        field.name for field in LessonRequest._meta.get_fields()
     ]

@@ -2,8 +2,9 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 from .forms import SignUpForms, LogInForm, StudentLessonRequest
 from django.contrib import messages
-from .models import Lesson
+from .models import Lesson, LessonRequest
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
 def home(request):
     return render(request,'index.html')
@@ -53,3 +54,20 @@ def request_lessons(request):
         choice_form = StudentLessonRequest(request.POST)
         return render(request, 'student_request_lessons.html', {'choice_form' : choice_form, 'term_lessons' : term_lesson, 'lesson_counter': lesson_counter})
     return render(request, 'student_request_lessons.html', {'choice_form' : choice_form, 'lesson_counter': lesson_counter})
+
+@login_required
+def book_lesson(request, LessonID):
+    if request.method == 'POST':
+        try:
+            book_lesson = LessonRequest(
+                student=request.user,
+                lesson=Lesson.objects.get(id=LessonID),
+                is_authorised = False
+            )
+            book_lesson.save()
+            Lesson.objects.get(id=LessonID).delete()
+        except Lesson.DoesNotExist:
+            pass
+        except Lesson.MultipleObjectsReturned:
+            pass
+    return redirect('request_lessons')
