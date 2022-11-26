@@ -19,7 +19,13 @@
               <td>Booking Authorised: {% if lesson_request.is_authorised %}Yes{% else %}No{% endif %}</td>
             </tr>
             <tr>
-              <td><input type="button" value="Edit"</td><td><input type="button" value="Delete"</td>
+              <td>
+                <a href="#">
+                  <button type="button">Edit</button>
+                </a>
+                <a href="#">
+                  <button type="button">Delete</button>
+                </a>
             </tr>
           {% endfor %}
         </table>

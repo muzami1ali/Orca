@@ -56,13 +56,10 @@ def request_lessons(request):
 
 @login_required
 def request_status(request):
-    requested_lessons = None
-    lesson_counter = 0
-    if request.method == 'GET':
-        if request.user.is_authenticated:
+    if request.user.is_authenticated:
+        if request.method == 'GET':
             request_status = LessonRequest.objects.filter(student=request.user)
             lesson_counter = LessonRequest.objects.filter(student=request.user).count()
             return render(request, 'request_status.html', {'request_status': request_status, 'lesson_counter': lesson_counter})
-        else:
-            return redirect('log_in')
-    return render(request, 'request_status.html', {'request_status': request_status, 'lesson_counter': lesson_counter})
+    else:
+        return redirect('log_in')
