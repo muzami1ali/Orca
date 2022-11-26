@@ -1,18 +1,11 @@
 from django import forms
-from .models import Student
+from .models import Student, Lesson
 from django.core.validators import RegexValidator
-
-
-
 
 class SignUpForms(forms.ModelForm):
     class Meta:
         model=Student
         fields=['username','first_name','last_name']
-
-
-
-
     new_password=forms.CharField(
         label="Password",
         widget=forms.PasswordInput(),
@@ -45,3 +38,9 @@ class SignUpForms(forms.ModelForm):
 class LogInForm(forms.Form):
     username = forms.CharField(label="Username")
     password = forms.CharField(label="Password", widget=forms.PasswordInput())
+
+class StudentLessonRequest(forms.ModelForm):
+    class Meta:
+        model = Lesson
+        fields = ['term_period']
+        labels = {'term_period': 'Select Term'}
