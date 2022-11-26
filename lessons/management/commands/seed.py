@@ -69,9 +69,9 @@ class Command(BaseCommand):
     def create_new_lesson(self):
         self.lesson = Lesson(
             lesson_name = Command.LESSON_NAMES[random.randrange(0, 3)],
-            duration = Command.DURATION[random.randrange(0, 2)],
+            duration = Command.DURATION[random.randrange(0, 3)],
             date = self.faker.date_between_dates(date_start=datetime(2022,9,1), date_end=datetime(2023,7,21)),
             price = 50,
-            term_period = Command.TERM_PERIOD[random.randrange(0, 5)]
+            term_period = Command.TERM_PERIOD[random.randrange(0, 6)]
         )
         self.lesson.save()
