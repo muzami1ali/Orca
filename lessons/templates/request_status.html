@@ -5,6 +5,26 @@
   </head>
   <body>
     <h1>Request Status</h1>
-
+      {% if lesson_counter > 0 %}
+      <p>Outstanding class requests: {{ lesson_counter }}</p>
+        <table class="request_status">
+          {% for lesson_request in request_status %}
+            <tr>
+              <td>Class name: {{ lesson_request.lesson.lesson_name }}</td>
+            </tr>
+            <tr>
+              <td>Date: {{ lesson_request.lesson.date }}</td>
+            </tr>
+            <tr>
+              <td>Booking Authorised: {% if lesson_request.is_authorised %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+              <td><input type="button" value="Edit"</td><td><input type="button" value="Delete"</td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% else %}
+      <p>No classes booked.</p>
+      {% endif %}
   </body>
 </html>

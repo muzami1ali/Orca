@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 from .forms import SignUpForms, LogInForm, StudentLessonRequest
 from django.contrib import messages
-from .models import Lesson
+from .models import Lesson, LessonRequest
 from django.contrib.auth.decorators import login_required
 
 def home(request):
@@ -54,5 +54,15 @@ def request_lessons(request):
         return render(request, 'student_request_lessons.html', {'choice_form' : choice_form, 'term_lessons' : term_lesson, 'lesson_counter': lesson_counter})
     return render(request, 'student_request_lessons.html', {'choice_form' : choice_form, 'lesson_counter': lesson_counter})
 
+@login_required
 def request_status(request):
-    return render(request, 'request_status.html')
+    requested_lessons = None
+    lesson_counter = 0
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            request_status = LessonRequest.objects.filter(student=request.user)
+            lesson_counter = LessonRequest.objects.filter(student=request.user).count()
+            return render(request, 'request_status.html', {'request_status': request_status, 'lesson_counter': lesson_counter})
+        else:
+            return redirect('log_in')
+    return render(request, 'request_status.html', {'request_status': request_status, 'lesson_counter': lesson_counter})
