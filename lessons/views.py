@@ -1,7 +1,9 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
-from .forms import SignUpForms,LogInForm
+from .forms import SignUpForms, LogInForm, StudentLessonRequest
 from django.contrib import messages
+from .models import Lesson
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render(request,'index.html')
@@ -39,3 +41,15 @@ def sign_up(request):
     else:
         context['form'] =SignUpForms()
     return render(request,'sign_up.html',context)
+
+
+@login_required
+def request_lessons(request):
+    choice_form = StudentLessonRequest()
+    lesson_counter = 0
+    if request.method == 'POST':
+        term_lesson = Lesson.objects.filter(term_period=request.POST['term_period'])
+        lesson_counter = Lesson.objects.filter(term_period=request.POST['term_period']).count()
+        choice_form = StudentLessonRequest(request.POST)
+        return render(request, 'student_request_lessons.html', {'choice_form' : choice_form, 'term_lessons' : term_lesson, 'lesson_counter': lesson_counter})
+    return render(request, 'student_request_lessons.html', {'choice_form' : choice_form, 'lesson_counter': lesson_counter})
