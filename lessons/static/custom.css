@@ -1,9 +1,12 @@
 #cover-image {
-  background : url('images/background.jpg') no-repeat center center fixed;
+  min-height: 100%;
+  background : url('images/background.jpg')100% no-repeat fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
-  background-size: cover;
+  background-size: 100%;
   -o-background-size: cover;
+
+
 }
 .p1{
   font-family: "Lucida Console", "Coursier New", monospace;
@@ -22,4 +25,15 @@
 .custom-button:hover {
   background: black;
   color: white
+}
+
+input[type=]
+
+#background-image{
+  min-height: 100%;
+  background-image: url('images/background.jpg');
+  background-size: cover;
+  background-repeat:no-repeat;
+  background-position: center;
+
 }
