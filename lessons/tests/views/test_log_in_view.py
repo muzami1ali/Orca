@@ -5,20 +5,16 @@ from django.urls import reverse
 from lessons.forms import LogInForm
 from lessons.models import Student
 from lessons.tests.helpers import LogInTester
-import uuid
 
 
 class LogInViewTestCase(TestCase,LogInTester):
     """Tests of the log in view."""
-
     def setUp(self):
         self.url = reverse('log_in')
         self.user = Student.objects.create_user(
             username = "@johndoe",
             first_name='John',
             last_name='Doe',
-            email='johndoe@example.com',
-            id=uuid.uuid4(),
             password='Password123'
         )
 
