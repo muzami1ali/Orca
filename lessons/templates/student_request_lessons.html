@@ -9,12 +9,31 @@
       {{ choice_form.as_p }}
       <input type="submit" value="Show Lessons">
     </form>
-    <table class="lessons">
+
+    {% if lesson_counter > 0%}
+    <h2>Total Classes Available: {{ lesson_counter }}</h2>
+    <table class="lesson-view">
       {% for lesson in term_lessons %}
-        <tr>
-          <td>{{ lesson }}</td>
-        </tr>
+        <table class="lesson-information">
+          <tr>
+            <td>Class: </td><td>{{ lesson.lesson_name }}</td>
+          </tr>
+          <tr>
+            <td>Date: </td><td>{{ lesson.date }}</td>
+          </tr>
+          <tr>
+            <td>Duration: </td><td>{{ lesson.duration }} minutes</td>
+          </tr>
+          <tr>
+            <td>Cost: </td><td>£{{ lesson.price }}</td>
+          </tr>
+          <tr>
+            <td><input type="button" value="Book"></td>
+          </tr>
+        </table>
       {% endfor %}
     </table>
+    {% endif %}
+
   </body>
 </html>
