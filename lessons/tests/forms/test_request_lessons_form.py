@@ -3,7 +3,7 @@
 ''' @version 22-11-2022'''
 
 from django.test import TestCase
-from lessons.forms import StudentLessonRequest
+from lessons.forms import LessonRequestForm
 from django.core.exceptions import ValidationError
 
 class StudentLessonRequestFormTestCase(TestCase):
@@ -25,9 +25,9 @@ class StudentLessonRequestFormTestCase(TestCase):
 
     '''Functions to verify form's validness'''
     def _form_is_valid(self):
-        self.form = StudentLessonRequest(data=self.form_data)
+        self.form = LessonRequestForm(data=self.form_data)
         self.assertTrue(self.form.is_valid())
 
     def _form_is_invalid(self):
-        self.form = StudentLessonRequest(data=self.form_data)
+        self.form = LessonRequestForm(data=self.form_data)
         self.assertFalse(self.form.is_valid())

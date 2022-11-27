@@ -39,7 +39,7 @@ class LogInForm(forms.Form):
     username = forms.CharField(label="Username")
     password = forms.CharField(label="Password", widget=forms.PasswordInput())
 
-class StudentLessonRequest(forms.ModelForm):
+class LessonRequestForm(forms.ModelForm):
     class Meta:
         model = Lesson
         fields = ['term_period']

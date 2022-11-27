@@ -28,7 +28,12 @@
             <td>Cost: </td><td>£{{ lesson.price }}</td>
           </tr>
           <tr>
-            <td><input type="button" value="Book"></td>
+            <td>
+                <form action="{% url 'book_lesson' lesson.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" value="Book">
+                </form>
+            </td>
           </tr>
         </table>
       {% endfor %}
