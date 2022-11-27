@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from lessons.models import Student
 from lessons.tests.helpers import LogInTester
-# import uuid
+import uuid
 
 class LogOutViewTestCase(TestCase, LogInTester):
 
@@ -13,8 +13,8 @@ class LogOutViewTestCase(TestCase, LogInTester):
             username = "@johndoe",
             first_name='John',
             last_name='Doe',
-            # email='johndoe@example.com',
-            # id=uuid.uuid4(),
+            email='johndoe@example.com',
+            id=uuid.uuid4(),
             password='Password123'
 
         )

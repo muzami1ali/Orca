@@ -5,7 +5,7 @@ from lessons.forms import LogInForm
 
 class LogInFormTestCase(TestCase):
     def setUp(self):
-        self.form_input = {'username': '@janedoe', 'password': 'Password123'}
+        self.form_input = {'username': 'johndoe@example.com', 'password': 'Password123'}
         #make sure this exists in the database?
 
     def test_form_contains_required_fields(self):

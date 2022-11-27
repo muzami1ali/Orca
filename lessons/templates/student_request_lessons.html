@@ -1,5 +1,5 @@
-{% extends 'base.html' %}
-{% block body%}
+{% extends 'base-content.html' %}
+{% block content%}
 
 
 
@@ -7,28 +7,27 @@
       <form action="{% url 'request_lessons' %}" method="post">
         {% csrf_token %}
         {{ choice_form.as_p }}
-        <input type="submit" value="Show Lessons">
+        <input type="submit" value="Show Lessons" class = "lessons" >
       </form>
 
       {% if lesson_counter > 0%}
       <h2>Total Classes Available: {{ lesson_counter }}</h2>
-      <table class="lesson-view">
+      <table class="lesson-view" >
         {% for lesson in term_lessons %}
-          <table class="lesson-information">
+          <table class="lesson-information" id = "lessons">
             <tr>
-              <td>Class: </td><td>{{ lesson.lesson_name }}</td>
+              <th>Class: </th>
+              <th>Date: </th>
+              <th>Duration: </th>
+              <th>Cost: </th>
             </tr>
             <tr>
-              <td>Date: </td><td>{{ lesson.date }}</td>
+              <td>{{ lesson.lesson_name }}</td>
+              <td>{{ lesson.date }}</td>
+              <td>{{ lesson.duration }} minutes</td>
+              <td>£{{ lesson.price }}</td>
             </tr>
-            <tr>
-              <td>Duration: </td><td>{{ lesson.duration }} minutes</td>
-            </tr>
-            <tr>
-              <td>Cost: </td><td>£{{ lesson.price }}</td>
-            </tr>
-            <tr>
-              <td><input type="button" value="Book"></td>
+              <td><input type="button" value="Book" class = "btn-xs custom-button"></td>
             </tr>
           </table>
         {% endfor %}
