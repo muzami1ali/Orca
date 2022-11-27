@@ -58,16 +58,15 @@ class CancelLessonViewTestCase(TestCase):
             redirect_url = reverse_with_next('request_status', self.url)
             self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
-    def test_cannot_cancel_unlisted_lesson(self):
+    def test_cannot_cancel_lesson_belonging_to_other_student(self):
         self.client.login(username=self.student.username, password='Password123')
+        self._create_other_lesson_request()
+        self.other_url = f'/booking/status/cancel/{self.other_lesson_request.id}/'
         with self.assertRaises(PermissionDenied):
-            response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id})
-            response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id}, follow=True)
-            redirect_url = reverse_with_next('request_status', self.url)
-            self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+            response = self.client.post(self.other_url)
 
     ''' Functions for test class '''
-    def _other_user(self):
+    def _create_other_user(self):
         self.other_student = Student.objects.create_user(
             username = 'jane.doe@example.org',
             first_name = 'Jane',
@@ -75,7 +74,7 @@ class CancelLessonViewTestCase(TestCase):
             password = 'Password123'
         )
 
-    def _other_lesson(self):
+    def _create_other_lesson(self):
         self.other_lesson = Lesson.objects.create(
             lesson_name = "Trumpet Training",
             duration = 90,
@@ -84,7 +83,9 @@ class CancelLessonViewTestCase(TestCase):
             term_period = "TERM5"
         )
 
-    def _other_lesson_request(self):
+    def _create_other_lesson_request(self):
+        self._create_other_user()
+        self._create_other_lesson()
         self.other_lesson_request = LessonRequest.objects.create(
             student_id = self.other_student.id,
             lesson_id = self.other_lesson.id,

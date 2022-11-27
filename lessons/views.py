@@ -6,6 +6,7 @@ from .models import Lesson, LessonRequest, Student
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db import IntegrityError
+from django.core.exceptions import PermissionDenied
 
 def home(request):
     return render(request,'index.html')
@@ -82,5 +83,18 @@ def request_status(request):
 def edit_lesson(request, LessonRequestID):
     pass
 
+@login_required
 def cancel_lesson(request, LessonRequestID):
+    if request.method == 'POST':
+        lesson_request_object = LessonRequest.objects.filter(id=LessonRequestID)
+        if lesson_request_object.exists():
+            if (LessonRequest.objects.get(id=LessonRequestID)).student_id == request.user.id:
+                try:
+                    LessonRequest.objects.get(id=LessonRequestID).delete()
+                except IntegrityError:
+                    pass
+            else:
+                raise PermissionDenied("Cannot cancel lesson booked by another student.")
+        else:
+            raise IntegrityError("Cannot cancel booking twice.")
     return redirect('request_status')
