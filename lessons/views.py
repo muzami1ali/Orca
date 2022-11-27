@@ -1,9 +1,11 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
-from .forms import SignUpForms, LogInForm, StudentLessonRequest
+from .forms import SignUpForms, LogInForm, LessonRequestForm
 from django.contrib import messages
-from .models import Lesson
+from .models import Lesson, LessonRequest, Student
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.db import IntegrityError
 
 def home(request):
     return render(request,'index.html')
@@ -43,13 +45,25 @@ def sign_up(request):
     return render(request,'sign_up.html',context)
 
 
-@login_required
+@login_required(login_url='log_in')
 def request_lessons(request):
-    choice_form = StudentLessonRequest()
+    choice_form = LessonRequestForm()
     lesson_counter = 0
     if request.method == 'POST':
         term_lesson = Lesson.objects.filter(term_period=request.POST['term_period'])
         lesson_counter = Lesson.objects.filter(term_period=request.POST['term_period']).count()
-        choice_form = StudentLessonRequest(request.POST)
-        return render(request, 'student_request_lessons.html', {'choice_form' : choice_form, 'term_lessons' : term_lesson, 'lesson_counter': lesson_counter})
-    return render(request, 'student_request_lessons.html', {'choice_form' : choice_form, 'lesson_counter': lesson_counter})
+        choice_form = LessonRequestForm(request.POST)
+        return render(request, 'request_lessons.html', {'choice_form' : choice_form, 'term_lessons' : term_lesson, 'lesson_counter': lesson_counter})
+    return render(request, 'request_lessons.html', {'choice_form' : choice_form, 'lesson_counter': lesson_counter})
+
+@login_required(login_url='log_in')
+def book_lesson(request, LessonID):
+    if request.method == 'POST':
+        if LessonRequest.objects.filter(student_id=request.user.id, lesson_id=LessonID).exists():
+            raise IntegrityError("Class cannot be booked twice")
+        else:
+            try:
+                LessonRequest.objects.create(student_id=request.user.id, lesson_id=LessonID)
+            except IntegrityError:
+                pass
+    return redirect('request_lessons')

@@ -36,6 +36,9 @@ class Lesson(models.Model):
     ]
     term_period = models.CharField(max_length = 6, choices = TERM_PERIOD_CHOICES, default = "TERM1")
 
+    def __str__(self):
+        return f'{self.lesson_name} - {self.date}'
+
 
 class LessonRequest(models.Model):
     student = models.ForeignKey(Student,on_delete = models.CASCADE)

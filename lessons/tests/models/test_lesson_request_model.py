@@ -15,14 +15,12 @@ class LessonRequestModelTest(TestCase):
         )
         lesson.save()
         student=Student.objects.create_user(
-            username='@johndoe',
-            first_name='John',
-            last_name='Doe',
-            email='johndoe@example.com',
-            id=uuid.uuid4(),
-            password='Password123'
+            username = 'john.doe@example.org',
+            first_name = 'John',
+            last_name = 'Doe',
+            password = 'Password123'            
         )
-        #student.save()
+        student.save()
         #lesson_request=LessonRequest(student = student, lesson = lesson, is_authorised = False)
         #lesson_request.save()
 
