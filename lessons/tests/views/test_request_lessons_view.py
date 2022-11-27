@@ -8,7 +8,6 @@ from django.test import TestCase
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from lessons.models import Student, Lesson
-from lessons.forms import StudentLessonRequest
 from lessons.tests.helpers import reverse_with_next
 
 class RequestLessonsViewTestCase(TestCase):

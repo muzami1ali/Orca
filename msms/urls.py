@@ -25,5 +25,6 @@ urlpatterns = [
     path('log_out/',views.log_out, name='log_out'),
     path('sign_up/',views.sign_up, name='sign_up'),
     path('booking/',views.booking, name='booking'),
-    path('request_lessons/', views.request_lessons, name='request_lessons'),
+    path('booking/request/', views.request_lessons, name='request_lessons'),
+    path('booking/request/<int:LessonID>', views.book_lesson, name='book_lesson')
 ]
