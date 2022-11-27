@@ -29,9 +29,10 @@
           </tr>
           <tr>
             <td>
-              <a href="{{ lesson.id }}">
-                  <button type="button" formmethod="post">Book</button>
-              </a>
+                <form action="{% url 'book_lesson' lesson.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" value="Book">
+                </form>
             </td>
           </tr>
         </table>

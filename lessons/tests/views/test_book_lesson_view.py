@@ -8,6 +8,7 @@ from django.urls import reverse
 from lessons.models import Student, Lesson, LessonRequest
 from lessons.tests.helpers import reverse_with_next
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 
 class BookLessonViewTestCase(TestCase):
 
@@ -18,14 +19,13 @@ class BookLessonViewTestCase(TestCase):
             last_name = 'Doe',
             password = 'Password123'
         )
-        self.lesson = Lesson(
+        self.lesson = Lesson.objects.create(
             lesson_name = "Piano Practice",
             duration = 30,
             date = "2022-11-26",
             price = 50,
             term_period = "TERM2"
         )
-        self.lesson.save()
         self.url = reverse('book_lesson', kwargs={'LessonID': self.lesson.id})
 
     ''' Test cases for the book lesson view - when a lesson gets booked. '''
@@ -39,30 +39,19 @@ class BookLessonViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'log_in.html')
 
-    def test_lesson_gets_booked(self):
+    def test_can_book_lesson(self):
         self.client.login(username=self.student.username, password='Password123')
         counter_before = LessonRequest.objects.count()
-        try:
-            response = self.client.post(self.url, data={'LessonID':self.lesson.id})
-        except Lesson.DoesNotExist:
-            self.fail('Lesson object does not exist in database.')
-        except Lesson.MultipleObjectsReturned:
-            self.fail('More than one object found in the database.')
-
+        response = self.client.post(self.url, data={'LessonID':self.lesson.id})
         counter_after = LessonRequest.objects.count()
         self.assertEqual(counter_before + 1, counter_after)
 
-    def test_lesson_is_removed_after_being_booked(self):
+    def test_cannot_book_the_same_lesson_twice(self):
         self.client.login(username=self.student.username, password='Password123')
-        counter_before = Lesson.objects.count()
-        try:
+        with self.assertRaises(IntegrityError):
             response = self.client.post(self.url, data={'LessonID':self.lesson.id})
-        except Lesson.DoesNotExist:
-            self.fail('Lesson object does not exist in database.')
-        except Lesson.MultipleObjectsReturned:
-            self.fail('More than one object found in the database.')
-
-        counter_after = Lesson.objects.count()
-        self.assertEqual(counter_before - 1, counter_after)
+            response = self.client.post(self.url, data={'LessonID':self.lesson.id}, follow=True)
+            redirect_url = reverse_with_next('request_lessons', self.url)
+            self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 
     ''' Functions for test class '''
