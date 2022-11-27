@@ -28,6 +28,6 @@ urlpatterns = [
     path('booking/request/', views.request_lessons, name='request_lessons'),
     path('booking/request/<int:LessonID>', views.book_lesson, name='book_lesson'),
     path('booking/status/', views.request_status, name='request_status'),
-    path('edit/<int:LessonID>/', views.edit_lesson, name='edit_lesson'),
-    path('booking/status/cancel/<int:LessonID>/', views.cancel_lesson, name='cancel_lesson'),
+    path('edit/<int:LessonRequestID>/', views.edit_lesson, name='edit_lesson'),
+    path('booking/status/cancel/<int:LessonRequestID>/', views.cancel_lesson, name='cancel_lesson'),
 ]

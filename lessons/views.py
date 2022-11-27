@@ -78,8 +78,9 @@ def request_status(request):
     else:
         return redirect('log_in')
 
-def edit_lesson(request):
+
+def edit_lesson(request, LessonRequestID):
     pass
 
-def cancel_lesson(request):
-    pass
+def cancel_lesson(request, LessonRequestID):
+    return redirect('request_status')

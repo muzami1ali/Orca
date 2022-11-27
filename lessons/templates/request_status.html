@@ -20,12 +20,17 @@
             </tr>
             <tr>
               <td>
-                <a href="#">
-                  <button type="button">Edit</button>
-                </a>
-                <a href="#">
-                  <button type="button">Delete</button>
-                </a>
+                <form action="{% url 'edit_lesson' lesson_request.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" value="Edit">
+                </form>
+              </td>
+              <td>
+                <form action="{% url 'cancel_lesson' lesson_request.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" value="Cancel">
+                </form>
+              </td>
             </tr>
           {% endfor %}
         </table>
