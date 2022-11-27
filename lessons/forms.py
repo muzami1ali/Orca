@@ -44,3 +44,6 @@ class StudentLessonRequest(forms.ModelForm):
         model = Lesson
         fields = ['term_period']
         labels = {'term_period': 'Select Term'}
+
+class EditBookedLesson(forms.ModelForm):
+    pass

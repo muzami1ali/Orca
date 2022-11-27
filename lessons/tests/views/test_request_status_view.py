@@ -18,23 +18,24 @@ class RequestStatusTestCase(TestCase):
             last_name = 'Doe',
             password = 'Password123'
         )
-        self.lesson_1 = Lesson(
+        self.lesson_1 = Lesson.objects.create(
             lesson_name = "Piano Practice",
             duration = 30,
             date = "2022-11-26",
             price = 50,
             term_period = "TERM2"
         )
-        self.lesson_1.save()
-        self.lesson_requested = LessonRequest(
+        self.lesson_requested = LessonRequest.objects.create(
             student = self.student,
             lesson = self.lesson_1,
             is_authorised = False
         )
-        self.lesson_requested.save()
         self.form_data = { "student": self.student.username}
 
     ''' Test cases for the student request status view. '''
+    def test_url_is_valid(self):
+        self.assertEqual(self.url, f'/booking/status/')
+
     def test_unauthenticated_user_redirected_to_login(self):
         redirect_url = reverse_with_next('log_in', self.url)
         response = self.client.get(self.url, follow=True)
@@ -52,37 +53,6 @@ class RequestStatusTestCase(TestCase):
         response = self.client.get(self.url, data=self.form_data)
         self.assertEqual(response.context['lesson_counter'], 0)
 
-    def test_cannot_edit_student_email_in_requested_lesson(self):
-        self.client.login(username=self.student.username, password='Password123')
-        response = self.client.get(self.url, data=self.form_data)
-        for lesson_request in response.context['request_status']:
-            self.assertTrue(lesson_request.is_authorised == False)
-            lesson_request.student.username = 'Jane.Doe@example.org'
-            self.assertFalse(lesson_request.save())
-
-    def test_can_edit_student_details_in_requested_lesson(self):
-        self.client.login(username=self.student.username, password='Password123')
-        response = self.client.get(self.url)
-        for lesson_request in response.context['request_status']:
-            self.assertTrue(lesson_request.is_authorised == False)
-            lesson_request.student.first_name = 'Jane'
-            lesson_request.student.last_name = 'Doe'
-            self.assertTrue(lesson_request.save())
-
-    def test_cannot_edit_lesson_details_in_requested_lesson(self):
-        self.client.login(username=self.student.username, password='Password123')
-        response = self.client.get(self.url, data=self.form_data)
-        for lesson_request in response.context['request_status']:
-            self.assertTrue(lesson_request.is_authorised == False)
-            lesson_request.lesson.lesson_name = 'WRONG LESSON NAME'
-            self.assertFalse(lesson_request.save())
-
-    def test_can_delete_lesson_request(self):
-        self.client.login(username=self.student.username, password='Password123')
-        response = self.client.get(self.url, data=self.form_data)
-        for lesson_request in response.context['request_status']:
-            self.assertTrue(lesson_request.is_authorised == False)
-            self.assertTrue(lesson_request.delete())
 
     ''' Functions for test class '''
     def _create_other_user(self):
@@ -92,4 +62,3 @@ class RequestStatusTestCase(TestCase):
             last_name = 'Doe',
             password = 'Password123'
         )
-        self.other_user.save()

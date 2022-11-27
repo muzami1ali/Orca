@@ -63,3 +63,9 @@ def request_status(request):
             return render(request, 'request_status.html', {'request_status': request_status, 'lesson_counter': lesson_counter})
     else:
         return redirect('log_in')
+
+def edit_lesson(self):
+    pass
+
+def cancel_lesson(self):
+    pass
