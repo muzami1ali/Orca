@@ -1,7 +1,9 @@
 html,body{
   min-height: 100%;
 }
-body{height:100vh}
+body{height:100vh;
+      padding-top: 65px;
+    }
 
 
 #cover-image {
@@ -11,9 +13,13 @@ body{height:100vh}
   -moz-background-size: cover;
   background-size: 100%;
   -o-background-size: cover;
-
-
 }
+#nav-icon {
+  height:50px;
+}
+
+
+
 #lessons{
   font-family: "Lucida Console", "Coursier New", monospace;
   border-collapse: collapse;
@@ -60,18 +66,13 @@ table.lesson-information{
 }
 .lessons{
   align-items: center;
-  background-color: green;
+  background-color: #fff;
   color: black;
   border: 2px solid #000000;
-  transition-duration: 0.2;
-  font-size: 45px;
+  font-size: 15px;
+  box-shadow: transparent 0 0 0 3px;
 
   }
-
-
-
-
-
 
 
 input[type=]
