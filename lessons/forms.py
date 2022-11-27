@@ -44,3 +44,10 @@ class LessonRequestForm(forms.ModelForm):
         model = Lesson
         fields = ['term_period']
         labels = {'term_period': 'Select Term'}
+
+class BankTransferForm(forms.Form):
+    invoice = forms.CharField(label ="invoice# ")
+    first_name = forms.CharField(label ="First Name ")
+    last_name = forms.CharField(label = "Last Name ")
+    bank_details1 = forms.CharField(label = "Account Number ")
+    bank_details2 = forms.CharField(label = "Sort Code ")
