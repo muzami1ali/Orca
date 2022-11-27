@@ -34,7 +34,7 @@ class RequestStatusTestCase(TestCase):
 
     ''' Test cases for the student request status view. '''
     def test_url_is_valid(self):
-        self.assertEqual(self.url, f'booking/status/')
+        self.assertEqual(self.url, f'/booking/status/')
 
     def test_unauthenticated_user_redirected_to_login(self):
         redirect_url = reverse_with_next('log_in', self.url)

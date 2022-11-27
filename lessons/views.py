@@ -68,8 +68,15 @@ def book_lesson(request, LessonID):
                 pass
     return redirect('request_lessons')
 
+@login_required
 def request_status(request):
-    pass
+    if request.user.is_authenticated:
+        if request.method == 'GET':
+            request_status = LessonRequest.objects.filter(student=request.user)
+            lesson_counter = LessonRequest.objects.filter(student=request.user).count()
+            return render(request, 'request_status.html', {'request_status': request_status, 'lesson_counter': lesson_counter})
+    else:
+        return redirect('log_in')
 
 def edit_lesson(request):
     pass
