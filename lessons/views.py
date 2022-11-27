@@ -67,3 +67,12 @@ def book_lesson(request, LessonID):
             except IntegrityError:
                 pass
     return redirect('request_lessons')
+
+def request_status(request):
+    pass
+
+def edit_lesson(request):
+    pass
+
+def cancel_lesson(request):
+    pass

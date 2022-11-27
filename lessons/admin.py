@@ -17,3 +17,4 @@ class LessonAdmin(admin.ModelAdmin):
 class LessonRequestAdmin(admin.ModelAdmin):
     list_display = [
         field.name for field in LessonRequest._meta.get_fields()
+    ]
