@@ -1,0 +1,12 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <form action="{% url 'edit_lesson' lessonID %}" method="post">
+      {% csrf_token %}
+      {{ edit_lesson_form.as_p }}
+      <input type = "submit" value = "Change">
+    </form>
+  </body>
+</html>

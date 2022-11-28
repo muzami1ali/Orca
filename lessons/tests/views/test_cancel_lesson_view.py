@@ -9,6 +9,7 @@ from django.db import IntegrityError
 from django.core.exceptions import PermissionDenied
 from lessons.models import Student, Lesson, LessonRequest
 from lessons.tests.helpers import reverse_with_next
+from django.http import HttpResponseForbidden
 
 class CancelLessonViewTestCase(TestCase):
 
@@ -62,8 +63,9 @@ class CancelLessonViewTestCase(TestCase):
         self.client.login(username=self.student.username, password='Password123')
         self._create_other_lesson_request()
         self.other_url = f'/booking/status/cancel/{self.other_lesson_request.id}/'
-        with self.assertRaises(PermissionDenied):
-            response = self.client.post(self.other_url)
+        response = self.client.post(self.other_url, follow=True)
+        self.assertTrue(response.status_code==403)
+
 
     ''' Functions for test class '''
     def _create_other_user(self):

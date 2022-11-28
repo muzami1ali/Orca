@@ -1,6 +1,6 @@
 from django import forms
 from .models import Student, Lesson
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MaxLengthValidator
 
 class SignUpForms(forms.ModelForm):
     class Meta:
@@ -45,5 +45,21 @@ class LessonRequestForm(forms.ModelForm):
         fields = ['term_period']
         labels = {'term_period': 'Select Term'}
 
-class EditBookedLesson(forms.ModelForm):
-    pass
+class EditBookedLessonForm(forms.Form):
+    first_name = forms.CharField(
+        required=False,
+        validators = [
+            RegexValidator(regex=r'^[A-Za-z]+$'),
+            MaxLengthValidator(50)
+            ]
+        )
+    last_name = forms.CharField(
+        required=False,
+        validators = [
+            RegexValidator(regex=r'^[A-Za-z]+$'),
+            MaxLengthValidator(50)
+            ]
+        )
+    date = forms.DateField(
+        required=False
+    )

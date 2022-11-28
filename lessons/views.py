@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
-from .forms import SignUpForms, LogInForm, LessonRequestForm
+from .forms import SignUpForms, LogInForm, LessonRequestForm, EditBookedLessonForm
 from django.contrib import messages
 from .models import Lesson, LessonRequest, Student
 from django.contrib.auth.decorators import login_required
@@ -81,7 +81,24 @@ def request_status(request):
 
 
 def edit_lesson(request, LessonRequestID):
-    pass
+
+    if request.method == 'POST':
+        if LessonRequest.objects.filter(id=LessonRequestID).exists():
+            lesson_request = LessonRequest.objects.get(id=LessonRequestID)
+            student_object = Student.objects.get(id=request.user.id)
+
+            edit_form = EditBookedLessonForm(
+                initial={
+                    'first_name':student_object.first_name,
+                    'last_name:':student_object.last_name,
+                    'date':lesson_request.lesson.date
+                    }
+                )
+        else:
+            raise IntegrityError
+    else:
+        edit_form = EditBookedLessonForm()
+    return render(request, 'edit_lesson.html', {'edit_lesson_form': edit_form, 'lessonID': LessonRequestID})
 
 @login_required
 def cancel_lesson(request, LessonRequestID):
