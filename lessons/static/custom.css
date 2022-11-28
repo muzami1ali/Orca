@@ -1,0 +1,87 @@
+html,body{
+  min-height: 100%;
+}
+body{height:100vh;
+      padding-top: 65px;
+    }
+
+
+#cover-image {
+
+  background : url('images/background.jpg')100% no-repeat fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: 100%;
+  -o-background-size: cover;
+}
+#nav-icon {
+  height:50px;
+}
+
+
+
+#lessons{
+  font-family: "Lucida Console", "Coursier New", monospace;
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px double;
+}
+#lessons td, #lessons th{
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+#lessons th{
+  text-align: left;
+  padding-top: 12px;
+  padding-bottom:12px;
+}
+table.lesson-information{
+  table-layout: fixed;
+  width: 180px;
+}
+
+
+.p1{
+  font-family: "Lucida Console", "Coursier New", monospace;
+}
+
+.btn{
+  color: green;
+  border: 2px solid #000000;
+  font-size: 45px;
+}
+
+.custom-button {
+  align-items: center;
+  background-color: #c2d6d6;
+  color: black;
+  border: 2px solid #000000;
+  transition-duration: 0.2;
+  font-size: 25px;
+}
+
+.custom-button:hover {
+  background: black;
+  color: white
+}
+.lessons{
+  align-items: center;
+  background-color: #fff;
+  color: black;
+  border: 2px solid #000000;
+  font-size: 15px;
+  box-shadow: transparent 0 0 0 3px;
+
+  }
+
+
+input[type=]
+
+#background-image{
+  min-height: 100%;
+  background-image: url('images/background.jpg');
+  background-size: cover;
+  background-repeat:no-repeat;
+  background-position: center;
+
+}
