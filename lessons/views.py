@@ -67,3 +67,7 @@ def book_lesson(request, LessonID):
             except IntegrityError:
                 pass
     return redirect('request_lessons')
+
+def invoice(request):
+    lessons = Lesson.objects.all()
+    return render(request, 'invoice.html', {'lessons':lessons})
