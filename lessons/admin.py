@@ -12,3 +12,8 @@ class LessonAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'lesson_name', 'date', 'duration', 'price', 'term_period',
     ]
+@admin.register(LessonRequest)
+class LessonRequestAdmin(admin.ModelAdmin):
+    list_display=[
+        'student','lesson','is_authorised',
+    ]
