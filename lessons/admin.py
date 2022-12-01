@@ -10,7 +10,8 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'lesson_name', 'date', 'duration', 'price', 'term_period',
+        'id', 'lesson_name', 'student_availability', 'number_of_lessons',
+         'interval', 'duration', 'term_period', 'additional_information'
     ]
 
 @admin.register(bankTransfers)

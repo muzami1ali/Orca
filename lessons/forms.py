@@ -42,8 +42,16 @@ class LogInForm(forms.Form):
 class LessonRequestForm(forms.ModelForm):
     class Meta:
         model = Lesson
-        fields = ['term_period']
-        labels = {'term_period': 'Select Term'}
+        fields = '__all__'
+        labels = {
+            'student_availability': 'Day',
+            'interval': 'Break between lessons (weeks)',
+            'duration': 'Duration (mins)',
+        }
+        widgets = {
+            'additional_information': forms.Textarea(attrs={'rows': 3}),
+        }
+        localized_fields = ('student_availability',)
 
 class BankTransferForm(forms.ModelForm):
     class Meta:

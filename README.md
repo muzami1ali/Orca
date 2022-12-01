@@ -3,10 +3,10 @@
 ## Team members
 The members of the team are:
 - *Aleksandr Limanovskij*
-- *<name of team member 2>*
+- *Dean Whitbread*
 - *Muzamil Ali*
-- *<name of team member 4>*
 - *Xiangyi Li*
+- *Harry Sharma*
 
 ## Project structure
 The project is called `msms` (Music School Management System).  It currently consists of a single app `lessons` where all functionality resides.

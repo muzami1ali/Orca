@@ -1,0 +1,15 @@
+[
+  {
+    "model": "lessons.lesson",
+    "pk": 1,
+    "fields": {
+        "lesson_name": "PIANO_PRACTICE",
+        "student_availability": "WED",
+        "number_of_lessons": 5,
+        "interval": 2,
+        "duration": 45,
+        "term_period": "TERM2",
+        "additional_information": "Please give me tutor, Jason Doe."
+    }
+  }
+]
