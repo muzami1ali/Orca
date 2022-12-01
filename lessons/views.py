@@ -47,26 +47,37 @@ def sign_up(request):
 
 @login_required(login_url='log_in')
 def request_lessons(request):
-    choice_form = LessonRequestForm()
-    lesson_counter = 0
-    if request.method == 'POST':
-        term_lesson = Lesson.objects.filter(term_period=request.POST['term_period'])
-        lesson_counter = Lesson.objects.filter(term_period=request.POST['term_period']).count()
-        choice_form = LessonRequestForm(request.POST)
-        return render(request, 'request_lessons.html', {'choice_form' : choice_form, 'term_lessons' : term_lesson, 'lesson_counter': lesson_counter})
-    return render(request, 'request_lessons.html', {'choice_form' : choice_form, 'lesson_counter': lesson_counter})
+    if request.method == "POST":
+        if LessonRequest.objects.filter(student_id=request.user.id).exists():
+            try:
+                student_booked_lessons = LessonRequest.objects.filter(student_id=request.user.id)
+                duplicate_lesson = False
 
-@login_required(login_url='log_in')
-def book_lesson(request, LessonID):
-    if request.method == 'POST':
-        if LessonRequest.objects.filter(student_id=request.user.id, lesson_id=LessonID).exists():
-            raise IntegrityError("Class cannot be booked twice")
+                for lesson_request in student_booked_lessons:
+                    lesson = Lesson.objects.get(id=lesson_request.lesson_id)
+                    if lesson.__eq__(request):
+                        duplicate_lesson = True
+                        break
+
+                if not duplicate_lesson:
+                    book_lesson = LessonRequestForm(request.POST)
+                    book_lesson = book_lesson.save()
+                    LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
+                else:
+                    raise IntegrityError("Class cannot be booked twice")
+            except ValueError:
+                pass
         else:
             try:
-                LessonRequest.objects.create(student_id=request.user.id, lesson_id=LessonID)
+                book_lesson = LessonRequestForm(request.POST)
+                book_lesson = book_lesson.save()
+                LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
             except IntegrityError:
                 pass
-    return redirect('request_lessons')
+        return redirect('request_lessons')
+    else:
+        form = LessonRequestForm()
+        return render(request, 'request_lessons.html', {'lesson_form': form})
 
 @login_required
 def bank_transfer(request):
