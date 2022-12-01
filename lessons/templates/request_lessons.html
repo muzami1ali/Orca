@@ -26,7 +26,13 @@
               <td>{{ lesson.duration }} minutes</td>
               <td>£{{ lesson.price }}</td>
             </tr>
-              <td><input type="button" value="Book" class = "btn-xs custom-button"></td>
+            <tr>
+              <td>
+                <form action="{% url 'book_lesson' lesson.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" value="Book" class = "btn-xs custom-button">
+                </form>
+              </td>
             </tr>
           </table>
         {% endfor %}
