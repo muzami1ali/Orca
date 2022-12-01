@@ -6,7 +6,7 @@ The members of the team are:
 - *<name of team member 2>*
 - *Muzamil Ali*
 - *<name of team member 4>*
-- *<name of team member 5>*
+- *Xiangyi Li*
 
 ## Project structure
 The project is called `msms` (Music School Management System).  It currently consists of a single app `lessons` where all functionality resides.

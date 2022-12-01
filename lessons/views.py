@@ -67,3 +67,11 @@ def book_lesson(request, LessonID):
             except IntegrityError:
                 pass
     return redirect('request_lessons')
+
+@login_required(login_url='log_in')
+def invoice(request):
+    invoices = Invioce.objects.all()
+    for i in invoices:
+        print(i.refNumber)
+    return render(request, 'invoice.html', {'invoices':invoices})
+

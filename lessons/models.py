@@ -52,3 +52,8 @@ class bankTransfers(models.Model):
     Account_Number = models.CharField(max_length=8,blank=False)
     Sort_Code = models.CharField(max_length=6,blank=False)
     Amount = models.PositiveSmallIntegerField(default=0,blank=False)
+
+class Invioce(models.Model):
+    refNumber = models.CharField(max_length=32, primary_key=True)
+    student = models.ForeignKey(Student, on_delete = models.CASCADE)
+    lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
