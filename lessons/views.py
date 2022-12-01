@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
-from .forms import SignUpForms, LogInForm, LessonRequestForm
+from .forms import SignUpForms, LogInForm, LessonRequestForm, BankTransferForm
 from django.contrib import messages
 from .models import Lesson, LessonRequest, Student
 from django.contrib.auth.decorators import login_required
@@ -78,3 +78,14 @@ def request_lessons(request):
     else:
         form = LessonRequestForm()
         return render(request, 'request_lessons.html', {'lesson_form': form})
+
+@login_required
+def bank_transfer(request):
+    if request.method == 'POST':
+        form= BankTransferForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('bank_transfer')
+    else:
+        form = BankTransferForm()
+    return render(request, 'bank_transfer.html', {'form': form})
