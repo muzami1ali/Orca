@@ -29,7 +29,6 @@ class Lesson(models.Model):
         ("SAT", "Saturday"),
         ("SUN", "Sunday")
     ]
-    #student_availability = models.DateField(auto_now=False, auto_now_add=False)
     student_availability = models.CharField(max_length = 9, choices = DAYS_OF_THE_WEEK, default = "MON")
 
     number_of_lessons = models.PositiveSmallIntegerField(
