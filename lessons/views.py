@@ -24,7 +24,7 @@ def log_in(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('booking')
+                return redirect('request_lessons')
         messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
     form = LogInForm()
     return render(request, 'log_in.html', {'form': form})
@@ -45,7 +45,7 @@ def sign_up(request):
     return render(request,'sign_up.html',context)
 
 
-@login_required
+@login_required(login_url='log_in')
 def request_lessons(request):
     choice_form = LessonRequestForm()
     lesson_counter = 0
@@ -56,7 +56,7 @@ def request_lessons(request):
         return render(request, 'request_lessons.html', {'choice_form' : choice_form, 'term_lessons' : term_lesson, 'lesson_counter': lesson_counter})
     return render(request, 'request_lessons.html', {'choice_form' : choice_form, 'lesson_counter': lesson_counter})
 
-@login_required
+@login_required(login_url='log_in')
 def book_lesson(request, LessonID):
     if request.method == 'POST':
         if LessonRequest.objects.filter(student_id=request.user.id, lesson_id=LessonID).exists():
