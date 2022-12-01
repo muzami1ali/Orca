@@ -51,3 +51,4 @@ class bankTransfers(models.Model):
     last_name=models.CharField(max_length=50,blank=False)
     Account_Number = models.CharField(max_length=8,blank=False)
     Sort_Code = models.CharField(max_length=6,blank=False)
+    Amount = models.PositiveSmallIntegerField(default=0,blank=False)
