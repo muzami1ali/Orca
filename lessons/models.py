@@ -72,7 +72,7 @@ class Lesson(models.Model):
     def __str__(self):
         return f'{self.lesson_name} - {self.student_availability}'
 
-    def __eq__(self, HttpRequest):
+    def equal_to(self, HttpRequest):
         return (self.lesson_name.__eq__(HttpRequest.POST.get('lesson_name')) and
          self.student_availability.__eq__(HttpRequest.POST.get('student_availability')) and
          self.number_of_lessons.__eq__(HttpRequest.POST.get('number_of_lessons')) and
