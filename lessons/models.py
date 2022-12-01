@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import RegexValidator, MinValueValidator
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator, MaxLengthValidator
 
 
 class Student(AbstractUser):
@@ -12,18 +12,35 @@ class Student(AbstractUser):
 
 
 class Lesson(models.Model):
-    lesson_name = models.CharField(
-            max_length=50,
-            validators = [RegexValidator(r'^[a-zA-Z ]+$')]
+    LESSON_CHOICES =[
+        ("PIANO_PRACTICE", "Piano Practice"),
+        ("TRUMPET_TRAINING", "Trumpet Training"),
+        ("MUSIC_THEORY", "Music Theory"),
+        ("PERFORMANCE_PREP", "Performance Preparation")
+    ]
+    lesson_name = models.CharField(max_length = 50, choices = LESSON_CHOICES, default = "MUSIC_THEORY")
+
+    student_availability = models.DateField(auto_now=False, auto_now_add=False)
+
+    number_of_lessons = models.PositiveSmallIntegerField(
+        default = 1,
+        validators = [
+            MinValueValidator(1, message="Must complete at least one lesson."),
+            MaxValueValidator(10, message="Maximum number of lessons exceeded. Messons per term is 10")
+            ]
         )
+
+    interval = models.PositiveSmallIntegerField(
+        default = 1,
+        validators = [
+            MinValueValidator(1, message="Interval period between lessons must be at least 1 week."),
+            MaxValueValidator(2, message="Maximum interval period between lessons of 2 weeks not selected.")
+            ]
+        )
+
+    DURATION_CHOICES = [(30, 30), (45, 45), (60, 60)]
     duration = models.PositiveSmallIntegerField(
-        default = 30,
-        validators = [MinValueValidator(30, message="Minimum value of 30 minutes not set.")]
-        )
-    date = models.DateField(auto_now=False, auto_now_add=False)
-    price = models.PositiveSmallIntegerField(
-        default = 30,
-        validators = [MinValueValidator(1, message="Price field must be set to a value greater than zero.")]
+        choices = DURATION_CHOICES, default = 30,
         )
 
     TERM_PERIOD_CHOICES =[
@@ -36,8 +53,14 @@ class Lesson(models.Model):
     ]
     term_period = models.CharField(max_length = 6, choices = TERM_PERIOD_CHOICES, default = "TERM1")
 
+    additional_information = models.CharField(
+        max_length=200,
+        validators=[MaxLengthValidator(200)],
+        blank=True
+        )
+
     def __str__(self):
-        return f'{self.lesson_name} - {self.date}'
+        return f'{self.lesson_name} - {self.student_availability}'
 
 
 class LessonRequest(models.Model):
