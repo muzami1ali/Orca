@@ -55,7 +55,6 @@ def request_lessons(request):
 
                 for lesson_request in student_booked_lessons:
                     lesson = Lesson.objects.get(id=lesson_request.lesson_id)
-                    print(lesson.__eq__(request))
                     if lesson.__eq__(request):
                         duplicate_lesson = True
                         break
@@ -65,7 +64,7 @@ def request_lessons(request):
                     book_lesson = book_lesson.save()
                     LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
                 else:
-                    raise ValueError("Class cannot be booked twice")
+                    raise IntegrityError("Class cannot be booked twice")
             except ValueError:
                 pass
         else:
@@ -79,15 +78,3 @@ def request_lessons(request):
     else:
         form = LessonRequestForm()
         return render(request, 'request_lessons.html', {'lesson_form': form})
-
-@login_required(login_url='log_in')
-def book_lesson(request, LessonID):
-    if request.method == 'POST':
-        if LessonRequest.objects.filter(student_id=request.user.id, lesson_id=LessonID).exists():
-            raise IntegrityError("Class cannot be booked twice")
-        else:
-            try:
-                LessonRequest.objects.create(student_id=request.user.id, lesson_id=LessonID)
-            except IntegrityError:
-                pass
-    return redirect('request_lessons')

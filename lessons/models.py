@@ -20,7 +20,17 @@ class Lesson(models.Model):
     ]
     lesson_name = models.CharField(max_length = 50, choices = LESSON_CHOICES, default = "MUSIC_THEORY")
 
-    student_availability = models.DateField(auto_now=False, auto_now_add=False)
+    DAYS_OF_THE_WEEK =[
+        ("MON", "Monday"),
+        ("TUE", "Tuesday"),
+        ("WED", "Wednesday"),
+        ("THU", "Thursday"),
+        ("FRI", "Friday"),
+        ("SAT", "Saturday"),
+        ("SUN", "Sunday")
+    ]
+    #student_availability = models.DateField(auto_now=False, auto_now_add=False)
+    student_availability = models.CharField(max_length = 9, choices = DAYS_OF_THE_WEEK, default = "MON")
 
     number_of_lessons = models.PositiveSmallIntegerField(
         default = 1,

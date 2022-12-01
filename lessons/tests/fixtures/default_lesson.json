@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
         "lesson_name": "PIANO_PRACTICE",
-        "student_availability": "2022-11-22",
+        "student_availability": "WED",
         "number_of_lessons": 5,
         "interval": 2,
         "duration": 45,

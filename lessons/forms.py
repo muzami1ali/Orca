@@ -44,12 +44,11 @@ class LessonRequestForm(forms.ModelForm):
         model = Lesson
         fields = '__all__'
         labels = {
-            'student_availability': 'Date',
-            'interval': 'Interval between lesson(s) (weeks)',
+            'student_availability': 'Day',
+            'interval': 'Break between lessons (weeks)',
             'duration': 'Duration (mins)',
         }
         widgets = {
-            'additional_information': forms.Textarea(attrs={'cols': 40, 'rows': 5}),
-            'student_availability': forms.SelectDateWidget(),
+            'additional_information': forms.Textarea(attrs={'rows': 3}),
         }
         localized_fields = ('student_availability',)

@@ -6,21 +6,14 @@ import uuid
 
 
 class LessonRequestModelTest(TestCase):
+    fixtures = [
+        'lessons/tests/fixtures/default_student.json',
+        'lessons/tests/fixtures/default_lesson.json',
+    ]
+
     def test_main_case(self):
-        lesson = Lesson(
-            lesson_name = "Piano Practice",
-            duration = 30,
-            date = "2022-11-22",
-            price = 50
-        )
-        lesson.save()
-        student=Student.objects.create_user(
-            username = 'john.doe@example.org',
-            first_name = 'John',
-            last_name = 'Doe',
-            password = 'Password123'            
-        )
-        student.save()
+        self.student = Student.objects.get(username='John.Doe@example.org')
+        self.lesson = Lesson.objects.get(lesson_name='PIANO_PRACTICE')
         #lesson_request=LessonRequest(student = student, lesson = lesson, is_authorised = False)
         #lesson_request.save()
 

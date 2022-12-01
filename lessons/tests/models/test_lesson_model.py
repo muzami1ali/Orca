@@ -44,12 +44,12 @@ class LessonModelTestCase(TestCase):
         self.lesson.lesson_name = 'a' * 51
         self._lesson_is_invalid()
 
-    def test_student_availability_format_is_correct(self):
-        self.lesson.student_availability = "2022-12-31"
+    def test_student_availability_is_correct(self):
+        self.lesson.student_availability = "SAT"
         self._lesson_is_valid()
 
-    def test_student_availability_format_is_incorrect(self):
-        self.lesson.student_availability = "31-12-2022"
+    def test_student_availability_cannot_be_blank(self):
+        self.lesson.student_availability = ""
         self._lesson_is_invalid()
 
     def test_number_of_lessons_is_invalid(self):
