@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
-from .forms import SignUpForms, LogInForm, LessonRequestForm
+from .forms import SignUpForms, LogInForm, LessonRequestForm, BankTransferForm
 from django.contrib import messages
 from .models import Lesson, LessonRequest, Student
 from django.contrib.auth.decorators import login_required
@@ -67,7 +67,3 @@ def book_lesson(request, LessonID):
             except IntegrityError:
                 pass
     return redirect('request_lessons')
-
-def invoice(request):
-    lessons = Lesson.objects.all()
-    return render(request, 'invoice.html', {'lessons':lessons})
