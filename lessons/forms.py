@@ -1,6 +1,7 @@
 from django import forms
-from .models import Student, Lesson
-from django.core.validators import RegexValidator, MaxLengthValidator
+from .models import Student, Lesson, bankTransfers
+#from django.core.validators import RegexValidator, MaxLengthValidator
+from django.core.validators import RegexValidator
 
 class SignUpForms(forms.ModelForm):
     class Meta:
@@ -42,24 +43,26 @@ class LogInForm(forms.Form):
 class LessonRequestForm(forms.ModelForm):
     class Meta:
         model = Lesson
+        fields = '__all__'
+        labels = {
+            'student_availability': 'Day',
+            'interval': 'Break between lessons (weeks)',
+            'duration': 'Duration (mins)',
+        }
+        widgets = {
+            'additional_information': forms.Textarea(attrs={'rows': 3}),
+        }
+        localized_fields = ('student_availability',)
+
+class BankTransferForm(forms.ModelForm):
+    class Meta:
+        model = bankTransfers
+        fields = ['invoice', 'first_name', 'last_name', 'Account_Number', 'Sort_Code', 'Amount']
+        # invoice = forms.CharField(label ="invoice# ")
+        # first_name = forms.CharField(label ="First Name ")
+        # last_name = forms.CharField(label = "Last Name ")
+        # Account_Number = forms.CharField(label = "Account Number ")
+        # Sort_Code = forms.CharField(label = "Sort Code ")
+
         fields = ['term_period']
         labels = {'term_period': 'Select Term'}
-
-class EditBookedLessonForm(forms.Form):
-    first_name = forms.CharField(
-        required=False,
-        validators = [
-            RegexValidator(regex=r'^[A-Za-z]+$'),
-            MaxLengthValidator(50)
-            ]
-        )
-    last_name = forms.CharField(
-        required=False,
-        validators = [
-            RegexValidator(regex=r'^[A-Za-z]+$'),
-            MaxLengthValidator(50)
-            ]
-        )
-    date = forms.DateField(
-        required=False
-    )

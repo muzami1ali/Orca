@@ -1,44 +1,11 @@
-<html>
-  <head>
-    <title>Request Lessons</title>
-  </head>
-  <body>
-    <h1>Request Lessons</h1>
-    <form action="{% url 'request_lessons' %}" method="post">
-      {% csrf_token %}
-      {{ choice_form.as_p }}
-      <input type="submit" value="Show Lessons">
-    </form>
-
-    {% if lesson_counter > 0%}
-    <h2>Total Classes Available: {{ lesson_counter }}</h2>
-    <table class="lesson-view">
-      {% for lesson in term_lessons %}
-        <table class="lesson-information">
-          <tr>
-            <td>Class: </td><td>{{ lesson.lesson_name }}</td>
-          </tr>
-          <tr>
-            <td>Date: </td><td>{{ lesson.date }}</td>
-          </tr>
-          <tr>
-            <td>Duration: </td><td>{{ lesson.duration }} minutes</td>
-          </tr>
-          <tr>
-            <td>Cost: </td><td>£{{ lesson.price }}</td>
-          </tr>
-          <tr>
-            <td>
-                <form action="{% url 'book_lesson' lesson.id %}" method="post">
-                  {% csrf_token %}
-                  <input type="submit" value="Book">
-                </form>
-            </td>
-          </tr>
-        </table>
-      {% endfor %}
-    </table>
-    {% endif %}
-
-  </body>
-</html>
+{% extends 'base-content.html' %}
+{% block content%}
+<div class="container vh-100">
+  <h1>Request Lessons</h1>
+  <form action="{% url 'request_lessons' %}" method="post">
+    {% csrf_token %}
+    {{ lesson_form.as_p }}
+    <input type="submit" value="Book" class = "lessons" >
+  </form>
+</div>
+{% endblock%}

@@ -6,19 +6,19 @@ import uuid
 
 class StudentModelTest(TestCase):
     def setUp(self):
-        self.user=Student.objects.create_user(
-            username='johndoe@example.com',
-            first_name='John',
-            last_name='Doe',
-            password='Password123'
-
+        self.user = Student.objects.create_user(
+            username = 'john.doe@example.org',
+            first_name = 'John',
+            last_name = 'Doe',
+            password = 'Password123'
         )
     def _create_second_user(self):
         user=Student.objects.create_user(
             username='janedoe@example.com',
             first_name='Jane',
             last_name='Doe',
-            password ='Password123'
+            password ='Password123',
+
         )
         return user
 
@@ -62,41 +62,31 @@ class StudentModelTest(TestCase):
         self._assert_student_user_is_invalid()
 
     """Email tests"""
-    def test_user_must_not_be_blank(self):
+    def test_email_must_not_be_blank(self):
         self.user.username=''
         self._assert_student_user_is_invalid()
 
-    def test_user_uniqueness(self):
+    def test_email_uniqueness(self):
         second_user=self._create_second_user()
         self.user.username=second_user.username
         self._assert_student_user_is_invalid()
 
-    def test_user_must_contain_username(self):
+    def test_email_must_contain_username(self):
         self.user.username='@example.org'
         self._assert_student_user_is_invalid()
 
-    def test_user_must_contain_at_symbol(self):
+    def test_email_must_contain_at_symbol(self):
         self.user.username='johndoe.example.org'
         self._assert_student_user_is_invalid()
 
-    def test_user_must_contain_domain_name(self):
+    def test_email_must_contain_domain_name(self):
         self.user.username='johndoe@.org'
         self._assert_student_user_is_invalid()
 
-    def test_user_must_contain_domain(self):
+    def test_email_must_contain_domain(self):
         self.user.username='johndoe@example'
         self._assert_student_user_is_invalid()
 
-    def test_user_must_not_contain_more_than_one_at(self):
+    def test_email_must_not_contain_more_than_one_at(self):
         self.user.username='johndoe@@example'
         self._assert_student_user_is_invalid()
-
-    # """Unique id tests"""
-    # def test_unique_id_is_not_blank(self):
-    #     self.user.id=''
-    #     self._assert_student_user_is_invalid()
-    #
-    # def test_uniqueness_of_id(self):
-    #     second_user=self._create_second_user()
-    #     self.user.id=second_user.id
-    #     self._assert_student_user_is_invalid()

@@ -1,24 +1,17 @@
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Music Lessons</title>
-  </head>
-  <body>
-    <h1>Music Lessons</h1>
-    <p>
-      Sign up or log in
-    </p>
-    <p>
-      <a href='{%url 'sign_up'%}'>
-              Sign up
-      </a>
-    </p>
-    <p>
-      <a href='{%url 'log_in' %}'>
-          Log in
-  </a>
-    </p>
-  </body>
-</html>
+{% extends 'base.html' %}
+{% block body%}
+
+  <div class="fixed-top text-center">
+    <h1> Music Lessons</h1>
+    <h1> <b>____________</b></h1>
+  </div>
+  <div class = "container-fluid vh-100 text-center" style = "border:1px solid #cecece;">
+    <div class = "row h-100">
+      <div class = "col-12 my-auto">
+          <p class="p1"><a href='{%url 'sign_up'%}'class = "btn btn-lg custom-button"> Sign up </a> </p>
+          <p class="p1"><a href='{%url 'log_in' %}'class = "btn btn-lg custom-button"> Log in </a> </p>
+      </div>
+    </div>
+  </div>
+</div>
+    {% endblock%}
