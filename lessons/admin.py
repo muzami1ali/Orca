@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Student, LessonRequest, Lesson
 
+
+    
 @admin.register(Student)
 class UserAdmin(admin.ModelAdmin):
    def get_queryset(self, request):
@@ -10,9 +12,25 @@ class UserAdmin(admin.ModelAdmin):
        elif request.user.is_superuser:
            return qs
        return qs.filter(author=request.user)
+   def has_delete_permission(self, request,object=None):
+       if request.user.is_staff==True or request.user.is_superuser==True:
+           return True
+       return False
+     
+   def has_change_permission(self, request,object=None):
+       if request.user.is_staff==True or request.user.is_superuser==True:
+           return  True
+       return False
+   
+       
+   def has_add_permission(self, request):
+       if request.user.is_superuser==True:
+           return True
+       return False
+       
     
    list_display=[
-       'id','username','first_name','last_name','is_active','password',
+       'id','username','first_name','last_name','is_active','password','is_staff','is_superuser',
    ]
 
 @admin.register(Lesson)
