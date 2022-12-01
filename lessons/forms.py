@@ -1,5 +1,5 @@
 from django import forms
-from .models import Student, Lesson
+from .models import Student, Lesson, bankTransfers
 from django.core.validators import RegexValidator
 
 class SignUpForms(forms.ModelForm):
@@ -45,9 +45,12 @@ class LessonRequestForm(forms.ModelForm):
         fields = ['term_period']
         labels = {'term_period': 'Select Term'}
 
-class BankTransferForm(forms.Form):
-    invoice = forms.CharField(label ="invoice# ")
-    first_name = forms.CharField(label ="First Name ")
-    last_name = forms.CharField(label = "Last Name ")
-    bank_details1 = forms.CharField(label = "Account Number ")
-    bank_details2 = forms.CharField(label = "Sort Code ")
+class BankTransferForm(forms.ModelForm):
+    class Meta:
+        model = bankTransfers
+        fields = ['invoice', 'first_name', 'last_name', 'Account_Number', 'Sort_Code' ]
+        # invoice = forms.CharField(label ="invoice# ")
+        # first_name = forms.CharField(label ="First Name ")
+        # last_name = forms.CharField(label = "Last Name ")
+        # Account_Number = forms.CharField(label = "Account Number ")
+        # Sort_Code = forms.CharField(label = "Sort Code ")
