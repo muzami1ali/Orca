@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator, MaxLengthValidator
-
+from django.http import HttpRequest
 
 class Student(AbstractUser):
     username=models.EmailField(unique=True,verbose_name='Email')
@@ -56,11 +56,20 @@ class Lesson(models.Model):
     additional_information = models.CharField(
         max_length=200,
         validators=[MaxLengthValidator(200)],
-        blank=True
+        blank=True,
+        null=True
         )
 
     def __str__(self):
         return f'{self.lesson_name} - {self.student_availability}'
+
+    def __eq__(self, HttpRequest):
+        return (self.lesson_name.__eq__(HttpRequest.POST.get('lesson_name')) and
+         self.student_availability.__eq__(HttpRequest.POST.get('student_availability')) and
+         self.number_of_lessons.__eq__(HttpRequest.POST.get('number_of_lessons')) and
+         self.interval.__eq__(HttpRequest.POST.get('interval')) and
+         self.duration.__eq__(HttpRequest.POST.get('duration')) and
+         self.term_period.__eq__(HttpRequest.POST.get('term_period')))
 
 
 class LessonRequest(models.Model):

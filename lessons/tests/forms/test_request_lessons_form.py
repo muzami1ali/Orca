@@ -12,6 +12,8 @@ class StudentLessonRequestFormTestCase(TestCase):
     def setUp(self):
         self.form_data = {'term_period': 'TERM2'}
 
+    
+
     def test_term_selection_is_valid(self):
         self._form_is_valid()
 
