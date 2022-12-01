@@ -7,18 +7,14 @@ from lessons.models import Lesson
 from django.core.exceptions import ValidationError
 
 class LessonModelTestCase(TestCase):
-    '''Unit tests for the request lessons model'''
 
+    fixtures = [
+        'lessons/tests/fixtures/default_lesson.json'
+    ]
+
+    '''Unit tests for the request lessons model'''
     def setUp(self):
-        self.lesson = Lesson(
-            lesson_name = "PIANO_PRACTICE",
-            student_availability = "2022-11-22",
-            number_of_lessons = 5,
-            interval = 2,
-            duration = 45,
-            term_period = "TERM2",
-            additional_information = "Please give me tutor Jane Doe."
-        )
+        self.lesson = Lesson.objects.get(lesson_name="PIANO_PRACTICE")
 
     '''Test Cases'''
     def test_lesson_object_is_valid(self):
@@ -26,6 +22,14 @@ class LessonModelTestCase(TestCase):
 
     def test_lesson_name_must_not_be_blank(self):
         self.lesson.lesson_name = ""
+        self._lesson_is_invalid()
+
+    def test_different_lesson_choice_is_valid(self):
+        self.lesson.lesson_name = "MUSIC_THEORY"
+        self._lesson_is_valid()
+
+    def test_different_lesson_choice_is_invalid(self):
+        self.lesson.lesson_name = "WRONG_LESSON"
         self._lesson_is_invalid()
 
     def test_lesson_name_contains_no_numbers(self):
@@ -68,7 +72,7 @@ class LessonModelTestCase(TestCase):
         self.lesson.interval = 1
         self._lesson_is_valid()
 
-    def test_interval_period_is_invalid(self):
+    def test_different_interval_period_is_invalid(self):
         self.lesson.interval = 3
         self._lesson_is_invalid()
 
