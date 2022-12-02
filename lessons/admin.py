@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Student, LessonRequest, Lesson
+from .models import Student, LessonRequest, Lesson, bankTransfers
 
 
     
@@ -36,7 +36,20 @@ class UserAdmin(admin.ModelAdmin):
 class LessonAdmin(admin.ModelAdmin):
     search_fields=('term_period__endswith',)
     list_display = [
-        'id', 'lesson_name', 'date', 'duration', 'price', 'term_period',
+        'id', 'lesson_name', 'student_availability', 'number_of_lessons',
+         'interval', 'duration', 'term_period', 'additional_information'
+    ]
+
+@admin.register(bankTransfers)
+class BankTransferAdmin(admin.ModelAdmin):
+    list_display=[
+        'invoice', 'first_name', 'last_name', 'Account_Number', 'Sort_Code', 'Amount' ,
+    ]
+
+@admin.register(LessonRequest)
+class LessonRequestAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'student_id', 'student', 'lesson_id', 'lesson',
     ]
     def has_delete_permission(self, request,object=None):
        return False

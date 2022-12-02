@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Orca</title>
+    </head>
+    <body>
+        <h1>Bank Transfer</h1>
+        <form action="{%url 'bank_transfer' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Pay">
+        </form>
+    </body>
+</html>
