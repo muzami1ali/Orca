@@ -41,6 +41,6 @@ class Lesson(models.Model):
 
 
 class LessonRequest(models.Model):
-    student = models.ForeignKey(Student,on_delete = models.CASCADE)
+    student= models.ForeignKey(Student,on_delete = models.CASCADE)
     lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
     is_authorised = models.BooleanField(default = False)

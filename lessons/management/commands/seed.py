@@ -17,7 +17,7 @@ class Command(BaseCommand):
     LESSON_NAMES = ['Piano Practice', 'Trumpet Techniques', 'Guitar Guidance']
     TERM_PERIOD = ['TERM1', 'TERM2', 'TERM3', 'TERM4', 'TERM5', 'TERM6']
     DURATION = [30, 60, 120]
-    LESSON_COUNT = 50
+    LESSON_COUNT = 100
 
 
     def __init__(self):
