@@ -1,0 +1,15 @@
+[
+  {
+    "model": "lessons.lesson",
+    "pk": 2,
+    "fields": {
+        "lesson_name": "PERFORMANCE_PREP",
+        "student_availability": "SAT",
+        "number_of_lessons": 2,
+        "interval": 1,
+        "duration": 60,
+        "term_period": "TERM5",
+        "additional_information": ""
+    }
+  }
+]
