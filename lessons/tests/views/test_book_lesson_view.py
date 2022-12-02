@@ -11,21 +11,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
 class BookLessonViewTestCase(TestCase):
-
+    fixtures = [
+        'lessons/tests/fixtures/default_student.json',
+        'lessons/tests/fixtures/default_lesson.json',
+        'lessons/tests/fixtures/other_student.json',
+        'lessons/tests/fixtures/other_lesson.json',
+    ]
     def setUp(self):
-        self.student = Student.objects.create_user(
-            username = 'john.doe@example.org',
-            first_name = 'John',
-            last_name = 'Doe',
-            password = 'Password123'
-        )
-        self.lesson = Lesson.objects.create(
-            lesson_name = "Piano Practice",
-            duration = 30,
-            date = "2022-11-26",
-            price = 50,
-            term_period = "TERM2"
-        )
+        self.student = Student.objects.get(username='John.Doe@example.org')
+        self.lesson = Lesson.objects.get(lesson_name='PIANO_PRACTICE')
         self.url = reverse('book_lesson', kwargs={'LessonID': self.lesson.id})
 
     ''' Test cases for the book lesson view - when a lesson gets booked. '''

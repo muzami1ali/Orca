@@ -5,7 +5,7 @@ from django.contrib import messages
 from .models import Lesson, LessonRequest, Student
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.db import IntegrityError
+
 
 def home(request):
     return render(request,'index.html')

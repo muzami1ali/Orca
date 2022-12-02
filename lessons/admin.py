@@ -19,3 +19,9 @@ class BankTransferAdmin(admin.ModelAdmin):
     list_display=[
         'invoice', 'first_name', 'last_name', 'Account_Number', 'Sort_Code', 'Amount' ,
     ]
+
+@admin.register(LessonRequest)
+class LessonRequestAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'student_id', 'student', 'lesson_id', 'lesson',
+    ]
