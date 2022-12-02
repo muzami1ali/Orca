@@ -55,7 +55,7 @@ def request_lessons(request):
 
                 for lesson_request in student_booked_lessons:
                     lesson = Lesson.objects.get(id=lesson_request.lesson_id)
-                    if lesson.__eq__(request):
+                    if lesson.equal_to(request):
                         duplicate_lesson = True
                         break
 
