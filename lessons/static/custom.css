@@ -39,6 +39,10 @@ table.lesson-information{
   table-layout: fixed;
   width: 180px;
 }
+.ul.a{
+  list-style-type:circle;
+  padding-top: 10%;
+}
 
 
 .p1{
