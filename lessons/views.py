@@ -13,6 +13,9 @@ def home(request):
 def booking(request):
     return render(request,'booking.html')
 
+def contact(request):
+    return render(request,'contact.html')
+
 
 
 def log_in(request):

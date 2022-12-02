@@ -64,6 +64,8 @@ table.lesson-information{
   background: black;
   color: white
 }
+
+
 .lessons{
   align-items: center;
   background-color: #fff;
@@ -73,13 +75,21 @@ table.lesson-information{
   box-shadow: transparent 0 0 0 3px;
 
   }
-.navbar-bottom{
-  position: :absolute;
-  bottom:0;
-  width:90%;
-  margin-bottom:0;
-}
 
+.contact_container{
+  position: relative;
+  max-width: 100%;
+}
+.center{
+  position: absolute;
+  top: 33%;
+  width: 100%;
+  text-align: center;
+  color: black;
+  font-size: 80px;
+  font-family: cursive;
+  -webkit-text-stroke: 2px white;
+}
 
 input[type=]
 
