@@ -26,7 +26,6 @@ urlpatterns = [
     path('log_out/',views.log_out, name='log_out'),
     path('sign_up/',views.sign_up, name='sign_up'),
     path('booking/',views.booking, name='booking'),
-    path('booking/request/', views.request_lessons, name='request_lessons'),
     path('booking/request/', lesson_request.request_lessons, name='request_lessons'),
     path('booking/bank_transfer/', views.bank_transfer, name='bank_transfer'),
     path('booking/status/', lesson_status.request_status, name='request_status'),
