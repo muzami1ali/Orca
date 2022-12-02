@@ -27,5 +27,8 @@ urlpatterns = [
     path('booking/',views.booking, name='booking'),
     path('booking/request/', views.request_lessons, name='request_lessons'),
     path('booking/bank_transfer/', views.bank_transfer, name='bank_transfer'),
+    path('booking/status/', lesson_status.request_status, name='request_status'),
+    path('booking/status/edit/<int:LessonRequestID>/', lesson_status.edit_lesson, name='edit_lesson'),
+    path('booking/status/cancel/<int:LessonRequestID>/', lesson_status.cancel_lesson, name='cancel_lesson'),
     path('invoice/', views.invoice, name='invoice')
 ]
