@@ -92,7 +92,7 @@ def bank_transfer(request):
 
 @login_required(login_url='log_in')
 def invoice(request):
-    invoices = Invioce.objects.all()
+    invoices = Invoice.objects.all()
     for i in invoices:
         print(i.refNumber)
     return render(request, 'invoice.html', {'invoices':invoices})
