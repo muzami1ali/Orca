@@ -1,7 +1,7 @@
 '''
     Test cases for the student request status view.
     @author Dean Whitbread
-    @version 26/11/2022
+    @version 02/12/2022
 '''
 from django.test import TestCase
 from django.urls import reverse
@@ -10,27 +10,21 @@ from lessons.tests.helpers import reverse_with_next
 
 class RequestStatusTestCase(TestCase):
 
+    fixtures = [
+        'lessons/tests/fixtures/default_student.json',
+        'lessons/tests/fixtures/default_lesson.json',
+    ]
+
     def setUp(self):
-        self.url = reverse('request_status')
-        self.student = Student.objects.create_user(
-            username = 'john.doe@example.org',
-            first_name = 'John',
-            last_name = 'Doe',
-            password = 'Password123'
-        )
-        self.lesson_1 = Lesson.objects.create(
-            lesson_name = "Piano Practice",
-            duration = 30,
-            date = "2022-11-26",
-            price = 50,
-            term_period = "TERM2"
-        )
+        self.student = Student.objects.get(username='John.Doe@example.org')
+        self.lesson = Lesson.objects.get(lesson_name='PIANO_PRACTICE')
         self.lesson_requested = LessonRequest.objects.create(
             student = self.student,
-            lesson = self.lesson_1,
+            lesson = self.lesson,
             is_authorised = False
         )
-        self.form_data = { "student": self.student.username}
+        self.form_data = {"student": self.student.username}
+        self.url = reverse('request_status')
 
     ''' Test cases for the student request status view. '''
     def test_url_is_valid(self):

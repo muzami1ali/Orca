@@ -1,12 +1,11 @@
-<html>
-  <head>
-    <title></title>
-  </head>
-  <body>
+{% extends 'base-content.html' %}
+{% block content%}
+<div class="container vh-100">
+  <h1>Edit Lesson</h1>
     <form action="{% url 'edit_lesson' lessonID %}" method="post">
       {% csrf_token %}
       {{ edit_lesson_form.as_p }}
-      <input type = "submit" value = "Change">
+      <input type = "submit" value = "Change" class = "lessons">
     </form>
-  </body>
-</html>
+</div>
+{% endblock%}

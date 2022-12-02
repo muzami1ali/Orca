@@ -23,5 +23,5 @@ class BankTransferAdmin(admin.ModelAdmin):
 @admin.register(LessonRequest)
 class LessonRequestAdmin(admin.ModelAdmin):
     list_display = [
-        field.name for field in LessonRequest._meta.get_fields()
+        'id', 'student_id', 'student', 'lesson_id', 'lesson',
     ]

@@ -63,6 +63,3 @@ class BankTransferForm(forms.ModelForm):
         # last_name = forms.CharField(label = "Last Name ")
         # Account_Number = forms.CharField(label = "Account Number ")
         # Sort_Code = forms.CharField(label = "Sort Code ")
-
-        fields = ['term_period']
-        labels = {'term_period': 'Select Term'}

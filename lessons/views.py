@@ -6,7 +6,8 @@ from .models import Lesson, LessonRequest, Student
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db import IntegrityError
-from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 def home(request):
     return render(request,'index.html')
@@ -65,7 +66,7 @@ def request_lessons(request):
                     book_lesson = book_lesson.save()
                     LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
                 else:
-                    raise IntegrityError("Class cannot be booked twice")
+                    return HttpResponseBadRequest("Class cannot be booked twice")
             except ValueError:
                 pass
         else:
@@ -91,7 +92,7 @@ def bank_transfer(request):
         form = BankTransferForm()
     return render(request, 'bank_transfer.html', {'form': form})
 
-@login_required
+@login_required(login_url='/log_in/')
 def request_status(request):
     if request.user.is_authenticated:
         if request.method == 'GET':
@@ -102,26 +103,51 @@ def request_status(request):
         return redirect('log_in')
 
 
+@login_required(login_url='/log_in/')
 def edit_lesson(request, LessonRequestID):
     if request.method == 'POST':
-        if LessonRequest.objects.filter(id=LessonRequestID).exists():
-            lesson_request = LessonRequest.objects.get(id=LessonRequestID)
-            student_object = Student.objects.get(id=request.user.id)
-
-            edit_form = EditBookedLessonForm(
-                initial={
-                    'first_name':student_object.first_name,
-                    'last_name:':student_object.last_name,
-                    'date':lesson_request.lesson.date
-                    }
+        try:
+            if request.user.id == LessonRequest.objects.get(id=LessonRequestID).student_id:
+                lesson_request = LessonRequest.objects.filter(id=LessonRequestID).get()
+                booked_lesson = Lesson.objects.filter(id=lesson_request.lesson_id).update(
+                    lesson_name = request.POST.get('lesson_name'),
+                    student_availability = request.POST.get('student_availability'),
+                    number_of_lessons = request.POST.get('number_of_lessons'),
+                    interval = request.POST.get('interval'),
+                    duration = request.POST.get('duration'),
+                    term_period = request.POST.get('term_period'),
+                    additional_information = request.POST.get('additional_information')
                 )
-        else:
-            raise IntegrityError
+            else:
+                return HttpResponseForbidden("Cannot edit other student lesson requests")
+        except ObjectDoesNotExist:
+            return HttpResponseBadRequest("Lesson request does not exist.")
+        except MultipleObjectsReturned:
+            return HttpResponseBadRequest("Multiple lesson objects found.")
+
+        return redirect('request_status')
     else:
-        edit_form = EditBookedLessonForm()
+        if LessonRequest.objects.filter(id=LessonRequestID).exists():
+            if request.user.id == LessonRequest.objects.get(id=LessonRequestID).student_id:
+                lesson_request = LessonRequest.objects.get(id=LessonRequestID)
+                edit_form = LessonRequestForm(
+                    initial={
+                        'lesson_name':lesson_request.lesson.lesson_name,
+                        'student_availability':lesson_request.lesson.student_availability,
+                        'number_of_lessons':lesson_request.lesson.number_of_lessons,
+                        'interval':lesson_request.lesson.interval,
+                        'duration':lesson_request.lesson.duration,
+                        'term_period':lesson_request.lesson.term_period,
+                        'additional_information':lesson_request.lesson.additional_information,
+                        }
+                    )
+            else:
+                return HttpResponseForbidden("Cannot edit other student lesson requests")
+        else:
+            return HttpResponseForbidden("Cannot edit this lesson request.")
     return render(request, 'edit_lesson.html', {'edit_lesson_form': edit_form, 'lessonID': LessonRequestID})
 
-@login_required
+@login_required(login_url='/log_in/')
 def cancel_lesson(request, LessonRequestID):
     if request.method == 'POST':
         lesson_request_object = LessonRequest.objects.filter(id=LessonRequestID)
@@ -132,7 +158,7 @@ def cancel_lesson(request, LessonRequestID):
                 except IntegrityError:
                     pass
             else:
-                raise PermissionDenied("Cannot cancel lesson booked by another student.")
+                return HttpResponseForbidden("Cannot cancel lesson booked by another student.")
         else:
-            raise IntegrityError("Cannot cancel booking twice.")
+            return HttpResponseBadRequest("Cannot cancel the same booking twice.")
     return redirect('request_status')

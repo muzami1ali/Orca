@@ -1,7 +1,7 @@
 '''
     Test cases for the cance lesson view.
     @author Dean Whitbread
-    @version 27/11/2022
+    @version 02/12/2022
 '''
 from django.test import TestCase
 from django.urls import reverse
@@ -9,24 +9,20 @@ from django.db import IntegrityError
 from django.core.exceptions import PermissionDenied
 from lessons.models import Student, Lesson, LessonRequest
 from lessons.tests.helpers import reverse_with_next
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseBadRequest
 
 class CancelLessonViewTestCase(TestCase):
 
+    fixtures = [
+        'lessons/tests/fixtures/default_student.json',
+        'lessons/tests/fixtures/default_lesson.json',
+        'lessons/tests/fixtures/other_student.json',
+        'lessons/tests/fixtures/other_lesson.json',
+    ]
+
     def setUp(self):
-        self.student = Student.objects.create_user(
-            username = 'john.doe@example.org',
-            first_name = 'John',
-            last_name = 'Doe',
-            password = 'Password123'
-        )
-        self.lesson = Lesson.objects.create(
-            lesson_name = "Piano Practice",
-            duration = 30,
-            date = "2022-11-26",
-            price = 50,
-            term_period = "TERM2"
-        )
+        self.student = Student.objects.get(username='John.Doe@example.org')
+        self.lesson = Lesson.objects.get(lesson_name='PIANO_PRACTICE')
         self.lesson_request = LessonRequest.objects.create(
             student_id = self.student.id,
             lesson_id = self.lesson.id,
@@ -46,18 +42,14 @@ class CancelLessonViewTestCase(TestCase):
 
     def test_can_cancel_listed_lesson(self):
         self.client.login(username=self.student.username, password='Password123')
-        counter_before = LessonRequest.objects.count()
         response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id})
-        counter_after = LessonRequest.objects.count()
-        self.assertEqual(counter_before - 1, counter_after)
+        self.assertEqual(LessonRequest.objects.count(), 0)
 
     def test_cannot_cancel_the_same_lesson_twice(self):
         self.client.login(username=self.student.username, password='Password123')
-        with self.assertRaises(IntegrityError):
-            response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id})
-            response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id}, follow=True)
-            redirect_url = reverse_with_next('request_status', self.url)
-            self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
+        response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id})
+        response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id}, follow=True)
+        self.assertTrue(response.status_code==400)
 
     def test_cannot_cancel_lesson_belonging_to_other_student(self):
         self.client.login(username=self.student.username, password='Password123')
@@ -68,26 +60,9 @@ class CancelLessonViewTestCase(TestCase):
 
 
     ''' Functions for test class '''
-    def _create_other_user(self):
-        self.other_student = Student.objects.create_user(
-            username = 'jane.doe@example.org',
-            first_name = 'Jane',
-            last_name = 'Doe',
-            password = 'Password123'
-        )
-
-    def _create_other_lesson(self):
-        self.other_lesson = Lesson.objects.create(
-            lesson_name = "Trumpet Training",
-            duration = 90,
-            date = "2023-01-15",
-            price = 50,
-            term_period = "TERM5"
-        )
-
     def _create_other_lesson_request(self):
-        self._create_other_user()
-        self._create_other_lesson()
+        self.other_student = Student.objects.get(username='Jane.Doe@example.org')
+        self.other_lesson = Lesson.objects.get(lesson_name='PIANO_PRACTICE')
         self.other_lesson_request = LessonRequest.objects.create(
             student_id = self.other_student.id,
             lesson_id = self.other_lesson.id,
