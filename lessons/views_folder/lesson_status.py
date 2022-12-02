@@ -36,13 +36,14 @@ def edit_lesson(request, LessonRequestID):
     except MultipleObjectsReturned:
         return HttpResponseBadRequest(HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
 
+    if lesson_request.student_id != request.user.id:
+        return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+
     if request.method == 'POST':
-        if lesson_request.student_id != request.user.id:
-            return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
-        elif lesson_request.is_authorised:
+        if lesson_request.is_authorised:
             return HttpResponseForbidden(LESSON_AUTHORISED_MSG)
         else:
-            booked_lesson = Lesson.objects.filter(id=lesson_request.lesson_id).update(
+            update_lesson = Lesson.objects.filter(id=lesson_request.lesson_id).update(
                 lesson_name = request.POST.get('lesson_name'),
                 student_availability = request.POST.get('student_availability'),
                 number_of_lessons = request.POST.get('number_of_lessons'),
@@ -53,22 +54,18 @@ def edit_lesson(request, LessonRequestID):
             )
             return redirect('request_status')
     else:
-        if lesson_request.student_id != request.user.id:
-            return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
-        else:
-            lesson_request = LessonRequest.objects.get(id=LessonRequestID)
-            edit_form = LessonRequestForm(
-                initial={
-                    'lesson_name':lesson_request.lesson.lesson_name,
-                    'student_availability':lesson_request.lesson.student_availability,
-                    'number_of_lessons':lesson_request.lesson.number_of_lessons,
-                    'interval':lesson_request.lesson.interval,
-                    'duration':lesson_request.lesson.duration,
-                    'term_period':lesson_request.lesson.term_period,
-                    'additional_information':lesson_request.lesson.additional_information,
-                    }
-                )
-            return render(request, 'edit_lesson.html', {'edit_lesson_form': edit_form, 'lessonID': LessonRequestID})
+        edit_form = LessonRequestForm(
+            initial={
+                'lesson_name':lesson_request.lesson.lesson_name,
+                'student_availability':lesson_request.lesson.student_availability,
+                'number_of_lessons':lesson_request.lesson.number_of_lessons,
+                'interval':lesson_request.lesson.interval,
+                'duration':lesson_request.lesson.duration,
+                'term_period':lesson_request.lesson.term_period,
+                'additional_information':lesson_request.lesson.additional_information,
+                }
+            )
+        return render(request, 'edit_lesson.html', {'edit_lesson_form': edit_form, 'lessonID': LessonRequestID})
 
 
 @login_required(login_url='/log_in/')
@@ -88,5 +85,5 @@ def cancel_lesson(request, LessonRequestID):
         elif lesson_request.get().is_authorised:
             return HttpResponseForbidden(LESSON_AUTHORISED_MSG)
         else:
-            LessonRequest.objects.get(id=LessonRequestID).delete()
+            lesson_request.delete()
     return redirect('request_status')
