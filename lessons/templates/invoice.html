@@ -1,39 +1,46 @@
 {% extends 'base-content.html' %}
 {% block content%}
+
 <div class="container">
-  
-  <table class="table">
-    <caption>List of Booking Lesson</caption>
-    <thead>
-      <tr>
-        <th scope="col">id</th>
-        <th scope="col">Lession Name</th>
-        <th scope="col">Duration</th>
-        <th scope="col">Date</th>
+  <div style="margin-bottom: 10px;">
+      
+      Total Price: {{totalPrice}}
+  </div>
+  <div class="panel panel-default">
+      
+      <div class="panel-heading">
+          <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+          List Of Invoices:</div>
+
+      <!-- Table -->
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Ref Number</th>
+          <th scope="col">Student Name</th>
+          <th scope="col">Lesson Name</th>
         <th scope="col">Price</th>
-        <th scope="col">Term Period</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for t in lessons %}
-      <tr>
-        <th>{{t.id}}</th>
-        <td>{{t.lesson_name}}</td>
-        <td>{{t.duration}}</td>
-        <td>{{t.date}}</td>
-        <td>{{t.price}}</td>
-        <td>{{t.term_period}}</td>
-       
-        <td>
-          <button type="button" >Get Invoice</button>
-        </td>
-      </tr>
-      {% endfor%}
-      
-      
-    </tbody>
-  </table>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in invoices %}
+          <tr>
+              <th>{{t.refNumber}}</th>
+              <td>{{t.student.username}}</td>
+              <td>{{t.lesson.lesson_name}}</td>
+              <td>50</td>
+              
+            </tr>
+          {% endfor %}
+          
+          
+        </tbody>
+      </table>
+    </div>
 </div>
+
+
+
 
   {% endblock%}

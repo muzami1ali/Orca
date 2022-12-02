@@ -2,10 +2,11 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,logout,authenticate
 from .forms import SignUpForms, LogInForm, LessonRequestForm, BankTransferForm
 from django.contrib import messages
-from .models import Lesson, LessonRequest, Student
+from .models import Lesson, LessonRequest, Student, Invoice, InvoiceNumber
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db import IntegrityError
+from django.db.models import Max
 
 def home(request):
     return render(request,'index.html')
@@ -14,6 +15,10 @@ def booking(request):
     return render(request,'booking.html')
 
 
+def getRefNumber(student_id):
+    InvoiceNumber.objects.create()
+    max = str(InvoiceNumber.objects.all().aggregate(Max('id')).get('id__max')).zfill(3)
+    return str(student_id).zfill(4) + "-" + max
 
 def log_in(request):
     if request.method == 'POST':
@@ -63,6 +68,7 @@ def request_lessons(request):
                     book_lesson = LessonRequestForm(request.POST)
                     book_lesson = book_lesson.save()
                     LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
+                    Invoice.objects.create(refNumber = getRefNumber(request.user.id), student_id=request.user.id, lesson_id=book_lesson.id)
                 else:
                     raise IntegrityError("Class cannot be booked twice")
             except ValueError:
@@ -72,6 +78,7 @@ def request_lessons(request):
                 book_lesson = LessonRequestForm(request.POST)
                 book_lesson = book_lesson.save()
                 LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
+                Invoice.objects.create(refNumber = getRefNumber(request.user.id), student_id=request.user.id, lesson_id=book_lesson.id)
             except IntegrityError:
                 pass
         return redirect('request_lessons')
@@ -93,7 +100,6 @@ def bank_transfer(request):
 @login_required(login_url='log_in')
 def invoice(request):
     invoices = Invoice.objects.all()
-    for i in invoices:
-        print(i.refNumber)
-    return render(request, 'invoice.html', {'invoices':invoices})
+    totalPrice = 50 * len(invoices)
+    return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 

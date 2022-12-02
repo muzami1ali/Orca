@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Student, LessonRequest, Lesson, bankTransfers
+from .models import Student, LessonRequest, Lesson, bankTransfers,Invoice, InvoiceNumber
 
 @admin.register(Student)
 class UserAdmin(admin.ModelAdmin):
@@ -18,4 +18,16 @@ class LessonAdmin(admin.ModelAdmin):
 class BankTransferAdmin(admin.ModelAdmin):
     list_display=[
         'invoice', 'first_name', 'last_name', 'Account_Number', 'Sort_Code', 'Amount' ,
+    ]
+
+@admin.register(Invoice)
+class Invoice(admin.ModelAdmin):
+    list_display=[
+        'refNumber', 'student', 'lesson'
+    ]
+
+@admin.register(InvoiceNumber)
+class InvoiceNumber(admin.ModelAdmin):
+    list_display=[
+        
     ]
