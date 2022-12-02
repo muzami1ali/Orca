@@ -26,6 +26,7 @@ class LessonRequestAdmin(admin.ModelAdmin):
         'id', 'student_id', 'student', 'lesson_id', 'lesson',
     ]
 
+
 @admin.register(Invoice)
 class Invoice(admin.ModelAdmin):
     list_display=[
@@ -37,3 +38,4 @@ class InvoiceNumber(admin.ModelAdmin):
     list_display=[
         
     ]
+

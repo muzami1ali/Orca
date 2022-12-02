@@ -1,5 +1,6 @@
 from django import forms
 from .models import Student, Lesson, bankTransfers
+#from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.validators import RegexValidator
 
 class SignUpForms(forms.ModelForm):
