@@ -1,32 +1,38 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top pt-1 pb-1 mb-3">
-<div class="container">
+<nav class="navbar navbar-bottom navbar-expand-lg navbar-dark bg-dark fixed-top pt-1 pb-1 mb-3">
+  <div class = "container-fluid">
   <a class="navbar-brand" href="{% url 'home' %}">
-    <span class = "bi-music-note-beamed"></span>
-     Music Management </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-      <li class="nav-item active">
-        <a class="nav-link" href='{%url 'request_lessons'%}'>Booking </a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href='{%url 'bank_transfer'%}'>Payment </a>
-      </li>
-
+    <div style = "position:relative;">
+        <span class = "bi-music-note-beamed "></span>
+        Music Management </a>
+    </div>
+     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+        <li class="nav-item active">
+          <a class="nav-link" href="{%url 'request_lessons'%}">Booking </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{%url 'bank_transfer'%}">Payment </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Contact </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class = "bi-person-circle"></span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Change profile</a>
+          <a class="dropdown-item" href="#">Change Password</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Something else here</a>
         </div>
       </li>
     </ul>
   </div>
-</div>
+  </div>
 </nav>

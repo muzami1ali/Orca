@@ -73,6 +73,12 @@ table.lesson-information{
   box-shadow: transparent 0 0 0 3px;
 
   }
+.navbar-bottom{
+  position: :absolute;
+  bottom:0;
+  width:90%;
+  margin-bottom:0;
+}
 
 
 input[type=]
