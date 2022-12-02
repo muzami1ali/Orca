@@ -38,11 +38,30 @@ class LessonAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'lesson_name', 'date', 'duration', 'price', 'term_period',
     ]
+    def has_delete_permission(self, request,object=None):
+       return False
+     
+    def has_change_permission(self, request,object=None):
+       if request.user.is_staff==True or request.user.is_superuser==True:
+           return  True
+       return False
+   
+       
+    def has_add_permission(self, request):
+       if request.user.is_superuser==True:
+           return True
+       return False
+      
+    
 @admin.register(LessonRequest)
 class LessonRequestAdmin(admin.ModelAdmin):
     list_display=[
      'get_student_id','student','lesson','is_authorised',
     ]
+    def has_add_permission(self, request) :
+        return False
+
     @admin.display(ordering='id',description='Student ID')
     def get_student_id(self,obj):
         return obj.student.id
+    
