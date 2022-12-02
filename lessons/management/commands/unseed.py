@@ -5,7 +5,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         Student.objects.filter(is_staff=False, is_superuser=False).delete()
         self._delete_all_lessons()
+        print("Database unseeded.")
 
     def _delete_all_lessons(self):
-        for i in range(1, 7):
-            Lesson.objects.filter(term_period=f'TERM{i}').delete()
+        for lesson in Lesson.objects.all():
+            lesson.delete()

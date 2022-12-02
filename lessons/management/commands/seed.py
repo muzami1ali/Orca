@@ -6,7 +6,6 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import IntegrityError
 from faker import Faker
 from lessons.models import Student, Lesson
-from datetime import datetime
 import random
 
 
@@ -14,11 +13,12 @@ class Command(BaseCommand):
     PASSWORD = "Password123"
     STUDENT_COUNT = 100
 
-    LESSON_NAMES = ['Piano Practice', 'Trumpet Techniques', 'Guitar Guidance']
+    LESSON_CHOICES =["PIANO_PRACTICE", "TRUMPET_TRAINING", "MUSIC_THEORY", "PERFORMANCE_PREP"]
+    DAYS_OF_THE_WEEK =["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+    DURATION_CHOICES = [30, 45, 60]
     TERM_PERIOD = ['TERM1', 'TERM2', 'TERM3', 'TERM4', 'TERM5', 'TERM6']
-    DURATION = [30, 60, 120]
+    MORE_INFO = ['', 'Please assign tutor, Jason Doe.', 'Please give me evening lessons.']
     LESSON_COUNT = 50
-
 
     def __init__(self):
         super().__init__()
@@ -67,11 +67,12 @@ class Command(BaseCommand):
         print('\n')
 
     def create_new_lesson(self):
-        self.lesson = Lesson(
-            lesson_name = Command.LESSON_NAMES[random.randrange(0, 3)],
-            duration = Command.DURATION[random.randrange(0, 3)],
-            date = self.faker.date_between_dates(date_start=datetime(2022,9,1), date_end=datetime(2023,7,21)),
-            price = 50,
-            term_period = Command.TERM_PERIOD[random.randrange(0, 6)]
+        self.lesson = Lesson.objects.create(
+            lesson_name = Command.LESSON_CHOICES[random.randrange(0, 4)],
+            student_availability = Command.DAYS_OF_THE_WEEK[random.randrange(0, 7)],
+            number_of_lessons = random.randrange(1, 11),
+            interval = random.randrange(1, 3),
+            duration = Command.DURATION_CHOICES[random.randrange(0, 3)],
+            term_period = Command.TERM_PERIOD[random.randrange(0, 6)],
+            additional_information = Command.MORE_INFO[random.randrange(0, 3)]
         )
-        self.lesson.save()
