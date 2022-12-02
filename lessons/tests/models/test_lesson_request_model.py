@@ -1,34 +1,61 @@
 """Tests for lesson request model"""
 from django.test import TestCase
 from django.core.exceptions import ValidationError
-from lessons.models import Student,Lesson, LessonRequest
-import uuid
+from lessons.models import Student, Lesson, LessonRequest
+from django.db import IntegrityError
 
 
 class LessonRequestModelTest(TestCase):
+    fixtures = [
+        'lessons/tests/fixtures/default_student.json',
+        'lessons/tests/fixtures/default_lesson.json',
+    ]
+
     def setUp(self):
-        self.student=Student.objects.create_user(
-            username = 'john.doe@example.org',
-            first_name = 'John',
-            last_name = 'Doe',
-            password = 'Password123'
+        self.student = Student.objects.get(username='John.Doe@example.org')
+        self.lesson = Lesson.objects.get(lesson_name='PIANO_PRACTICE')
+        self.authorised = False
+
+    def test_lesson_request_model_is_vald(self):
+        self._create_new_lesson_request()
+        self._model_is_valid()
+
+    def test_missing_student_is_invalid(self):
+        self.student = None
+        try:
+            self._create_new_lesson_request()
+            self._model_is_invalid()
+        except IntegrityError:
+            pass
+
+    def test_missing_lesson_is_invalid(self):
+        self.lesson = None
+        try:
+            self._create_new_lesson_request()
+            self._model_is_invalid()
+        except IntegrityError:
+            pass
+
+    def test_is_authorised_set_to_true_is_valid(self):
+        self.authorised = True
+        self._create_new_lesson_request()
+        self._model_is_valid()
+
+    ''' Functions for the test class '''
+
+    def _model_is_valid(self):
+        try:
+            self.lesson_request.full_clean()
+        except ValidationError:
+            self.fail('Lesson object is invalid.')
+
+    def _model_is_invalid(self):
+        with self.assertRaises(ValidationError):
+            self.lesson_request.full_clean()
+
+    def _create_new_lesson_request(self):
+        self.lesson_request = LessonRequest.objects.create(
+            student=self.student,
+            lesson=self.lesson,
+            is_authorised=self.authorised
         )
-        self.lesson = Lesson(
-            lesson_name = "Piano Practice",
-            duration = 30,
-            date = "2022-11-22",
-            price = 50
-        )
-        self.lesson_request=LessonRequest(student =self.student,lesson = self.lesson, is_authorised = False)
-
-
-
-    def test_lesson_request_has_valid_student(self):
-        self.assertEqual(self.lesson_request.student.username, "john.doe@example.org")
-        self.assertEqual(self.lesson_request.student.first_name, "John")
-        self.assertEqual(self.lesson_request.student.last_name, "Doe")
-
-    def test_lesson_request_has_valid_lesson(self):
-        self.assertEqual(self.lesson_request.lesson.lesson_name, "Piano Practice")
-        self.assertEqual(self.lesson_request.lesson.duration, 30)
-        self.assertEqual(self.lesson_request.lesson.date, "2022-11-22")
