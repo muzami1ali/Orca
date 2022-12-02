@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.db import IntegrityError
 from django.db.models import Max
 
+
 def home(request):
     return render(request,'index.html')
 
@@ -85,6 +86,7 @@ def request_lessons(request):
     else:
         form = LessonRequestForm()
         return render(request, 'request_lessons.html', {'lesson_form': form})
+
 
 @login_required
 def bank_transfer(request):

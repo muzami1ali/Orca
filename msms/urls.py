@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from lessons import views
+from lessons.views_folder import lesson_status, lesson_request
 
 
 urlpatterns = [
@@ -32,4 +33,5 @@ urlpatterns = [
     path('booking/status/edit/<int:LessonRequestID>/', lesson_status.edit_lesson, name='edit_lesson'),
     path('booking/status/cancel/<int:LessonRequestID>/', lesson_status.cancel_lesson, name='cancel_lesson'),
     path('invoice/', views.invoice, name='invoice')
+
 ]

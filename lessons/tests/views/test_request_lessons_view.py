@@ -57,10 +57,10 @@ class RequestLessonsViewTestCase(TestCase):
 
     def test_cannot_book_same_lesson_twice(self):
         self.client.login(username=self.student.username, password='Password123')
-        with self.assertRaises(IntegrityError):
-            response = self.client.post(self.url, data=self.form_data)
-            response = self.client.post(self.url, data=self.form_data)
-            self.assertEqual(Lesson.objects.count(), 1)
+        response = self.client.post(self.url, data=self.form_data)
+        response = self.client.post(self.url, data=self.form_data)
+        self.assertEqual(Lesson.objects.count(), 1)
+        self.assertFalse(response.status_code==200)
 
     def test_cannot_submit_empty_form(self):
         self.client.login(username=self.student.username, password='Password123')
