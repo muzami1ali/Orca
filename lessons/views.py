@@ -78,7 +78,7 @@ def request_lessons(request):
     else:
         form = LessonRequestForm()
         return render(request, 'request_lessons.html', {'lesson_form': form})
-    
+
 @login_required
 def bank_transfer(request):
     if request.method == 'POST':
