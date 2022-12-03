@@ -5,7 +5,7 @@
   <form action="{% url 'request_lessons' %}" method="post">
     {% csrf_token %}
     {{ lesson_form.as_p }}
-    <input type="submit" value="Book" class = "lessons" >
+    <input type="submit" value="Book" class = "lessons" > <a class="" href="/invoice">Invoices</a>
   </form>
 </div>
 {% endblock%}
