@@ -21,8 +21,8 @@ class Command(BaseCommand):
     MORE_INFO = ['', 'Please assign tutor, Jason Doe.', 'Please give me evening lessons.']
     LESSON_COUNT = 50
 
-    LESSON_REQUESTS_COUNT = 45
-    JOHN_DOE_FULFILLED_REQUESTS = 5
+    LESSON_REQUESTS_COUNT = 49
+    JOHN_DOE_FULFILLED_REQUESTS = 1
 
     '''
         Constants to track the starting db id for Student and Lesson.
@@ -72,7 +72,7 @@ class Command(BaseCommand):
 
     def create_new_student(self, f_name, l_name, staff=False, superuser=False):
         Student.objects.create_user(
-            username=f'{f_name}.{l_name}@example.org',
+            username=f'{f_name.lower()}.{l_name.lower()}@example.org',
             first_name = f_name,
             last_name = l_name,
             password=Command.PASSWORD,
