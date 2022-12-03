@@ -23,6 +23,9 @@ def log_in(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
+                if user.is_superuser or user.is_staff:
+                    login(request,user)
+                    return redirect('admin:index')
                 login(request, user)
                 return redirect('request_lessons')
         messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")

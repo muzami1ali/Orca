@@ -26,9 +26,11 @@
       
         {% else %}
             {%if user.is_superuser%}
+            <p>{{user.username}}</p>
               <a href="{% url 'admin:index' %}">Admin</a>
             </form>
             {% elif user.is_staff%}
+            <p>{{user.username}}</p>
               <a href="{% url 'admin:index' %}">Admin</a>
             {%else%}
             <p>{{user.username}}</p>
