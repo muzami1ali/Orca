@@ -55,3 +55,11 @@ def bank_transfer(request):
     else:
         form = BankTransferForm()
     return render(request, 'bank_transfer.html', {'form': form})
+
+@login_required
+def admin_panel(request):
+    if request.method=='POST':
+        if request.user.is_authenticated:
+            if request.user.is_superuser or request.user.is_staff:
+                return redirect('admin')
+    return render(request,'request_lessons.html')

@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Student, LessonRequest, Lesson, bankTransfers
 
 
-    
+
 @admin.register(Student)
 class UserAdmin(admin.ModelAdmin):
    search_fields = ("username__startswith", )
@@ -45,6 +45,7 @@ class BankTransferAdmin(admin.ModelAdmin):
     list_display=[
         'invoice', 'first_name', 'last_name', 'Account_Number', 'Sort_Code', 'Amount' ,
     ]
+   
 
 @admin.register(LessonRequest)
 class LessonRequestAdmin(admin.ModelAdmin):
