@@ -50,8 +50,17 @@ class BankTransferAdmin(admin.ModelAdmin):
 @admin.register(LessonRequest)
 class LessonRequestAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'get_student_id', 'student', 'lesson_id', 'lesson',
+        'id', 'get_student_id', 'student', 'lesson_id', 'lesson','is_authorised',
     ]
+    actions=['enable_selected','disable_selected']
+    def enable_selected(self,request,queryset):
+        queryset.update(is_authorised=True)
+    def disable_selected(self,request,queryset):
+        queryset.update(is_authorised=False)
+    enable_selected.short_description="Authorise the lessons"
+    disable_selected.short_description="Revoke the lesson's authorisation"
+   
+        
     def has_delete_permission(self, request,object=None):
        return False
      
