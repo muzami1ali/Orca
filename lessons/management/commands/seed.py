@@ -13,6 +13,7 @@ class Command(BaseCommand):
     PASSWORD = "Password123"
     STUDENT_COUNT = 100
     ADMINISTRATOR_COUNT = 1
+    REQUIRED_USERS_COUNTER = 4
 
     LESSON_CHOICES =["PIANO_PRACTICE", "TRUMPET_TRAINING", "MUSIC_THEORY", "PERFORMANCE_PREP"]
     DAYS_OF_THE_WEEK =["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
@@ -21,8 +22,7 @@ class Command(BaseCommand):
     MORE_INFO = ['', 'Please assign tutor, Jason Doe.', 'Please give me evening lessons.']
     LESSON_COUNT = 50
 
-    LESSON_REQUESTS_COUNT = 49
-    JOHN_DOE_FULFILLED_REQUESTS = 1
+    LESSON_REQUESTS_COUNT = 49      # John Doe has 1 lesson request = 50 altogether
 
     '''
         Constants to track the starting db id for Student and Lesson.
@@ -103,16 +103,12 @@ class Command(BaseCommand):
 
     ''' Seed Lesson Requests '''
     def seed_lesson_requests(self):
-        counter = 0
-        while counter < Command.JOHN_DOE_FULFILLED_REQUESTS:
-            print(f'Seeding John Doe fufilled requests...{counter + 1}',  end='\r')
-            self.create_new_lesson_request(
-                Command.STUDENT_DB_START_ID,
-                Command.LESSON_DB_START_ID + counter,
-                True
-                )
-            counter += 1
-
+        print(f'Seeding John Doe fufilled requests...1',  end='\r')
+        self.create_new_lesson_request(
+            Command.STUDENT_DB_START_ID,
+            Command.LESSON_DB_START_ID + 1,
+            fufilled=True
+            )
         print()
 
         counter = 0
@@ -121,11 +117,11 @@ class Command(BaseCommand):
             print(f'Seeding other lesson requests...{counter}',  end='\r')
             self.create_new_lesson_request(
                 student_id = random.randrange(
-                    Command.STUDENT_DB_START_ID + 5,
+                    Command.STUDENT_DB_START_ID + Command.REQUIRED_USERS_COUNTER,
                     Command.STUDENT_DB_START_ID + Student.objects.count()
                     ),
                 lesson_id = random.randrange(
-                    Command.LESSON_DB_START_ID + 6,
+                    Command.LESSON_DB_START_ID + 1,
                     Command.LESSON_DB_START_ID + Lesson.objects.count()
                     )
                 )
