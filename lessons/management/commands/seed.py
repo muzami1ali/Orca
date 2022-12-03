@@ -17,6 +17,7 @@ class Command(BaseCommand):
     DAYS_OF_THE_WEEK =["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
     DURATION_CHOICES = [30, 45, 60]
     TERM_PERIOD = ['TERM1', 'TERM2', 'TERM3', 'TERM4', 'TERM5', 'TERM6']
+    MORE_INFO = ['', 'Please assign tutor, Jason Doe.', 'Please give me evening lessons.']
     DURATION = [30, 60, 120]
     LESSON_COUNT = 50
 
