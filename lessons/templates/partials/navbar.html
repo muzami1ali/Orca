@@ -1,38 +1,40 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top pt-1 pb-1 mb-3">
+{% if user.is_authenticated %}
+<nav class="navbar navbar-bottom navbar-expand-lg navbar-dark bg-dark fixed-top pt-1 pb-1 mb-3">
+  <div class = "container-fluid ">
+  <a class="navbar-brand" href="{% url 'request_lessons' %}">
+    <div style = "position:absolute">
+        <span class = "bi-music-note-beamed "></span>
+        Music Management </a>
+    </div>
+     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <a class="navbar-brand" href="{% url 'home' %}">
-    {% load static %}<img id = "nav-icon" src = "{% static "images/pngegg.png" %}" >rca</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+      <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+        <li class="nav-item active">
+          <a class="nav-link" href="{%url 'request_lessons'%}">Book</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{%url 'request_status'%}">Your bookings</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{%url 'invoice'%}">My invoices </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{%url 'bank_transfer'%}">Payment </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{%url 'contact'%}">Contact </a>
+        </li>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#"> <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
+
+      </ul>
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+
+        <a class="nav-link " href="{%url 'log_out'%}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class = "bi-person-circle"> Log Out</span>
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class=" lessons btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+  {% endif%}
   </div>
-
 </nav>
