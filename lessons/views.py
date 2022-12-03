@@ -14,7 +14,8 @@ def home(request):
 
 def booking(request):
     return render(request,'booking.html')
-
+    
+@login_required(login_url='log_in')
 def contact(request):
     return render(request,'contact.html')
 
@@ -53,7 +54,6 @@ def sign_up(request):
         context['form'] =SignUpForms()
     return render(request,'sign_up.html',context)
 
-<<<<<<< HEAD
 
 @login_required(login_url='log_in')
 def request_lessons(request):
@@ -90,9 +90,6 @@ def request_lessons(request):
         return render(request, 'request_lessons.html', {'lesson_form': form})
 
 @login_required(login_url='log_in')
-=======
-@login_required
->>>>>>> origin
 def bank_transfer(request):
     if request.method == 'POST':
         form= BankTransferForm(request.POST)
@@ -108,4 +105,3 @@ def invoice(request):
     invoices = Invoice.objects.all()
     totalPrice = 50 * len(invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
-

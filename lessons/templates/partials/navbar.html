@@ -1,7 +1,8 @@
+{% if user.is_authenticated %}
 <nav class="navbar navbar-bottom navbar-expand-lg navbar-dark bg-dark fixed-top pt-1 pb-1 mb-3">
   <div class = "container-fluid ">
-  <a class="navbar-brand" href="{% url 'home' %}">
-    <div style = "position:relative;">
+  <a class="navbar-brand" href="{% url 'request_lessons' %}">
+    <div style = "position:absolute">
         <span class = "bi-music-note-beamed "></span>
         Music Management </a>
     </div>
@@ -17,11 +18,15 @@
           <a class="nav-link" href="{%url 'request_status'%}">Your bookings</a>
         </li>
         <li class="nav-item active">
+          <a class="nav-link" href="{%url 'invoice'%}">My invoices </a>
+        </li>
+        <li class="nav-item active">
           <a class="nav-link" href="{%url 'bank_transfer'%}">Payment </a>
         </li>
         <li class="nav-item active">
           <a class="nav-link" href="{%url 'contact'%}">Contact </a>
         </li>
+
 
       </ul>
       <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
@@ -29,8 +34,7 @@
         <a class="nav-link " href="{%url 'log_out'%}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class = "bi-person-circle"> Log Out</span>
         </a>
-
-
     </ul>
-
+  {% endif%}
+  </div>
 </nav>
