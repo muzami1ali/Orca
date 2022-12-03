@@ -31,5 +31,8 @@ urlpatterns = [
     path('booking/status/', lesson_status.request_status, name='request_status'),
     path('booking/status/edit/<int:LessonRequestID>/', lesson_status.edit_lesson, name='edit_lesson'),
     path('booking/status/cancel/<int:LessonRequestID>/', lesson_status.cancel_lesson, name='cancel_lesson'),
-    path('invoice/', views.invoice, name='invoice')
+    path('invoice/', views.invoice, name='invoice'),
+    path('deal_requests/', views.deal_requests, name='deal_requests'),
+    path('authorise/<int:nid>', views.authorise, name='authorise'),
+    path('decline/<int:nid>', views.decline, name='decline'),
 ]

@@ -16,7 +16,7 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th scope="col">Ref Number</th>
+            <th scope="col">Number</th>
           <th scope="col">Student Name</th>
           <th scope="col">Lesson Name</th>
         <th scope="col">Price</th>
@@ -26,7 +26,7 @@
         <tbody>
           {% for t in invoices %}
           <tr>
-              <th>{{t.refNumber}}</th>
+              <th>{{t.id}}</th>
               <td>{{t.student.username}}</td>
               <td>{{t.lesson.lesson_name}}</td>
               <td>50</td>
