@@ -1,11 +1,9 @@
-{% extends 'base-content.html' %}
-{% block content%}
+{% extends 'base-content.html' %} {% block content%}
 <div class="container vh-100">
   <h1>Request Lessons</h1>
   <form action="{% url 'request_lessons' %}" method="post">
-    {% csrf_token %}
-    {{ lesson_form.as_p }}
-    <input type="submit" value="Book" class = "lessons" >
+    {% csrf_token %} {{ lesson_form.as_p }}
+    <input type="submit" value="Book" class="lessons" />
   </form>
 </div>
 {% endblock%}
