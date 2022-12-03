@@ -95,9 +95,5 @@ class bankTransfers(models.Model):
     Amount = models.PositiveSmallIntegerField(default=0,blank=False)
 
 class Invoice(models.Model):
-    refNumber = models.CharField(max_length=32, primary_key=True)
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
     lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
-
-class InvoiceNumber(models.Model):
-    pass
