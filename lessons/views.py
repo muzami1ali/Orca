@@ -9,6 +9,7 @@ from django.db import IntegrityError
 from django.db.models import Max
 
 
+
 def home(request):
     return render(request,'index.html')
 
@@ -36,7 +37,7 @@ def log_in(request):
             if user is not None:
                 if user.is_superuser or user.is_staff:
                     login(request,user)
-                    return redirect('admin:index')
+                    return redirect('admin_panel')
                 login(request, user)
                 return redirect('request_lessons')
         messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
@@ -54,7 +55,7 @@ def sign_up(request):
         context['form']= SignUpForms(request.POST)
         if context['form'].is_valid():
             context['form'].save()
-            return redirect('sign_up')
+            return redirect('log_in')
     else:
         context['form'] =SignUpForms()
     return render(request,'sign_up.html',context)
@@ -111,3 +112,10 @@ def invoice(request):
     totalPrice = 50 * len(invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
+def admin_panel(request):
+    context={
+        'lessons_request_data':LessonRequest.objects.all(),
+        'user_data':Student.objects.all(),
+        'lessons_data':Lesson.objects.all()
+    }
+    return render(request,'admin_panel.html',context)

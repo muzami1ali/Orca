@@ -17,12 +17,15 @@ from django.contrib import admin
 from django.urls import path
 from lessons import views
 from lessons.views_folder import lesson_status, lesson_request
+from lessons.views_folder.admin_panel import AdminTableView
+
 
 admin.site.site_title='Music Admin'
 admin.site.site_header='Music Admin'
 admin.site.index_title=''
 urlpatterns = [
     path('admin/', admin.site.urls,name='admin'),
+    path('admin_panel/',views.admin_panel,name='admin_panel'),
     path('',views.home,name='home'),
     path('log_in/', views.log_in, name = 'log_in'),
     path('log_out/',views.log_out, name='log_out'),
