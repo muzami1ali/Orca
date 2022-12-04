@@ -1,5 +1,5 @@
 '''
-    Test cases for the cance lesson view.
+    Test cases for the cancel lesson view.
     @author Dean Whitbread
     @version 02/12/2022
 '''

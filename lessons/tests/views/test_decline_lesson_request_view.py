@@ -1,8 +1,7 @@
 '''
-    Test cases for the cance lesson view.
-    @author Dean Whitbread
-    @version 02/12/2022
+    Test cases for the decline lesson request view
 '''
+
 from django.test import TestCase
 from django.urls import reverse
 from django.db import IntegrityError
