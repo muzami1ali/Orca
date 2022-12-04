@@ -28,9 +28,13 @@
               </tr>
               <tr>
                 <td>
+                  {%if lesson_request.is_authorised%}
+                      <p>Cannot edit through portal now call the institution if cancellation urgent</p>
+                  {%else%}
                   <form action="{% url 'edit_lesson' lesson_request.id %}" method="get">
                     <input type="submit" value="Edit" class="lessons btn small-button">
                   </form>
+                  {%endif%}
                 </td>
                 <td> 
                   {%if lesson_request.is_authorised%}
