@@ -20,6 +20,7 @@ def contact(request):
     return render(request,'contact.html')
 
 
+
 def getRefNumber(student_id):
     InvoiceNumber.objects.create()
     max = str(InvoiceNumber.objects.all().aggregate(Max('id')).get('id__max')).zfill(3)
