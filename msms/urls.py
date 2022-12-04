@@ -35,4 +35,5 @@ urlpatterns = [
     path('deal_requests/', views.deal_requests, name='deal_requests'),
     path('authorise/<int:nid>', views.authorise, name='authorise'),
     path('decline/<int:nid>', views.decline, name='decline'),
+    path('contact/', views.contact, name='contact')
 ]
