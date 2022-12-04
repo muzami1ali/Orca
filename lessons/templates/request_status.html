@@ -32,11 +32,16 @@
                     <input type="submit" value="Edit" class="lessons btn small-button">
                   </form>
                 </td>
-                <td>
+                <td> 
+                  {%if lesson_request.is_authorised%}
+                      <p>Cannot cancel through portal now call the institution if cancellation urgent</p>
+                  {%else%}
                   <form action="{% url 'cancel_lesson' lesson_request.id %}" method="post">
                     {% csrf_token %}
                     <input type="submit" value="Cancel" class="lessons btn small-button">
                   </form>
+                  {%endif%}
+            
                 </td>
               </tr>
             </table>

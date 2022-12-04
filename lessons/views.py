@@ -110,10 +110,3 @@ def invoice(request):
     totalPrice = 50 * len(invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
-@login_required
-def admin_panel(request):
-    if request.method=='POST':
-        if request.user.is_authenticated:
-            if request.user.is_superuser or request.user.is_staff:
-                return redirect('admin')
-    return render(request,'request_lessons.html')
