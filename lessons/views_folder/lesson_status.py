@@ -10,7 +10,11 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.auth.decorators import login_required
 from lessons.models import Lesson, LessonRequest
 from lessons.forms import LessonRequestForm
+from lessons.views_folder import HttpResponseConstantMsg
 
+''' Constant Messages '''
+LESSON_AUTHORISED_MSG = "Lesson has been authorised and cannot be edited."
+LESSON_CANNOT_CANCEL_TWICE_MSG = "Cannot cancel the same booking twice."
 
 @login_required(login_url='/log_in/')
 def request_status(request):
@@ -25,61 +29,61 @@ def request_status(request):
 
 @login_required(login_url='/log_in/')
 def edit_lesson(request, LessonRequestID):
-    if request.method == 'POST':
-        try:
-            if request.user.id == LessonRequest.objects.get(id=LessonRequestID).student_id:
-                lesson_request = LessonRequest.objects.filter(id=LessonRequestID).get()
-                booked_lesson = Lesson.objects.filter(id=lesson_request.lesson_id).update(
-                    lesson_name = request.POST.get('lesson_name'),
-                    student_availability = request.POST.get('student_availability'),
-                    number_of_lessons = request.POST.get('number_of_lessons'),
-                    interval = request.POST.get('interval'),
-                    duration = request.POST.get('duration'),
-                    term_period = request.POST.get('term_period'),
-                    additional_information = request.POST.get('additional_information')
-                )
-            else:
-                return HttpResponseForbidden("Cannot edit other student lesson requests")
-        except ObjectDoesNotExist:
-            return HttpResponseBadRequest("Lesson request does not exist.")
-        except MultipleObjectsReturned:
-            return HttpResponseBadRequest("Multiple lesson objects found.")
+    try:
+        lesson_request = LessonRequest.objects.filter(id=LessonRequestID).get()
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest(HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
+    except MultipleObjectsReturned:
+        return HttpResponseBadRequest(HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
 
-        return redirect('request_status')
-    else:
-        if LessonRequest.objects.filter(id=LessonRequestID).exists():
-            if request.user.id == LessonRequest.objects.get(id=LessonRequestID).student_id:
-                lesson_request = LessonRequest.objects.get(id=LessonRequestID)
-                edit_form = LessonRequestForm(
-                    initial={
-                        'lesson_name':lesson_request.lesson.lesson_name,
-                        'student_availability':lesson_request.lesson.student_availability,
-                        'number_of_lessons':lesson_request.lesson.number_of_lessons,
-                        'interval':lesson_request.lesson.interval,
-                        'duration':lesson_request.lesson.duration,
-                        'term_period':lesson_request.lesson.term_period,
-                        'additional_information':lesson_request.lesson.additional_information,
-                        }
-                    )
-            else:
-                return HttpResponseForbidden("Cannot edit other student lesson requests")
+    if lesson_request.student_id != request.user.id:
+        return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+
+    if request.method == 'POST':
+        if lesson_request.is_authorised:
+            return HttpResponseForbidden(LESSON_AUTHORISED_MSG)
         else:
-            return HttpResponseForbidden("Cannot edit this lesson request.")
-    return render(request, 'edit_lesson.html', {'edit_lesson_form': edit_form, 'lessonID': LessonRequestID})
+            update_lesson = Lesson.objects.filter(id=lesson_request.lesson_id).update(
+                lesson_name = request.POST.get('lesson_name'),
+                student_availability = request.POST.get('student_availability'),
+                number_of_lessons = request.POST.get('number_of_lessons'),
+                interval = request.POST.get('interval'),
+                duration = request.POST.get('duration'),
+                term_period = request.POST.get('term_period'),
+                additional_information = request.POST.get('additional_information')
+            )
+            return redirect('request_status')
+    else:
+        edit_form = LessonRequestForm(
+            initial={
+                'lesson_name':lesson_request.lesson.lesson_name,
+                'student_availability':lesson_request.lesson.student_availability,
+                'number_of_lessons':lesson_request.lesson.number_of_lessons,
+                'interval':lesson_request.lesson.interval,
+                'duration':lesson_request.lesson.duration,
+                'term_period':lesson_request.lesson.term_period,
+                'additional_information':lesson_request.lesson.additional_information,
+                }
+            )
+        return render(request, 'edit_lesson.html', {'edit_lesson_form': edit_form, 'lessonID': LessonRequestID})
 
 
 @login_required(login_url='/log_in/')
 def cancel_lesson(request, LessonRequestID):
+    try:
+        lesson_request = LessonRequest.objects.filter(id=LessonRequestID)
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest(HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
+    except MultipleObjectsReturned:
+        return HttpResponseBadRequest(HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
+
     if request.method == 'POST':
-        lesson_request_object = LessonRequest.objects.filter(id=LessonRequestID)
-        if lesson_request_object.exists():
-            if (LessonRequest.objects.get(id=LessonRequestID)).student_id == request.user.id:
-                try:
-                    LessonRequest.objects.get(id=LessonRequestID).delete()
-                except IntegrityError:
-                    pass
-            else:
-                return HttpResponseForbidden("Cannot cancel lesson booked by another student.")
+        if not lesson_request.exists():
+            return HttpResponseBadRequest(LESSON_CANNOT_CANCEL_TWICE_MSG)
+        elif lesson_request.get().student_id != request.user.id:
+            return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+        elif lesson_request.get().is_authorised:
+            return HttpResponseForbidden(LESSON_AUTHORISED_MSG)
         else:
-            return HttpResponseBadRequest("Cannot cancel the same booking twice.")
+            lesson_request.delete()
     return redirect('request_status')

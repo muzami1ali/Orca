@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Student, LessonRequest, Lesson, bankTransfers
+from .models import Student, LessonRequest, Lesson, bankTransfers,Invoice, InvoiceNumber
 
 
 
@@ -50,8 +50,9 @@ class BankTransferAdmin(admin.ModelAdmin):
 @admin.register(LessonRequest)
 class LessonRequestAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'get_student_id', 'student', 'lesson_id', 'lesson','is_authorised',
+        'id', 'student_id', 'student', 'lesson_id', 'lesson','is_authorised',
     ]
+    
     actions=['enable_selected','disable_selected']
     def enable_selected(self,request,queryset):
         queryset.update(is_authorised=True)
@@ -61,22 +62,17 @@ class LessonRequestAdmin(admin.ModelAdmin):
     disable_selected.short_description="Revoke the lesson's authorisation"
    
         
-    def has_delete_permission(self, request,object=None):
-       return False
-     
-    def has_change_permission(self, request,object=None):
-       if request.user.is_staff==True or request.user.is_superuser==True:
-           return  True
-       return False
-   
-       
-    def has_add_permission(self, request):
-       if request.user.is_superuser==True:
-           return True
-       return False
-    @admin.display(ordering='id',description='Student ID')
-    def get_student_id(self,obj):
-        return obj.student.id
-    
-      
-    
+
+
+@admin.register(Invoice)
+class Invoice(admin.ModelAdmin):
+    list_display=[
+        'refNumber', 'student', 'lesson'
+    ]
+
+@admin.register(InvoiceNumber)
+class InvoiceNumber(admin.ModelAdmin):
+    list_display=[
+        
+    ]
+

@@ -105,6 +105,12 @@ class EditLessonViewTestCase(TestCase):
         response = self.client.post(self.other_url, data=self.other_form_data, follow=True)
         self.assertFalse(response.status_code == 200)
 
+    def test_cannot_edit_form_that_is_authorised(self):
+        self.client.login(username=self.student.username, password='Password123')
+        LessonRequest.objects.filter(id=self.lesson_request.id).update(is_authorised=True)
+        response = self.client.post(self.url, data=self.form_data, follow=True)
+        self.assertFalse(response.status_code==200)
+
     ''' GET Tests '''
     def test_edit_webpage_form_shows_initial_lesson_data_on_get(self):
         self.client.login(username=self.student.username, password='Password123')
@@ -124,6 +130,7 @@ class EditLessonViewTestCase(TestCase):
         self.other_url = reverse('edit_lesson', kwargs={'LessonRequestID': self.other_lesson_request.id})
         response = self.client.get(self.other_url, data=self.other_form_data, follow=True)
         self.assertFalse(response.status_code == 200)
+
 
     ''' Functions for test class '''
     def _create_other_lesson_request(self):
