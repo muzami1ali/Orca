@@ -58,6 +58,11 @@ class CancelLessonViewTestCase(TestCase):
         response = self.client.post(self.other_url, follow=True)
         self.assertTrue(response.status_code==403)
 
+    def test_cannot_cancel_form_that_is_authorised(self):
+        self.client.login(username=self.student.username, password='Password123')
+        LessonRequest.objects.filter(id=self.lesson_request.id).update(is_authorised=True)
+        response = self.client.post(self.url, follow=True)
+        self.assertFalse(response.status_code==200)
 
     ''' Functions for test class '''
     def _create_other_lesson_request(self):
