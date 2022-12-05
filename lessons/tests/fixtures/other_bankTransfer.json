@@ -1,0 +1,14 @@
+[
+    {
+        "model": "lessons.bankTransfer",
+        "pk": 2,
+        "fields": {
+            "invoice": "00102", 
+            "first_name":"John",
+            "last_name": "Doe",
+            "Account_Number": "12345678",
+            "Sort_Code": "12345678",
+            "Amount": "50"
+        }
+    }
+]
