@@ -36,7 +36,7 @@ class CancelLessonViewTestCase(TestCase):
 
     def test_redirect_if_not_logged_in(self):
         redirect_url = reverse_with_next('log_in', self.url)
-        response = self.client.get(self.url, follow=True)
+        response = self.client.post(self.url, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'log_in.html')
 
@@ -63,6 +63,13 @@ class CancelLessonViewTestCase(TestCase):
         LessonRequest.objects.filter(id=self.lesson_request.id).update(is_authorised=True)
         response = self.client.post(self.url, follow=True)
         self.assertFalse(response.status_code==200)
+
+    def test_cannot_cancel_non_existent_lesson(self):
+        self.client.login(username=self.student.username, password='Password123')
+        response = self.client.post(self.url, data={'LessonRequestID': 1000})
+        self.assertEqual(LessonRequest.objects.count(), 1)
+        self.assertTrue(response.status_code!=200)
+
 
     ''' Functions for test class '''
     def _create_other_lesson_request(self):

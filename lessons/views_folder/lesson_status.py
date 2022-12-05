@@ -1,7 +1,7 @@
 '''
     View for the 'Lesson Status' page.
     @author Dean Whitbread
-    @version 02/12/2022
+    @version 05/12/2022
 '''
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -33,8 +33,6 @@ def edit_lesson(request, LessonRequestID):
         lesson_request = LessonRequest.objects.filter(id=LessonRequestID).get()
     except ObjectDoesNotExist:
         return HttpResponseBadRequest(HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
-    except MultipleObjectsReturned:
-        return HttpResponseBadRequest(HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
 
     if lesson_request.student_id != request.user.id:
         return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
@@ -74,8 +72,6 @@ def cancel_lesson(request, LessonRequestID):
         lesson_request = LessonRequest.objects.filter(id=LessonRequestID)
     except ObjectDoesNotExist:
         return HttpResponseBadRequest(HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
-    except MultipleObjectsReturned:
-        return HttpResponseBadRequest(HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
 
     if request.method == 'POST':
         if not lesson_request.exists():

@@ -12,13 +12,14 @@ from django.db.models import Max
 def home(request):
     return render(request,'index.html')
 
+
 def booking(request):
     return render(request,'booking.html')
-    
+
+
 @login_required(login_url='log_in')
 def contact(request):
     return render(request,'contact.html')
-
 
 
 def log_in(request):
@@ -37,9 +38,11 @@ def log_in(request):
     form = LogInForm()
     return render(request, 'log_in.html', {'form': form})
 
+
 def log_out(request):
     logout(request)
     return redirect('home')
+
 
 def sign_up(request):
     context={}
@@ -54,40 +57,6 @@ def sign_up(request):
 
 
 @login_required(login_url='log_in')
-def request_lessons(request):
-    if request.method == "POST":
-        if LessonRequest.objects.filter(student_id=request.user.id).exists():
-            try:
-                student_booked_lessons = LessonRequest.objects.filter(student_id=request.user.id)
-                duplicate_lesson = False
-
-                for lesson_request in student_booked_lessons:
-                    lesson = Lesson.objects.get(id=lesson_request.lesson_id)
-                    if lesson.equal_to(request):
-                        duplicate_lesson = True
-                        break
-
-                if not duplicate_lesson:
-                    book_lesson = LessonRequestForm(request.POST)
-                    book_lesson = book_lesson.save()
-                    LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
-                else:
-                    raise IntegrityError("Class cannot be booked twice")
-            except ValueError:
-                pass
-        else:
-            try:
-                book_lesson = LessonRequestForm(request.POST)
-                book_lesson = book_lesson.save()
-                LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
-            except IntegrityError:
-                pass
-        return redirect('request_lessons')
-    else:
-        form = LessonRequestForm()
-        return render(request, 'request_lessons.html', {'lesson_form': form})
-
-@login_required(login_url='log_in')
 def bank_transfer(request):
     if request.method == 'POST':
         form= BankTransferForm(request.POST)
@@ -98,16 +67,19 @@ def bank_transfer(request):
         form = BankTransferForm()
     return render(request, 'bank_transfer.html', {'form': form})
 
+
 @login_required(login_url='log_in')
 def invoice(request):
     invoices = Invoice.objects.all()
     totalPrice = 50 * len(invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
+
 @login_required(login_url='log_in')
 def deal_requests(request):
     lessonrequest = LessonRequest.objects.filter(is_authorised=False).all()
     return render(request, 'request_deal.html', {'lessonrequest': lessonrequest})
+
 
 @login_required(login_url='log_in')
 def authorise(request,nid):
