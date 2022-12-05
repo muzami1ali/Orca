@@ -49,7 +49,7 @@ class BankTransferAdmin(admin.ModelAdmin):
 @admin.register(LessonRequest)
 class LessonRequestAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'get_student_id', 'student', 'lesson_id', 'lesson',
+        'id', 'student', 'lesson_id', 'lesson',
     ]
 
 
