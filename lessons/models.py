@@ -86,7 +86,7 @@ class LessonRequest(models.Model):
     lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
     is_authorised = models.BooleanField(default = False)
 
-class bankTransfers(models.Model):
+class bankTransfer(models.Model):
     invoice = models.CharField(max_length=40,blank=False)
     first_name=models.CharField(max_length=50,blank=False)
     last_name=models.CharField(max_length=50,blank=False)
