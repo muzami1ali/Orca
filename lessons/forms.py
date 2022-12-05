@@ -1,5 +1,5 @@
 from django import forms
-from .models import Student, Lesson, bankTransfers
+from .models import Student, Lesson, BankTransfers
 #from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.validators import RegexValidator
 
@@ -56,10 +56,10 @@ class LessonRequestForm(forms.ModelForm):
 
 class BankTransferForm(forms.ModelForm):
     class Meta:
-        model = bankTransfers
-        fields = ['invoice', 'first_name', 'last_name', 'Account_Number', 'Sort_Code', 'Amount']
+        model = BankTransfers
+        fields = ['invoice', 'first_name', 'last_name', 'account_number', 'sort_code', 'amount']
         # invoice = forms.CharField(label ="invoice# ")
         # first_name = forms.CharField(label ="First Name ")
         # last_name = forms.CharField(label = "Last Name ")
-        # Account_Number = forms.CharField(label = "Account Number ")
-        # Sort_Code = forms.CharField(label = "Sort Code ")
+        # account_number = forms.CharField(label = "Account Number ")
+        # sort_code = forms.CharField(label = "Sort Code ")

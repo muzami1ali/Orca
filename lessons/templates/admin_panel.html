@@ -2,7 +2,83 @@
 {%block content%}
 <div class="container vh-100">
     <h1>Admin Panel</h1>
-   
+    <h2>Lesson Request</h2>
+    <div class="card card-body">
+        <table class="table table-bordered border-dark">
+            <thead class="table-light">
+                    <tr>
+                        <th>ID</th> 
+                        <th>Student</th>
+                        <th>Lesson</th>
+                        <th>Authorised?</th>
+                        <th>Accept</th>
+                        <th>Edit</th>
+                        <th>Decline</th>
+                    </tr>
+            </thead>
+            <tbody>
+            
+                {%for request in lesson_request%}
+                    <tr>
+                        <td>{{request.id}}</td> 
+                        <td>{{request.student}}</td>
+                        <td>{{request.lesson}}</td>
+                        <td>{{request.is_authorised}}</td>
+                        <td>
+                            <form action="{% url 'edit_lesson' request.id %}" method="get">
+                                <input type="submit" value="Edit" class="lessons btn small-button">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{% url 'approve_lesson' request.id %}" method="post">
+                                {%csrf_token%}
+                                <input type="submit" value="Approve" class="lessons btn small-button">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{% url 'cancel_lesson' request.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Decline" class="lessons btn small-button">
+                            </form>
+                        </td>
+                    </tr>
+                    
+                {%endfor%}
+            <tbody>
+        </table>
+    </div>
+    
+    <h2>Bank Transfers</h2>
+    <div class="card card-body">
+        <table class="table table-bordered border-dark">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Invoice</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Account Number</th>
+                    <th>Sort Code</th>
+                    <th>Amount Paid</th>
+                </tr>
+        </thead>
+        <tbody>
+            {%for bank in bank_transfer%}
+            <tr>
+                <td>{{bank.id}}</td>
+                <td>{{bank.invoice}}</td>
+                <td>{{bank.first_name}}</td>
+                <td>{{bank.last_name}}</td>
+                <td>{{bank.account_number}}</td>
+                <td>{{bank.sort_code}}</td>
+                <td>{{bank.amount}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+        </table>
+    </div>
+
+
      
 
 

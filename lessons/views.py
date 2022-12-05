@@ -62,40 +62,6 @@ def sign_up(request):
 
 
 @login_required(login_url='log_in')
-def request_lessons(request):
-    if request.method == "POST":
-        if LessonRequest.objects.filter(student_id=request.user.id).exists():
-            try:
-                student_booked_lessons = LessonRequest.objects.filter(student_id=request.user.id)
-                duplicate_lesson = False
-
-                for lesson_request in student_booked_lessons:
-                    lesson = Lesson.objects.get(id=lesson_request.lesson_id)
-                    if lesson.equal_to(request):
-                        duplicate_lesson = True
-                        break
-
-                if not duplicate_lesson:
-                    book_lesson = LessonRequestForm(request.POST)
-                    book_lesson = book_lesson.save()
-                    LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
-                else:
-                    raise IntegrityError("Class cannot be booked twice")
-            except ValueError:
-                pass
-        else:
-            try:
-                book_lesson = LessonRequestForm(request.POST)
-                book_lesson = book_lesson.save()
-                LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
-            except IntegrityError:
-                pass
-        return redirect('request_lessons')
-    else:
-        form = LessonRequestForm()
-        return render(request, 'request_lessons.html', {'lesson_form': form})
-
-@login_required(login_url='log_in')
 def bank_transfer(request):
     if request.method == 'POST':
         form= BankTransferForm(request.POST)
@@ -108,7 +74,9 @@ def bank_transfer(request):
 
 @login_required(login_url='log_in')
 def invoice(request):
-    invoices = Invoice.objects.all()
+    us=request.user
+    inv=Invoice.objects.all()
+    invoices = Invoice.objects.filter(us==inv.student).all()
     totalPrice = 50 * len(invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
@@ -119,7 +87,6 @@ def deal_requests(request):
 
 @login_required(login_url='log_in')
 def authorise(request,nid):
-
     LessonRequest.objects.filter(id=nid).update(is_authorised=True)
     lr = LessonRequest.objects.filter(id=nid).first()
     Invoice.objects.create(student_id=lr.student.id, lesson_id=lr.lesson.id)

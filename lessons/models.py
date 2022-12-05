@@ -86,13 +86,13 @@ class LessonRequest(models.Model):
     lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
     is_authorised = models.BooleanField(default = False)
 
-class bankTransfers(models.Model):
+class BankTransfers(models.Model):
     invoice = models.CharField(max_length=40,blank=False)
     first_name=models.CharField(max_length=50,blank=False)
     last_name=models.CharField(max_length=50,blank=False)
-    Account_Number = models.CharField(max_length=8,blank=False)
-    Sort_Code = models.CharField(max_length=6,blank=False)
-    Amount = models.PositiveSmallIntegerField(default=0,blank=False)
+    account_number = models.CharField(max_length=8,blank=False)
+    sort_code = models.CharField(max_length=6,blank=False)
+    amount = models.PositiveSmallIntegerField(default=0,blank=False)
 
 class Invoice(models.Model):
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
