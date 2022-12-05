@@ -23,8 +23,8 @@ def contact(request):
 
 
 def getRefNumber(student_id):
-    InvoiceNumber.objects.create()
-    max = str(InvoiceNumber.objects.all().aggregate(Max('id')).get('id__max')).zfill(3)
+    inv= Invoice.objects.create()
+    max = str(Invoice.objects.all().aggregate(Max('id')).get('id__max')).zfill(3)
     return str(student_id).zfill(4) + "-" + max
 
 def log_in(request):
@@ -74,9 +74,9 @@ def bank_transfer(request):
 
 @login_required(login_url='log_in')
 def invoice(request):
-    us=request.user
-    inv=Invoice.objects.all()
-    invoices = Invoice.objects.filter(us==inv.student).all()
+    use=request.user
+    inv=Invoice.objects.all().get()
+    invoices = Invoice.objects.filter(student_id=use.id).all()
     totalPrice = 50 * len(invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
