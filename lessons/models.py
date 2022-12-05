@@ -86,9 +86,9 @@ class LessonRequest(models.Model):
     lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
     is_authorised = models.BooleanField(default = False)
 
-class bankTransfer(models.Model):
+class BankTransfer(models.Model):
     invoice = models.CharField(
-        unique=True,
+        # unique=True,
         max_length=40,
         blank=False,
         validators=[RegexValidator(
@@ -98,7 +98,7 @@ class bankTransfer(models.Model):
     )
     first_name=models.CharField(max_length=50,blank=False)
     last_name=models.CharField(max_length=50,blank=False)
-    Account_Number = models.CharField(
+    account_number = models.CharField(
         max_length=8,
         blank=False,
         validators=[RegexValidator(
@@ -106,7 +106,7 @@ class bankTransfer(models.Model):
             message='Account Number can only contain eight numbers'
         )]
     )
-    Sort_Code = models.CharField(
+    sort_code = models.CharField(
         max_length=6,
         blank=False,
         validators=[RegexValidator(
@@ -114,7 +114,14 @@ class bankTransfer(models.Model):
             message='Sort Code can only contain six numbers'
         )]
     )
-    Amount = models.PositiveSmallIntegerField(default=0,blank=False)
+    amount = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False, 
+        validators=[MinValueValidator(
+            limit_value=0, 
+            message="Amount cannot be negative"
+        )]
+    )
 
 class Invoice(models.Model):
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
