@@ -1,13 +1,32 @@
 from django_tables2 import MultiTableMixin
 from django.views.generic.base import TemplateView
-from django.shortcuts import render,redirect
-from django.contrib.auth import login,logout,authenticate
-from django.contrib import messages
-from lessons.models import Lesson, LessonRequest, Student, Invoice, InvoiceNumber
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView
+from lessons.tables import Lesson_Table,Lesson_Request_Table,Student_Table,Invoice_Table,Bank_Transfer_Table
+from lessons.models import Lesson,LessonRequest,Student,Invoice,bankTransfers
+import django_tables2 as tables
 
 
-class AdminTableView(ListView,LoginRequiredMixin):
- pass
+
+
+class AdminTableView(MultiTableMixin, TemplateView):
+    template_name = "admin_panel.html"
+    lesson_qs=Lesson.objects.all()
+    lesson_request_qs=LessonRequest.objects.all()
+    student_qs=Student.objects.all()
+    invoice_qs=Invoice.objects.all()
+    bank_transfer_qs=bankTransfers.objects.all()
+    tables = [
+        Lesson_Request_Table(lesson_request_qs),
+        Lesson_Table(lesson_qs),
+        Student_Table(student_qs),
+        Invoice_Table(invoice_qs),
+        Bank_Transfer_Table(bank_transfer_qs),
+       
+    ]
+
+    table_pagination = {
+        "per_page": 10
+    }
+class StudentTable(tables.SingleTableView):
+    table_class = Student_Table
+    queryset = Student.objects.all()
+    template_name = "admin_panel.html"

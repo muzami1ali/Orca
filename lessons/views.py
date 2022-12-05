@@ -112,6 +112,7 @@ def invoice(request):
     totalPrice = 50 * len(invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
+@login_required(login_url='log_in')
 def admin_panel(request):
     context={
         'lessons_request_data':LessonRequest.objects.all(),
