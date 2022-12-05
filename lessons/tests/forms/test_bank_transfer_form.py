@@ -9,7 +9,7 @@ class BankTransferFormTestCase(TestCase):
 
     def setUp(self):
         self.form_input = {
-            "invoice": "00101", 
+            "invoice": "001-01", 
             "first_name":"John",
             "last_name": "Doe",
             "account_number": "12345678",
@@ -87,7 +87,7 @@ class BankTransferFormTestCase(TestCase):
         form.save()
         after_count = BankTransfer.objects.count()
         self.assertEqual(after_count, before_count+1)
-        bank_transfer = BankTransfer.objects.get(invoice='00101')
+        bank_transfer = BankTransfer.objects.get(invoice='001-01')
         self.assertEqual(bank_transfer.first_name, 'John')
         self.assertEqual(bank_transfer.last_name, 'Doe')
         self.assertEqual(bank_transfer.account_number, '12345678')

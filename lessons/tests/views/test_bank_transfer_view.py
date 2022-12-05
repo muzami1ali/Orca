@@ -15,7 +15,7 @@ class BankTransferViewTestCase(TestCase):
         self.url = reverse('bank_transfer')
         self.student = Student.objects.get(username='John.Doe@example.org')
         self.form_input = {
-            "invoice": "00101", 
+            "invoice": "001-01", 
             "first_name":"John",
             "last_name": "Doe",
             "account_number": "12345678",
@@ -64,7 +64,7 @@ class BankTransferViewTestCase(TestCase):
         response_url = reverse('bank_transfer')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'bank_transfer.html')
-        bank_transfer = BankTransfer.objects.get(invoice='00101')
+        bank_transfer = BankTransfer.objects.get(invoice='001-01')
         self.assertEqual(bank_transfer.first_name, 'John')
         self.assertEqual(bank_transfer.last_name, 'Doe')
         self.assertEqual(bank_transfer.account_number, '12345678')

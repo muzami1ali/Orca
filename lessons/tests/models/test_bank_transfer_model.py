@@ -11,11 +11,11 @@ class BankTransferModelTestCase(TestCase):
     ]
 
     def setUp(self):
-        self.BankTransfer = BankTransfer.objects.get(invoice="00101")
+        self.BankTransfer = BankTransfer.objects.get(invoice="001-01")
     
     def _create_second_bank_transfer(self):
         bank_transfer = BankTransfer.objects.create(
-            invoice="00102",
+            invoice="001-02",
             first_name="John",
             last_name= "Doe",
             account_number= "12345678",
@@ -47,7 +47,7 @@ class BankTransferModelTestCase(TestCase):
         self._assert_bank_transfer_is_invalid()
     
     def test_invoice_field_may_contain_40_characters(self):
-        self.BankTransfer.invoice='1'*40
+        self.BankTransfer.invoice= '1'*20 + '-' + '1'*19
         self._assert_bank_transfer_is_valid()
 
     def test_invoice_field_may_not_contain_more_than_40_characters(self):

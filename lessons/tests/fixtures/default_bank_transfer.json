@@ -3,7 +3,7 @@
         "model": "lessons.BankTransfer",
         "pk": 1,
         "fields": {
-            "invoice": "00101", 
+            "invoice": "001-01", 
             "first_name":"John",
             "last_name": "Doe",
             "account_number": "12345678",
