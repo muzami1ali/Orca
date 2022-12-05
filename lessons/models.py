@@ -92,7 +92,7 @@ class BankTransfer(models.Model):
         max_length=40,
         blank=False,
         validators=[RegexValidator(
-            regex=r'^[0-9]',
+            regex=r'^[0-9]*-[0-9]*$',
             message='invoice can only contain numbers'
         )]
     )
