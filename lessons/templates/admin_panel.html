@@ -13,7 +13,6 @@
                         <th>Authorised?</th>
                         <th>Accept</th>
                         <th>Edit</th>
-                        <th>Decline</th>
                     </tr>
             </thead>
             <tbody>
@@ -35,12 +34,7 @@
                                 <input type="submit" value="Approve" class="lessons btn small-button">
                             </form>
                         </td>
-                        <td>
-                            <form action="{% url 'cancel_lesson' request.id %}" method="post">
-                                {% csrf_token %}
-                                <input type="submit" value="Decline" class="lessons btn small-button">
-                            </form>
-                        </td>
+                       
                     </tr>
                     
                 {%endfor%}
