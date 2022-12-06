@@ -8,10 +8,6 @@ from ..helpers import LogInTester
 
 class SignUpViewTestCase(TestCase, LogInTester):
 
-    fixtures = [
-        'lessons/tests/fixtures/default_student.json',
-    ]
-
     def setUp(self):
         self.url = reverse('sign_up')
         self.form_input = {
@@ -21,7 +17,6 @@ class SignUpViewTestCase(TestCase, LogInTester):
             'new_password': 'Password123',
             'password_confirmation': 'Password123'
         }
-        
 
     def test_sign_up_url(self):
         self.assertEqual(self.url,'/sign_up/')
