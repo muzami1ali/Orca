@@ -16,11 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from lessons import views
-from lessons.views_folder import lesson_status, lesson_request
+from lessons.views_folder import lesson_status, lesson_request, admin_panel
 
 
+admin.site.site_title='Music Admin'
+admin.site.site_header='Music Admin'
+admin.site.index_title=''
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls,name='admin'),
+    path('dashboard/admin/',admin_panel.admin_panel,name='admin_panel'),
+    path('dashboard/admin/approve/<int:LessonRequestID>', admin_panel.approve_lesson, name="approve_lesson"),
+    path('dashboard/admin/delete/<int:LessonRequestID>', admin_panel.delete_booking, name="delete_booking"),
+    path('dashboard/admin/approve-payment/<int:BankTransferID>',admin_panel.approve_bank_payment,name="approve_payment"),
     path('',views.home,name='home'),
     path('log_in/', views.log_in, name = 'log_in'),
     path('log_out/',views.log_out, name='log_out'),

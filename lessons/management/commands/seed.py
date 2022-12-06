@@ -22,6 +22,7 @@ class Command(BaseCommand):
     MORE_INFO = ['', 'Please assign tutor, Jason Doe.', 'Please give me evening lessons.']
     LESSON_COUNT = 20
 
+
     LESSON_REQUESTS_COUNT = 19      # John Doe has 1 lesson request = 50 altogether
 
     '''
