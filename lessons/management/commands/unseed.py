@@ -1,6 +1,9 @@
 from django.core.management.base import BaseCommand, CommandError
+from lessons.models import Student, Lesson
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        print("The unseed command has not been implemented yet!")
-        print("TO DO: Create an unseed command following the instructions of the assignment carefully.")
+        Student.objects.all().delete()
+        Lesson.objects.all().delete()
+        
+        print("Database unseeded.")

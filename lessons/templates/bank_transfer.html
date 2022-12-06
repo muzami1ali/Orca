@@ -1,0 +1,11 @@
+{% extends 'base-content.html' %}
+{% block content%}
+<div class = "container">
+  <h1>Bank Transfer</h1>
+  <form action="{%url 'bank_transfer' %}" method="post">
+      {% csrf_token %}
+      {% include 'partials/bootsrap_form.html' with form=form %}
+      <input type="submit" value="Pay" class = "btn custom-button">
+  </form>
+</div>
+  {% endblock%}

@@ -1,0 +1,50 @@
+<!--This is the your booking page/ -->
+{% extends 'base-content.html' %}
+{% block content%}
+<div class="container vh-100">
+    <h1>Your Lesson Status</h1>
+        {% if lesson_counter > 0 %}
+        <p>Outstanding class requests: {{ lesson_counter }}</p>
+          {% for lesson_request in request_status %}
+          <table class="lesson-view" >
+            <table class="lesson-information" id = "lessons">
+              <tr>
+                <td>Lesson name: {{ lesson_request.lesson.lesson_name }}</td>
+                <td>Term: {{ lesson_request.lesson.term_period }}</td>
+              </tr>
+              <tr>
+                <td>Day: {{ lesson_request.lesson.student_availability }}</td>
+                <td>Duration: {{ lesson_request.lesson.duration }} minutes</td>
+              </tr>
+              <tr>
+                <td>Number of Lesson(s): {{ lesson_request.lesson.number_of_lessons }}</td>
+                <td>Lesson Interval: {{ lesson_request.lesson.interval }}</td>
+              </tr>
+              <tr>
+                <td colspan="2">Additional Info: {{ lesson_request.lesson.additional_information }}</td>
+              </tr>
+              <tr>
+                <td>Booking Authorised: {% if lesson_request.is_authorised %}Yes{% else %}No{% endif %}</td>
+              </tr>
+              <tr>
+                <td>
+                  <form action="{% url 'edit_lesson' lesson_request.id %}" method="get">
+                    <input type="submit" value="Edit" class="lessons btn small-button">
+                  </form>
+                </td>
+                <td>
+                  <form action="{% url 'cancel_lesson' lesson_request.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Cancel" class="lessons btn small-button">
+                  </form>
+                </td>
+              </tr>
+            </table>
+          </table>
+          {% endfor %}
+        {% else %}
+        <p>No classes booked.</p>
+        {% endif %}
+
+</div>
+{% endblock%}

@@ -1,0 +1,12 @@
+<!--This is the book page -->
+{% extends 'base-content.html' %}
+{% block content%}
+<div class="container vh-100">
+  <h1>Request Lessons</h1>
+  <form action="{% url 'request_lessons' %}" method="post">
+    {% csrf_token %}
+    {{ lesson_form.as_p }}
+    <input type="submit" value="Book" class = "btn small-button" > 
+  </form>
+</div>
+{% endblock%}
