@@ -9,7 +9,7 @@ from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from lessons.models import Lesson, LessonRequest
+from lessons.models import Lesson, LessonRequest,Invoice
 from lessons.forms import LessonRequestForm
 
 
@@ -30,7 +30,13 @@ def request_lessons(request):
                 if not duplicate_lesson:
                     book_lesson = LessonRequestForm(request.POST)
                     book_lesson = book_lesson.save()
-                    LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
+                    if book_lesson.is_authorised==True:
+                        rand_invoice=request.user.generate_invoice_number()
+                        invoice=Invoice(student=request.user,lesson=book_lesson.id,invoice=rand_invoice)
+                        invoice.save()
+                        LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
+                    else:
+                        LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
                 else:
                     return HttpResponseBadRequest("Class cannot be booked twice.")
             except ValueError:
@@ -39,7 +45,13 @@ def request_lessons(request):
             try:
                 book_lesson = LessonRequestForm(request.POST)
                 book_lesson = book_lesson.save()
-                LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
+                if book_lesson.is_authorised==True:
+                    rand_invoice=request.user.generate_invoice_number()
+                    invoice=Invoice(student=request.user,lesson=book_lesson.id,invoice=rand_invoice)
+                    invoice.save()
+                    LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
+                else:
+                     LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
             except IntegrityError:
                 return HttpResponseBadRequest("Lesson request does not exits.")
         return redirect('request_lessons')

@@ -53,6 +53,6 @@ class LessonRequestAdmin(admin.ModelAdmin):
 @admin.register(Invoice)
 class Invoice(admin.ModelAdmin):
     list_display=[
-        'id','student_id', 'student', 'lesson',
+        'id','student_id', 'student', 'lesson','invoice',
     ]
 

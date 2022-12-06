@@ -41,7 +41,34 @@
             <tbody>
         </table>
     </div>
-    
+
+    <h2>All On going invoices</h2>
+    <div class="card card-body">
+        <table class="table table bordered border-dark">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Student ID</th>
+                    <th>Student Email</th>
+                    <th>Lesson</th>
+                    <th>Invoice Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for i in invoices%}
+                <tr>
+                    <td>{{i.id}}</td>
+                    <td>{{i.student_id}}</td>
+                    <td>{{i.student}}</td>
+                    <td>{{i.lesson}}</td>
+                    <td>{{i.invoice}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+
+    </div>
+
     <h2>Bank Transfers</h2>
     <div class="card card-body">
         <table class="table table-bordered border-dark">
@@ -60,7 +87,7 @@
             {%for bank in bank_transfer%}
             <tr>
                 <td>{{bank.id}}</td>
-                <td>{{bank.invoice}}</td>
+                <td>{{bank.i}}</td>
                 <td>{{bank.first_name}}</td>
                 <td>{{bank.last_name}}</td>
                 <td>{{bank.account_number}}</td>
@@ -71,6 +98,8 @@
         </tbody>
         </table>
     </div>
+
+ 
 
 
      

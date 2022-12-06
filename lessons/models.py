@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator, MaxLengthValidator
 from django.http import HttpRequest
+import uuid
 
 class Student(AbstractUser):
     username=models.EmailField(unique=True,verbose_name='Email')
@@ -9,6 +10,11 @@ class Student(AbstractUser):
     last_name=models.CharField(max_length=50,blank=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    
+    def generate_invoice_number(self):
+      random_uuid=str(uuid.uuid4())
+      
+      return f'{self.id}-{random_uuid}'
 
 
 class Lesson(models.Model):
@@ -126,3 +132,14 @@ class BankTransfer(models.Model):
 class Invoice(models.Model):
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
     lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
+    invoice = models.CharField(
+        # unique=True,
+        max_length=40,
+        blank=False,
+        validators=[RegexValidator(
+            regex=r'^[0-9]*-[0-9]*$',
+            message='invoice can only contain numbers'
+        )]
+    )
+
+    
