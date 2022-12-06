@@ -18,8 +18,9 @@
                         <th>Student</th>
                         <th>Lesson</th>
                         <th>Authorised?</th>
-                        <th>Accept</th>
                         <th>Edit</th>
+                        <th>Approve</th>
+                        <th>Delete</th>
                     </tr>
             </thead>
             <tbody>
@@ -40,6 +41,17 @@
                                 {%csrf_token%}
                                 <input type="submit" value="Approve" class="lessons btn small-button">
                             </form>
+                        </td>
+
+                        <td>
+                            {%if request.is_authorised == False%}
+                            <form action="{% url 'delete_booking' request.id %}" method="post">
+                                {%csrf_token%}
+                                <input type="submit" value="Delete" class="lessons btn small-button">
+                            </form>
+                            {%else%}
+                                <p>Contact director</p>
+                            {%endif%}
                         </td>
                     
                     </tr>
@@ -110,19 +122,26 @@
                 <td>{{bank.status}}</td>
                 <td>{{bank.is_approved}}</td>
                
+                <td>
+                    {%if bank.amount == 50 and bank.is_approved == False%}
+                    <form action="{% url 'approve_payment' bank.id %}" method="post">
+                        {%csrf_token%}
+                        <input type="submit" value="Approve" class="lessons btn small-button">
+                    </form>
+                    {%else%}
+                        {%if bank.is_approved == True%}
+                            <p>Already Approved</p>
+                        {%else%}
+                            <p>Contact finance</p>
+                        {%endif%}
+                    {%endif%}
+                </td>
                 
             </tr>
             {%endfor%}
         </tbody>
         </table>
     </div>
-
- 
-
-
-     
-
-
 </div>
 
 {%endblock%}
