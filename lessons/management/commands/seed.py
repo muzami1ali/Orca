@@ -20,6 +20,7 @@ class Command(BaseCommand):
     DURATION_CHOICES = [30, 45, 60]
     TERM_PERIOD = ['TERM1', 'TERM2', 'TERM3', 'TERM4', 'TERM5', 'TERM6']
     MORE_INFO = ['', 'Please assign tutor, Jason Doe.', 'Please give me evening lessons.']
+
     LESSON_COUNT = 20
 
     LESSON_REQUESTS_COUNT = 19      # John Doe has 1 lesson request = 50 altogether

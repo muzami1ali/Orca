@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.auth.decorators import login_required
-from lessons.models import Lesson, LessonRequest
+from lessons.models import Lesson, LessonRequest, Student
 from lessons.forms import LessonRequestForm
 from lessons.views_folder import HttpResponseConstantMsg
 
@@ -36,7 +36,8 @@ def edit_lesson(request, LessonRequestID):
     except MultipleObjectsReturned:
         return HttpResponseBadRequest(HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
 
-    if lesson_request.student_id != request.user.id:
+    logged_in_user = Student.objects.get(id=request.user.id)
+    if lesson_request.student_id != request.user.id and logged_in_user.is_staff == False and logged_in_user.is_superuser == False:
         return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
 
     if request.method == 'POST':
@@ -52,7 +53,10 @@ def edit_lesson(request, LessonRequestID):
                 term_period = request.POST.get('term_period'),
                 additional_information = request.POST.get('additional_information')
             )
-            return redirect('request_status')
+            if logged_in_user.is_staff == True or logged_in_user.is_superuser == True:
+                return redirect('admin_panel')
+            else:                    
+                return redirect('request_status')
     else:
         edit_form = LessonRequestForm(
             initial={
@@ -64,7 +68,8 @@ def edit_lesson(request, LessonRequestID):
                 'term_period':lesson_request.lesson.term_period,
                 'additional_information':lesson_request.lesson.additional_information,
                 }
-            )
+            )   
+        
         return render(request, 'edit_lesson.html', {'edit_lesson_form': edit_form, 'lessonID': LessonRequestID})
 
 
@@ -77,6 +82,8 @@ def cancel_lesson(request, LessonRequestID):
     except MultipleObjectsReturned:
         return HttpResponseBadRequest(HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
 
+    
+
     if request.method == 'POST':
         if not lesson_request.exists():
             return HttpResponseBadRequest(LESSON_CANNOT_CANCEL_TWICE_MSG)
@@ -85,5 +92,15 @@ def cancel_lesson(request, LessonRequestID):
         elif lesson_request.get().is_authorised:
             return HttpResponseForbidden(LESSON_AUTHORISED_MSG)
         else:
-            lesson_request.delete()
-    return redirect('request_status')
+        
+            logged_in_user = Student.objects.get(id=request.user.id)
+            lesson_request = lesson_request.get(student_id=logged_in_user.id)
+            if lesson_request.student_id != request.user.id and logged_in_user.is_staff == False and logged_in_user.is_superuser == False:
+                return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+            else:
+                lesson_request.delete()
+    
+    if logged_in_user.is_staff == True or logged_in_user.is_superuser == True:
+        return redirect('admin_panel')
+    else:                    
+        return redirect('request_status')
