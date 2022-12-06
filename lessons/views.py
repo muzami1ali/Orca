@@ -76,8 +76,9 @@ def bank_transfer(request):
 def invoice(request):
     logged_in_user=request.user
     invoices = Invoice.objects.filter(student_id=logged_in_user.id).all()
+    filter_invoices= invoices.filter(is_fulfilled = False).all()
    
-    totalPrice = 50 * len(invoices)
+    totalPrice = 50 * len(filter_invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
 @login_required(login_url='log_in')
