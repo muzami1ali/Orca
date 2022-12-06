@@ -5,7 +5,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db import IntegrityError
 from faker import Faker
-from lessons.models import Student, Lesson, LessonRequest
+from lessons.models import Student, Lesson, LessonRequest, Invoice
 import random
 
 
@@ -20,9 +20,9 @@ class Command(BaseCommand):
     DURATION_CHOICES = [30, 45, 60]
     TERM_PERIOD = ['TERM1', 'TERM2', 'TERM3', 'TERM4', 'TERM5', 'TERM6']
     MORE_INFO = ['', 'Please assign tutor, Jason Doe.', 'Please give me evening lessons.']
-    LESSON_COUNT = 50
+    LESSON_COUNT = 20
 
-    LESSON_REQUESTS_COUNT = 49      # John Doe has 1 lesson request = 50 altogether
+    LESSON_REQUESTS_COUNT = 19      # John Doe has 1 lesson request = 50 altogether
 
     '''
         Constants to track the starting db id for Student and Lesson.
@@ -41,6 +41,7 @@ class Command(BaseCommand):
             self.seed_user_accounts()
             self.seed_lessons()
             self.seed_lesson_requests()
+            self.seed_invoices()
 
             print('Database seeding complete.')
         except IntegrityError:
@@ -138,3 +139,16 @@ class Command(BaseCommand):
             lesson = Lesson.objects.get(id=lesson_id),
             is_authorised = authorised_value
         )
+
+    ''' Seed Invoices '''
+    def seed_invoices(self):
+        counter = 0
+        for request in LessonRequest.objects.all():
+            if request.is_authorised:
+                counter += 1
+                Invoice.objects.create(
+                    student = request.student,
+                    lesson = request.lesson
+                )
+            print(f'Seeding invoices...{counter}',  end='\r')
+        print('\n')
