@@ -128,6 +128,19 @@ class BankTransfer(models.Model):
             message="Amount cannot be negative"
         )]
     )
+    status = models.CharField(max_length=20,default="unpaid")
+
+    def save(self, *args, **kwargs):
+        if self.amount < 50:
+            self.status = "underpaid"
+        elif self.amount > 50:
+            self.status = "overpaid"
+        else:
+            self.status = "correctly paid"
+
+        super().save(*args, **kwargs)
+    
+    is_approved=models.BooleanField(default=False)
 
 class Invoice(models.Model):
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
@@ -141,5 +154,6 @@ class Invoice(models.Model):
             message='invoice can only contain numbers'
         )]
     )
+    is_fulfilled=models.BooleanField(default=False)
 
     

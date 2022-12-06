@@ -29,7 +29,7 @@ class LessonAdmin(admin.ModelAdmin):
 @admin.register(BankTransfer)
 class BankTransferAdmin(admin.ModelAdmin):
     list_display=[
-        'invoice', 'first_name', 'last_name', 'account_number', 'sort_code', 'amount' ,
+        'invoice', 'first_name', 'last_name', 'account_number', 'sort_code', 'amount' ,'is_approved'
     ]
    
 

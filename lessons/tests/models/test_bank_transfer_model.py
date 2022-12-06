@@ -21,6 +21,7 @@ class BankTransferModelTestCase(TestCase):
             account_number= "12345678",
             sort_code="123456",
             amount= "50",
+            is_approved=False
         )
         return bank_transfer
 

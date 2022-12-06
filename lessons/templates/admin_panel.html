@@ -2,6 +2,12 @@
 {%block content%}
 <div class="container vh-100">
     <h1>Admin Panel</h1>
+
+    {% with messages=messages %}
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+{% endwith %}
     <h2>Lesson Request</h2>
     <div class="card card-body">
         
@@ -47,7 +53,7 @@
 
     <h2>All On going invoices</h2>
     <div class="card card-body">
-        <table class="table table bordered border-dark">
+        <table class="table table-bordered border-dark">
             <thead class="table-light">
                 <tr>
                     <th>ID</th>
@@ -55,6 +61,7 @@
                     <th>Student Email</th>
                     <th>Lesson</th>
                     <th>Invoice Number</th>
+                    <th>Is Fulfilled?</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,6 +72,7 @@
                     <td>{{i.student}}</td>
                     <td>{{i.lesson}}</td>
                     <td>{{i.invoice}}</td>
+                    <td>{{i.is_fulfilled}}</td>
                 </tr>
                 {%endfor%}
             </tbody>
@@ -84,18 +92,25 @@
                     <th>Account Number</th>
                     <th>Sort Code</th>
                     <th>Amount Paid</th>
+                    <th>Payment Status</th>
+                    <th>Is Approved</th>
+                    <th>Approve Payment</th>
                 </tr>
         </thead>
         <tbody>
             {%for bank in bank_transfer%}
             <tr>
                 <td>{{bank.id}}</td>
-                <td>{{bank.i}}</td>
+                <td>{{bank.invoice}}</td>
                 <td>{{bank.first_name}}</td>
                 <td>{{bank.last_name}}</td>
                 <td>{{bank.account_number}}</td>
                 <td>{{bank.sort_code}}</td>
                 <td>{{bank.amount}}</td>
+                <td>{{bank.status}}</td>
+                <td>{{bank.is_approved}}</td>
+               
+                
             </tr>
             {%endfor%}
         </tbody>
