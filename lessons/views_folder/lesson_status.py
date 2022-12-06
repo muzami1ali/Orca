@@ -18,13 +18,9 @@ LESSON_CANNOT_CANCEL_TWICE_MSG = "Cannot cancel the same booking twice."
 
 @login_required(login_url='/log_in/')
 def request_status(request):
-    if request.user.is_authenticated:
-        if request.method == 'GET':
-            request_status = LessonRequest.objects.filter(student=request.user)
-            lesson_counter = LessonRequest.objects.filter(student=request.user).count()
-            return render(request, 'request_status.html', {'request_status': request_status, 'lesson_counter': lesson_counter})
-    else:
-        return redirect('log_in')
+    request_status = LessonRequest.objects.filter(student=request.user)
+    lesson_counter = LessonRequest.objects.filter(student=request.user).count()
+    return render(request, 'request_status.html', {'request_status': request_status, 'lesson_counter': lesson_counter})
 
 
 @login_required(login_url='/log_in/')
