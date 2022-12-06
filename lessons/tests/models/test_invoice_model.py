@@ -21,13 +21,18 @@ class InvoiceModelTest(TestCase):
         )
         self.invoice = Invoice.objects.create(
             lesson = self.lesson,
-            student = self.student
+            student = self.student,
+            invoice = "1-12",
+            is_fulfilled = False
+
         )
 
     def _create_second_invoice(self):
         invoice=Invoice.objects.create(
             lesson_id = 48,
-            student_id = 2
+            student_id = 2,
+            invoice = "2-12",
+            is_fulfilled = False
         )
         return invoice
 
