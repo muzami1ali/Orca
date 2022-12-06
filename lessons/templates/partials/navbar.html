@@ -1,4 +1,4 @@
-{% if user.is_authenticated %}
+{% if user.is_authenticated and user.is_staff == False %}
 <nav class="navbar navbar-bottom navbar-expand-lg navbar-dark bg-dark fixed-top pt-1 pb-1 mb-3">
   <div class = "container-fluid ">
   <a class="navbar-brand" href="{% url 'request_lessons' %}">
@@ -41,3 +41,27 @@
   {% endif%}
   </div>
 </nav>
+
+{%if user.is_authenticated and user.is_staff == True %}
+<nav class="navbar navbar-bottom navbar-expand-lg navbar-dark bg-dark fixed-top pt-1 pb-1 mb-3">
+  <div class = "container-fluid ">
+  <a class="navbar-brand" href="{% url 'admin_panel' %}">
+    <div style = "position:absolute">
+        <span class = "bi-music-note-beamed "></span>
+        Music Management </a>
+    </div>
+     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+        <li class="nav-item active">
+          <a class="nav-link" href="{%url 'contact'%}">Contact</a>
+        </li>
+        <a class="nav-link " href="{%url 'log_out'%}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class = "bi-person-circle"> Log Out</span>
+        </a>
+    </ul>
+  {% endif%}
+  </div>
+</nav>
+
