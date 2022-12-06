@@ -122,6 +122,7 @@ class BankTransfer(models.Model):
             message="Amount cannot be negative"
         )]
     )
+    approved = models.BooleanField(default=False)
 
 class Invoice(models.Model):
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
