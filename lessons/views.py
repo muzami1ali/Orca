@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db import IntegrityError
 from django.db.models import Max
+import lessons.views_folder.admin_panel as admin
 
 
 def home(request):
@@ -21,6 +22,11 @@ def contact(request):
 
 
 
+def getRefNumber(student_id):
+    inv= Invoice.objects.create()
+    max = str(Invoice.objects.all().aggregate(Max('id')).get('id__max')).zfill(3)
+    return str(student_id).zfill(4) + "-" + max
+
 def log_in(request):
     if request.method == 'POST':
         form = LogInForm(request.POST)
@@ -29,14 +35,16 @@ def log_in(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
-                if user.is_superuser is True:
-                    return redirect('deal_requests')
+                if user.is_superuser or user.is_staff:
+                    login(request,user)
+                    return redirect('admin_panel')
                 login(request, user)
                 return redirect('request_lessons')
         messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
     form = LogInForm()
     return render(request, 'log_in.html', {'form': form})
 
+@login_required
 def log_out(request):
     logout(request)
     return redirect('home')
@@ -47,45 +55,11 @@ def sign_up(request):
         context['form']= SignUpForms(request.POST)
         if context['form'].is_valid():
             context['form'].save()
-            return redirect('sign_up')
+            return redirect('log_in')
     else:
         context['form'] =SignUpForms()
     return render(request,'sign_up.html',context)
 
-
-@login_required(login_url='log_in')
-def request_lessons(request):
-    if request.method == "POST":
-        if LessonRequest.objects.filter(student_id=request.user.id).exists():
-            try:
-                student_booked_lessons = LessonRequest.objects.filter(student_id=request.user.id)
-                duplicate_lesson = False
-
-                for lesson_request in student_booked_lessons:
-                    lesson = Lesson.objects.get(id=lesson_request.lesson_id)
-                    if lesson.equal_to(request):
-                        duplicate_lesson = True
-                        break
-
-                if not duplicate_lesson:
-                    book_lesson = LessonRequestForm(request.POST)
-                    book_lesson = book_lesson.save()
-                    LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
-                else:
-                    raise IntegrityError("Class cannot be booked twice")
-            except ValueError:
-                pass
-        else:
-            try:
-                book_lesson = LessonRequestForm(request.POST)
-                book_lesson = book_lesson.save()
-                LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
-            except IntegrityError:
-                pass
-        return redirect('request_lessons')
-    else:
-        form = LessonRequestForm()
-        return render(request, 'request_lessons.html', {'lesson_form': form})
 
 @login_required(login_url='log_in')
 def bank_transfer(request):
@@ -100,7 +74,9 @@ def bank_transfer(request):
 
 @login_required(login_url='log_in')
 def invoice(request):
-    invoices = Invoice.objects.all()
+    logged_in_user=request.user
+    invoices = Invoice.objects.filter(student_id=logged_in_user.id).all()
+   
     totalPrice = 50 * len(invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
@@ -111,7 +87,6 @@ def deal_requests(request):
 
 @login_required(login_url='log_in')
 def authorise(request,nid):
-
     LessonRequest.objects.filter(id=nid).update(is_authorised=True)
     lr = LessonRequest.objects.filter(id=nid).first()
     Invoice.objects.create(student_id=lr.student.id, lesson_id=lr.lesson.id)
