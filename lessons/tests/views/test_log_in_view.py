@@ -10,7 +10,7 @@ from lessons.tests.helpers import LogInTester
 class LogInViewTestCase(TestCase,LogInTester):
     """Tests of the log in view."""
     def setUp(self):
-        self.url = reverse('log_in')
+        self.url = reverse('login')
         self.user = Student.objects.create_user(
             username = "@johndoe",
             first_name='John',
@@ -19,7 +19,7 @@ class LogInViewTestCase(TestCase,LogInTester):
         )
 
     def test_log_in_url(self):
-        self.assertEqual(self.url,'/log_in/')
+        self.assertEqual(self.url,'/login/')
 
     def test_get_log_in(self):
         response = self.client.get(self.url)

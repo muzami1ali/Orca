@@ -15,7 +15,7 @@ class BankTransferViewTestCase(TestCase):
         self.url = reverse('bank_transfer')
         self.student = Student.objects.get(username='John.Doe@example.org')
         self.form_input = {
-            "invoice": "001-01", 
+            "invoice": "001-01",
             "first_name":"John",
             "last_name": "Doe",
             "account_number": "12345678",
@@ -36,7 +36,7 @@ class BankTransferViewTestCase(TestCase):
         self.assertFalse(form.is_bound)
 
     def test_webpage_redirects_when_student_not_logged_in(self):
-        redirect_url = reverse_with_next('log_in', self.url)
+        redirect_url = reverse_with_next('login', self.url)
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'log_in.html')

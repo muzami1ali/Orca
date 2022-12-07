@@ -5,7 +5,7 @@
   <div class="row h-100">
     <div class="col-12 my-auto">
       <h1>Sign up</h1>
-      <form action="{% url 'sign_up' %}" method="POST">
+      <form action="{% url 'sign-up' %}" method="POST">
         {% csrf_token %}
         {% include 'partials/bootsrap_form.html' with form=form %}
         <input type="submit" value="Sign up" class = "btn btn-lg custom-button" >

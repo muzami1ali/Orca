@@ -1,25 +1,28 @@
+'''
+AdminPanel contains the views for administartor and director views.
 
-from lessons.models import LessonRequest,Invoice,BankTransfer,Lesson,Student
+@author Harry Sharma
+@version 06/12/2022
+'''
+from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
 
+from lessons.models import Lesson, LessonRequest, Student, Invoice, BankTransfer
 
 
-@login_required(login_url='log_in')
+@login_required
 def admin_panel(request):
     if request.method=="POST":
         return redirect('admin_panel')
     else:
-        # lesson_request = LessonRequest.objects.filter(is_authorised=False).all()
         lesson_request = LessonRequest.objects.all()
-        # invoice=Invoice.objects.filter(is_fulfilled=False).all()
         invoice=Invoice.objects.all()
-        # bank_transfer=BankTransfer.objects.filter(is_approved=False).all()
         bank_transfer=BankTransfer.objects.all()
         curent_user=request.user
         return render(request,'admin_panel.html', {'lesson_request': lesson_request,'invoices':invoice,'bank_transfer':bank_transfer,'user':curent_user})
 
-@login_required(login_url='log_in')
+@login_required
 def approve_lesson(request,LessonRequestID):
     current_user = request.user
     chosen_lesson_request = LessonRequest.objects.filter(id=LessonRequestID).get()
@@ -34,7 +37,7 @@ def approve_lesson(request,LessonRequestID):
           
     return redirect('admin_panel')
 
-@login_required(login_url='log_in')
+@login_required
 def delete_booking(request,LessonRequestID):
     lesson_request=LessonRequest.objects.filter(id=LessonRequestID).get()
     user=lesson_request.student
@@ -48,11 +51,10 @@ def delete_booking(request,LessonRequestID):
         
     return redirect('admin_panel')
 
-@login_required(login_url='log_in')
+@login_required
 def approve_bank_payment(request,BankTransferID):
     bank_transfer=BankTransfer.objects.filter(id=BankTransferID).get()
     if bank_transfer.amount==50:
         BankTransfer.objects.filter(id=BankTransferID).update(is_approved=True)
         Invoice.objects.filter(invoice=bank_transfer.invoice).update(is_fulfilled=True)
     return redirect('admin_panel')
-
