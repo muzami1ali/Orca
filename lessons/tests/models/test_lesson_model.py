@@ -130,7 +130,7 @@ class LessonModelTestCase(TestCase):
 
     def test_additional_information_can_accept_special_characters(self):
         self.lesson.additional_information = "asdfhf!@$£"
-        self._lesson_is_valid()
+        self._lesson_is_valid()E....E
 
     '''Functions for valid/invalid object'''
     def _lesson_is_valid(self):

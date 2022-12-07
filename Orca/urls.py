@@ -42,4 +42,8 @@ urlpatterns = [
     path('deal_requests/authorise/<int:nid>', Invoice.authorise, name='authorise'),
     path('deal_requests/decline/<int:nid>', Invoice.decline, name='decline'),
     path('contact-us/', ContactUs.contact, name='contact-us')
+
+
+
 ]
+handler404 = "lessons.views.page_not_found_view.page_not_found_view"
