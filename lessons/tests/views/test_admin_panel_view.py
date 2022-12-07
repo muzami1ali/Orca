@@ -42,20 +42,3 @@ class AdminPanelViewTestCase(TestCase):
     def test_admin_cannot_be_superuser_alone(self):
         self.assertFalse(self.superuser.is_superuser and self.superuser.is_staff==False)
     
-    def test_call_view_deny_anonymous_from_admin_panel(self):
-        response = self.client.get(self.url, follow=True)
-        self.assertRedirects(response, '/admin_panel/')
-       
-
-    def test_call_view_load(self):
-        self.client.login(username='user', password='test')  # defined in fixture or with factory in setUp()
-        response = self.client.get('/url/to/view')
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'conversation.html')
-
-    def test_call_view_fail_blank(self):
-        self.client.login(username=self.staff_user.username, password=self.staff_user.password)
-        response = self.client.post(self.url, {}) 
-        self.assertFormError(response, 'form', 'some_field', 'This field is required.')
-      
-   
