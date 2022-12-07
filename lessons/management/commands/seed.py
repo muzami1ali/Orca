@@ -5,7 +5,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db import IntegrityError
 from faker import Faker
-from lessons.models import Student, Lesson, LessonRequest, Invoice
+from lessons.models import Student, Lesson, LessonRequest, Invoice, BankTransfer
 import random
 
 
@@ -21,6 +21,7 @@ class Command(BaseCommand):
     TERM_PERIOD = ['TERM1', 'TERM2', 'TERM3', 'TERM4', 'TERM5', 'TERM6']
     MORE_INFO = ['', 'Please assign tutor, Jason Doe.', 'Please give me evening lessons.']
     LESSON_COUNT = 20
+    AMOUNT_CHOICES = [40, 50, 60]
 
 
     LESSON_REQUESTS_COUNT = 19      # John Doe has 1 lesson request = 50 altogether
@@ -43,6 +44,7 @@ class Command(BaseCommand):
             self.seed_lessons()
             self.seed_lesson_requests()
             self.seed_invoices()
+            self.seed_bank_transfer()
 
             print('Database seeding complete.')
         except IntegrityError:
@@ -147,9 +149,29 @@ class Command(BaseCommand):
         for request in LessonRequest.objects.all():
             if request.is_authorised:
                 counter += 1
-                Invoice.objects.create(
+                inv=Invoice.objects.create(
                     student = request.student,
                     lesson = request.lesson
                 )
+                reference=f'{inv.student_id}-{inv.id}'
+                inv.invoice=reference
+                Invoice.objects.filter(id=inv.id).update(invoice=reference)
             print(f'Seeding invoices...{counter}',  end='\r')
+        print('\n')
+
+    '''Seed Bank Transfers'''
+    def seed_bank_transfer(self):
+        counter = 0
+        for inv in Invoice.objects.all():
+            if inv.is_fulfilled == False:
+                counter += 1
+                bank_transfer = BankTransfer.objects.create(
+                    invoice = inv.invoice ,
+                    first_name = inv.student.first_name,
+                    last_name = inv.student.last_name,
+                    account_number = f'{random.randrange(10000000,99999999)}',
+                    sort_code = f'{random.randrange(100000,999999)}',
+                    amount = Command.AMOUNT_CHOICES[random.randrange(0, 3)]
+                )
+            print(f'Seeding Bank Transfers...{counter}',  end='\r')
         print('\n')
