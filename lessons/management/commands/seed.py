@@ -5,7 +5,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db import IntegrityError
 from faker import Faker
-from lessons.models import Student, Lesson, LessonRequest, Invoice
+from lessons.models import Student, Lesson, LessonRequest, Invoice, BankTransfer
 import random
 
 
@@ -43,6 +43,7 @@ class Command(BaseCommand):
             self.seed_lessons()
             self.seed_lesson_requests()
             self.seed_invoices()
+            self.seed_bank_transfer()
 
             print('Database seeding complete.')
         except IntegrityError:
@@ -155,4 +156,21 @@ class Command(BaseCommand):
                 inv.invoice=reference
                 Invoice.objects.filter(id=inv.id).update(invoice=reference)
             print(f'Seeding invoices...{counter}',  end='\r')
+        print('\n')
+
+    '''Seed Bank Transfers'''
+    def seed_bank_transfer(self):
+        counter = 0
+        for inv in Invoice.objects.all():
+            if inv.is_fulfilled == False:
+                counter += 1
+                bank_transfer = BankTransfer.objects.create(
+                    invoice = inv.invoice ,
+                    first_name = inv.student.first_name,
+                    last_name = inv.student.last_name,
+                    account_number = "12345678",
+                    sort_code = "123456",
+                    amount = 50
+                )
+            print(f'Seeding Bank Transfers...{counter}',  end='\r')
         print('\n')
