@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from lessons import views
-from lessons.views_folder import LessonStatus, LessonRequest, AdminPanel, AccessViews, BankTransfer, Invoice
+from lessons.views import LessonStatus, LessonRequest, AdminPanel, AccessViews, BankTransfer, Invoice, ContactUs, Home
 
 
 admin.site.site_title='Music Admin'
@@ -24,22 +24,22 @@ admin.site.site_header='Music Admin'
 admin.site.index_title=''
 urlpatterns = [
     path('admin/', admin.site.urls,name='admin'),
+    path('',Home.home,name='home'),
     path('dashboard/admin/',AdminPanel.admin_panel,name='admin_panel'),
     path('dashboard/admin/approve/<int:LessonRequestID>', AdminPanel.approve_lesson, name="approve_lesson"),
     path('dashboard/admin/delete/<int:LessonRequestID>', AdminPanel.delete_booking, name="delete_booking"),
-    path('dashboard/admin/approve-payment/<int:BankTransferID>',AdminPanel.approve_bank_payment,name="approve_payment"),
-    path('',views.home,name='home'),
-    path('log_in/', AccessViews.log_in, name = 'log_in'),
-    path('log_out/',AccessViews.log_out, name='log_out'),
-    path('sign_up/',AccessViews.sign_up, name='sign_up'),
+    path('dashboard/admin/approve/payment/<int:BankTransferID>',AdminPanel.approve_bank_payment,name="approve_payment"),
+    path('login/', AccessViews.log_in, name = 'log_in'),
+    path('logout/',AccessViews.log_out, name='log_out'),
+    path('sign-up/',AccessViews.sign_up, name='sign_up'),
     path('booking/request/', LessonRequest.request_lessons, name='request_lessons'),
     path('booking/bank_transfer/', BankTransfer.bank_transfer, name='bank_transfer'),
     path('booking/status/', LessonStatus.request_status, name='request_status'),
     path('booking/status/edit/<int:LessonRequestID>/', LessonStatus.edit_lesson, name='edit_lesson'),
     path('booking/status/cancel/<int:LessonRequestID>/', LessonStatus.cancel_lesson, name='cancel_lesson'),
-    path('invoice/', Invoice.invoice, name='invoice'),
+    path('booking/invoice/', Invoice.invoice, name='invoice'),
     path('deal_requests/', Invoice.deal_requests, name='deal_requests'),
-    path('authorise/<int:nid>', Invoice.authorise, name='authorise'),
-    path('decline/<int:nid>', Invoice.decline, name='decline'),
-    path('contact/', views.contact, name='contact')
+    path('deal_requests/authorise/<int:nid>', Invoice.authorise, name='authorise'),
+    path('deal_requests/decline/<int:nid>', Invoice.decline, name='decline'),
+    path('contact-us/', ContactUs.contact, name='contact')
 ]
