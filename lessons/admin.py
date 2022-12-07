@@ -53,5 +53,5 @@ class LessonRequestAdmin(admin.ModelAdmin):
 @admin.register(Invoice)
 class Invoice(admin.ModelAdmin):
     list_display=[
-        'refNumber','student_id', 'student', 'lesson','invoice',
+        'id','student_id', 'student', 'lesson','invoice',
     ]

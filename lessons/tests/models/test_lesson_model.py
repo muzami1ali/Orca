@@ -130,7 +130,7 @@ class LessonModelTestCase(TestCase):
 
     def test_additional_information_can_accept_special_characters(self):
         self.lesson.additional_information = "asdfhf!@$£"
-        self._lesson_is_valid()E....E
+        self._lesson_is_valid()
 
     def test_lesson_model_to_string_follows_format(self):
         self.assertEqual(self.lesson.__str__(), f'{self.lesson.lesson_name} - {self.lesson.student_availability}')
