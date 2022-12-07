@@ -27,38 +27,7 @@ def getRefNumber(student_id):
     max = str(Invoice.objects.all().aggregate(Max('id')).get('id__max')).zfill(3)
     return str(student_id).zfill(4) + "-" + max
 
-def log_in(request):
-    if request.method == 'POST':
-        form = LogInForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                if user.is_superuser or user.is_staff:
-                    login(request,user)
-                    return redirect('admin_panel')
-                login(request, user)
-                return redirect('request_lessons')
-        messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
-    form = LogInForm()
-    return render(request, 'log_in.html', {'form': form})
 
-@login_required
-def log_out(request):
-    logout(request)
-    return redirect('home')
-
-def sign_up(request):
-    context={}
-    if request.method =='POST':
-        context['form']= SignUpForms(request.POST)
-        if context['form'].is_valid():
-            context['form'].save()
-            return redirect('log_in')
-    else:
-        context['form'] =SignUpForms()
-    return render(request,'sign_up.html',context)
 
 
 @login_required(login_url='log_in')

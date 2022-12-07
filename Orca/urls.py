@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from lessons import views
-from lessons.views_folder import LessonStatus, LessonRequest, AdminPanel
+from lessons.views_folder import LessonStatus, LessonRequest, AdminPanel, AccessViews
 
 
 admin.site.site_title='Music Admin'
@@ -29,9 +29,9 @@ urlpatterns = [
     path('dashboard/admin/delete/<int:LessonRequestID>', AdminPanel.delete_booking, name="delete_booking"),
     path('dashboard/admin/approve-payment/<int:BankTransferID>',AdminPanel.approve_bank_payment,name="approve_payment"),
     path('',views.home,name='home'),
-    path('log_in/', views.log_in, name = 'log_in'),
-    path('log_out/',views.log_out, name='log_out'),
-    path('sign_up/',views.sign_up, name='sign_up'),
+    path('log_in/', AccessViews.log_in, name = 'log_in'),
+    path('log_out/',AccessViews.log_out, name='log_out'),
+    path('sign_up/',AccessViews.sign_up, name='sign_up'),
     path('booking/',views.booking, name='booking'),
     path('booking/request/', LessonRequest.request_lessons, name='request_lessons'),
     path('booking/bank_transfer/', views.bank_transfer, name='bank_transfer'),
