@@ -21,6 +21,7 @@ class Command(BaseCommand):
     TERM_PERIOD = ['TERM1', 'TERM2', 'TERM3', 'TERM4', 'TERM5', 'TERM6']
     MORE_INFO = ['', 'Please assign tutor, Jason Doe.', 'Please give me evening lessons.']
     LESSON_COUNT = 20
+    AMOUNT_CHOICES = [40, 50, 60]
 
 
     LESSON_REQUESTS_COUNT = 19      # John Doe has 1 lesson request = 50 altogether
@@ -168,9 +169,9 @@ class Command(BaseCommand):
                     invoice = inv.invoice ,
                     first_name = inv.student.first_name,
                     last_name = inv.student.last_name,
-                    account_number = "12345678",
-                    sort_code = "123456",
-                    amount = 50
+                    account_number = f'{random.randrange(10000000,99999999)}',
+                    sort_code = f'{random.randrange(100000,999999)}',
+                    amount = Command.AMOUNT_CHOICES[random.randrange(0, 3)]
                 )
             print(f'Seeding Bank Transfers...{counter}',  end='\r')
         print('\n')
