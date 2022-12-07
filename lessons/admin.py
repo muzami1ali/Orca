@@ -1,8 +1,6 @@
 from django.contrib import admin
 from .models import Student, LessonRequest, Lesson, BankTransfer,Invoice
 
-
-    
 @admin.register(Student)
 class UserAdmin(admin.ModelAdmin):
    search_fields = ("username__startswith", )
@@ -13,24 +11,12 @@ class UserAdmin(admin.ModelAdmin):
        elif request.user.is_superuser:
            return qs
        return qs.filter(author=request.user)
-   def has_delete_permission(self, request,object=None):
-       return False
-     
-   def has_change_permission(self, request,object=None):
-       if request.user.is_staff==True or request.user.is_superuser==True:
-           return  True
-       return False
-   
-       
-   def has_add_permission(self, request):
-       if request.user.is_superuser==True:
-           return True
-       return False
-       
+    
     
    list_display=[
        'id','username','first_name','last_name','is_active','password','is_staff','is_superuser',
    ]
+   
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
@@ -43,19 +29,30 @@ class LessonAdmin(admin.ModelAdmin):
 @admin.register(BankTransfer)
 class BankTransferAdmin(admin.ModelAdmin):
     list_display=[
-        'invoice', 'first_name', 'last_name', 'account_number', 'sort_code', 'amount' ,
+        'invoice', 'first_name', 'last_name', 'account_number', 'sort_code', 'amount' ,'is_approved'
     ]
+   
 
 @admin.register(LessonRequest)
 class LessonRequestAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'student', 'lesson_id', 'lesson',
+        'id', 'student_id', 'student', 'lesson_id', 'lesson','is_authorised',
     ]
+    
+    actions=['enable_selected','disable_selected']
+    def enable_selected(self,request,queryset):
+        queryset.update(is_authorised=True)
+    def disable_selected(self,request,queryset):
+        queryset.update(is_authorised=False)
+    enable_selected.short_description="Authorise the lessons"
+    disable_selected.short_description="Revoke the lesson's authorisation"
+   
+        
 
 
 @admin.register(Invoice)
 class Invoice(admin.ModelAdmin):
     list_display=[
-        'id', 'student', 'lesson'
+        'id','student_id', 'student', 'lesson','invoice',
     ]
 
