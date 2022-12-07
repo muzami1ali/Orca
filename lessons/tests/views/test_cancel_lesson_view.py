@@ -35,8 +35,8 @@ class CancelLessonViewTestCase(TestCase):
         self.assertEqual(self.url, f'/booking/status/cancel/{self.lesson_request.id}/')
 
     def test_redirect_if_not_logged_in(self):
-        redirect_url = reverse_with_next('log_in', self.url)
-        response = self.client.post(self.url, follow=True)
+        redirect_url = reverse_with_next('login', self.url)
+        response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'log_in.html')
 

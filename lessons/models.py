@@ -10,10 +10,10 @@ class Student(AbstractUser):
     last_name=models.CharField(max_length=50,blank=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    
+
     def generate_invoice_number(self):
       random_uuid=str(uuid.uuid4())
-      
+
       return f'{self.id}-{random_uuid}'
 
 
@@ -122,9 +122,9 @@ class BankTransfer(models.Model):
     )
     amount = models.PositiveSmallIntegerField(
         default=0,
-        blank=False, 
+        blank=False,
         validators=[MinValueValidator(
-            limit_value=0, 
+            limit_value=0,
             message="Amount cannot be negative"
         )]
     )
@@ -139,7 +139,7 @@ class BankTransfer(models.Model):
             self.status = "correctly paid"
 
         super().save(*args, **kwargs)
-    
+
     is_approved=models.BooleanField(default=False)
 
 class Invoice(models.Model):
@@ -155,5 +155,3 @@ class Invoice(models.Model):
         )]
     )
     is_fulfilled=models.BooleanField(default=False)
-
-    
