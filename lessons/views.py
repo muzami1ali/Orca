@@ -14,7 +14,7 @@ def home(request):
 
 def booking(request):
     return render(request,'booking.html')
-    
+
 @login_required(login_url='log_in')
 def contact(request):
     return render(request,'contact.html')
