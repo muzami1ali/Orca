@@ -147,9 +147,12 @@ class Command(BaseCommand):
         for request in LessonRequest.objects.all():
             if request.is_authorised:
                 counter += 1
-                Invoice.objects.create(
+                inv=Invoice.objects.create(
                     student = request.student,
                     lesson = request.lesson
                 )
+                reference=f'{inv.student_id}-{inv.id}'
+                inv.invoice=reference
+                Invoice.objects.filter(id=inv.id).update(invoice=reference)
             print(f'Seeding invoices...{counter}',  end='\r')
         print('\n')
