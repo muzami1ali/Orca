@@ -1,5 +1,5 @@
 '''
-    View for the 'Lesson Request' page.
+    LessonRequest contains the views for requesting lessons as a student.
     @author Dean Whitbread
     @version 02/12/2022
 '''

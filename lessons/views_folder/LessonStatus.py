@@ -1,5 +1,6 @@
 '''
-    View for the 'Lesson Status' page.
+    LessonStatus contains the views for viewing, editing, and cancelling
+    requested lessons.
     @author Dean Whitbread
     @version 02/12/2022
 '''
