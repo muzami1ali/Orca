@@ -23,15 +23,12 @@ def contact(request):
     return render(request,'contact.html')
 
 
-<<<<<<< HEAD
-=======
 
 def getRefNumber(student_id):
     inv= Invoice.objects.create()
     max = str(Invoice.objects.all().aggregate(Max('id')).get('id__max')).zfill(3)
     return str(student_id).zfill(4) + "-" + max
 
->>>>>>> e9e16217fad06736f3f541abfbe8d33bc87073c4
 def log_in(request):
     if request.method == 'POST':
         form = LogInForm(request.POST)
@@ -49,11 +46,7 @@ def log_in(request):
     form = LogInForm()
     return render(request, 'log_in.html', {'form': form})
 
-<<<<<<< HEAD
-
-=======
 @login_required
->>>>>>> e9e16217fad06736f3f541abfbe8d33bc87073c4
 def log_out(request):
     logout(request)
     return redirect('home')
@@ -88,7 +81,7 @@ def invoice(request):
     logged_in_user=request.user
     invoices = Invoice.objects.filter(student_id=logged_in_user.id).all()
     filter_invoices= invoices.filter(is_fulfilled = False).all()
-   
+
     totalPrice = 50 * len(filter_invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
