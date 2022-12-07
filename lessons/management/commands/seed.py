@@ -157,6 +157,7 @@ class Command(BaseCommand):
                 inv.invoice=reference
                 Invoice.objects.filter(id=inv.id).update(invoice=reference)
                 LessonRequest.objects.filter(lesson=request.lesson,student=request.student).update(is_authorised=True)
+
             print(f'Seeding invoices...{counter}',  end='\r')
         print('\n')
 
