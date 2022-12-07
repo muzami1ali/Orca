@@ -39,13 +39,20 @@ class RequestStatusTestCase(TestCase):
     def test_requested_lessons_show_in_webpage(self):
         self.client.login(username=self.student.username, password='Password123')
         response = self.client.get(self.url, data=self.form_data)
-        self.assertNotEqual(response.context['lesson_counter'], 0)
+        self.assertEqual(response.context['lesson_counter'], 1)
 
     def test_no_lessons_show_when_no_lessons_have_been_booked(self):
         self._create_other_user()
         self.client.login(username=self.other_user.username, password='Password123')
         response = self.client.get(self.url, data=self.form_data)
         self.assertEqual(response.context['lesson_counter'], 0)
+
+    def test_additional_booked_lessons_show_in_webpage(self):
+        self.client.login(username=self.student.username, password='Password123')
+        self. _create_other_lesson_request()
+        response = self.client.get(self.url, data=self.form_data)
+        self.assertEqual(LessonRequest.objects.count(), 2)
+        self.assertEqual(response.context['lesson_counter'], 2)
 
 
     ''' Functions for test class '''
@@ -55,4 +62,23 @@ class RequestStatusTestCase(TestCase):
             first_name = 'Jane',
             last_name = 'Doe',
             password = 'Password123'
+        )
+
+    def _create_other_lesson(self):
+        self.other_lesson = Lesson.objects.create(
+            lesson_name = "PERFORMANCE_PREP",
+            student_availability = "SAT",
+            number_of_lessons = 2,
+            interval = 1,
+            duration = 60,
+            term_period = "TERM5",
+            additional_information = ""
+        )
+
+    def _create_other_lesson_request(self):
+        self._create_other_lesson()
+        self.other_lesson_request = LessonRequest.objects.create(
+            student = self.student,
+            lesson = self.other_lesson,
+            is_authorised = False
         )

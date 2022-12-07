@@ -17,3 +17,4 @@ OTHER_USER_RECORD_MSG = source_code403
 
 
 MULTIPLE_RECORDS_FOUND_MSG = "Multiple records found. Please contact the system administrator."
+CANNOT_BOOK_TWICE_MSG = "Class cannot be booked twice."

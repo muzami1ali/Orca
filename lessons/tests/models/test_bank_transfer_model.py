@@ -12,7 +12,7 @@ class BankTransferModelTestCase(TestCase):
 
     def setUp(self):
         self.BankTransfer = BankTransfer.objects.get(invoice="001-01")
-    
+
     def _create_second_bank_transfer(self):
         bank_transfer = BankTransfer.objects.create(
             invoice="001-02",
@@ -46,7 +46,7 @@ class BankTransferModelTestCase(TestCase):
     def test_invoice_field_cannot_contain_alphabets(self):
         self.BankTransfer.invoice = "abcdefg"
         self._assert_bank_transfer_is_invalid()
-    
+
     def test_invoice_field_may_contain_40_characters(self):
         self.BankTransfer.invoice= '1'*20 + '-' + '1'*19
         self._assert_bank_transfer_is_valid()
@@ -54,11 +54,6 @@ class BankTransferModelTestCase(TestCase):
     def test_invoice_field_may_not_contain_more_than_40_characters(self):
         self.BankTransfer.invoice='1'*41
         self._assert_bank_transfer_is_invalid()
-
-    # def test_invoice_field_uniqueness(self):
-    #     second_bank_transfer=self._create_second_bank_transfer()
-    #     self.BankTransfer.invoice=second_bank_transfer.invoice
-    #     self._assert_bank_transfer_is_invalid()
 
     """Unit test for first name field"""
     def test_first_name_must_not_be_blank(self):
@@ -72,7 +67,7 @@ class BankTransferModelTestCase(TestCase):
     def test_first_name_field_name_may_not_contain_more_than_50_characters(self):
         self.BankTransfer.first_name='x'*51
         self._assert_bank_transfer_is_invalid()
-    
+
     """Unit test for last name field"""
     def test_last_name_must_not_be_blank(self):
         self.BankTransfer.last_name = ""
@@ -90,7 +85,7 @@ class BankTransferModelTestCase(TestCase):
     def test_account_number_field_must_not_be_blank(self):
         self.BankTransfer.account_number = ""
         self._assert_bank_transfer_is_invalid()
-    
+
     def test_account_number_field_may_contain_8_characters(self):
         self.BankTransfer.account_number='1'*8
         self._assert_bank_transfer_is_valid()
@@ -136,5 +131,22 @@ class BankTransferModelTestCase(TestCase):
     def test_amount_field_cannot_be_negative(self):
         self.BankTransfer.amount = "-60"
         self._assert_bank_transfer_is_invalid()
-    
-    
+
+    ''' Test for save function'''
+    def test_can_save_underpaid_transfer(self):
+        self.BankTransfer.amount = 10
+        self.BankTransfer.save()
+        self.assertTrue(self.BankTransfer.status == "underpaid")
+        self.assertEqual(BankTransfer.objects.count(), 1)
+
+    def test_can_save_overpaid_transfer(self):
+        self.BankTransfer.amount = 70
+        self.BankTransfer.save()
+        self.assertTrue(self.BankTransfer.status == "overpaid")
+        self.assertEqual(BankTransfer.objects.count(), 1)
+
+    def test_can_save_correctly_paid_transfer(self):
+        self.BankTransfer.amount = 50
+        self.BankTransfer.save()
+        self.assertTrue(self.BankTransfer.status == "correctly paid")
+        self.assertEqual(BankTransfer.objects.count(), 1)
