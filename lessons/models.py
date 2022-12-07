@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator, MaxLengthValidator
 from django.http import HttpRequest
+import uuid
 
 class Student(AbstractUser):
     username=models.EmailField(unique=True,verbose_name='Email')
@@ -9,6 +10,11 @@ class Student(AbstractUser):
     last_name=models.CharField(max_length=50,blank=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+
+    def generate_invoice_number(self):
+      random_uuid=str(uuid.uuid4())
+
+      return f'{self.id}-{random_uuid}'
 
 
 class Lesson(models.Model):
@@ -82,22 +88,71 @@ class Lesson(models.Model):
 
 
 class LessonRequest(models.Model):
-    student = models.ForeignKey(Student,on_delete = models.CASCADE)
+    student= models.ForeignKey(Student,on_delete = models.CASCADE)
     lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
     is_authorised = models.BooleanField(default = False)
 
-class bankTransfers(models.Model):
-    invoice = models.CharField(max_length=40,blank=False)
+class BankTransfer(models.Model):
+    invoice = models.CharField(
+        # unique=True,
+        max_length=40,
+        blank=False,
+        validators=[RegexValidator(
+            regex=r'^[0-9]*-[0-9]*$',
+            message='invoice can only contain numbers'
+        )]
+    )
     first_name=models.CharField(max_length=50,blank=False)
     last_name=models.CharField(max_length=50,blank=False)
-    Account_Number = models.CharField(max_length=8,blank=False)
-    Sort_Code = models.CharField(max_length=6,blank=False)
-    Amount = models.PositiveSmallIntegerField(default=0,blank=False)
+    account_number = models.CharField(
+        max_length=8,
+        blank=False,
+        validators=[RegexValidator(
+            regex=r'^[0-9]{8,}',
+            message='Account Number can only contain eight numbers'
+        )]
+    )
+    sort_code = models.CharField(
+        max_length=6,
+        blank=False,
+        validators=[RegexValidator(
+            regex=r'^[0-9]{6,}',
+            message='Sort Code can only contain six numbers'
+        )]
+    )
+    amount = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        validators=[MinValueValidator(
+            limit_value=0,
+            message="Amount cannot be negative"
+        )]
+    )
+    status = models.CharField(max_length=20,default="unpaid")
+
+    def save(self, *args, **kwargs):
+        if self.amount < 50:
+            self.status = "underpaid"
+        elif self.amount > 50:
+            self.status = "overpaid"
+        else:
+            self.status = "correctly paid"
+
+        super().save(*args, **kwargs)
+
+    is_approved=models.BooleanField(default=False)
 
 class Invoice(models.Model):
     refNumber = models.CharField(max_length=32, primary_key=True)
     student = models.ForeignKey(Student, on_delete = models.CASCADE)
     lesson = models.ForeignKey(Lesson,on_delete = models.CASCADE)
-
-class InvoiceNumber(models.Model):
-    pass
+    invoice = models.CharField(
+        # unique=True,
+        max_length=40,
+        blank=False,
+        validators=[RegexValidator(
+            regex=r'^[0-9]*-[0-9]*$',
+            message='invoice can only contain numbers'
+        )]
+    )
+    is_fulfilled=models.BooleanField(default=False)
