@@ -1,12 +1,12 @@
 from django import forms
 from .models import Student, Lesson, BankTransfer
-#from django.core.validators import RegexValidator, MaxLengthValidator
 from django.core.validators import RegexValidator
 
 class SignUpForms(forms.ModelForm):
     class Meta:
         model=Student
         fields=['username','first_name','last_name']
+
     new_password=forms.CharField(
         label="Password",
         widget=forms.PasswordInput(),
@@ -15,7 +15,7 @@ class SignUpForms(forms.ModelForm):
             message="Password must contain an uppercase letter, lowercase letter and a number"
             )
           ]
-        )
+    )
 
     password_confirmation=forms.CharField(label="Password confirmation",widget=forms.PasswordInput())
 
@@ -52,10 +52,8 @@ class LessonRequestForm(forms.ModelForm):
         widgets = {
             'additional_information': forms.Textarea(attrs={'rows': 3}),
         }
-        localized_fields = ('student_availability',)
 
 class BankTransferForm(forms.ModelForm):
     class Meta:
         model = BankTransfer
         fields = ['invoice','first_name','last_name','account_number','sort_code','amount']
-        

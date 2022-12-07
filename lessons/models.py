@@ -10,8 +10,6 @@ class Student(AbstractUser):
     last_name=models.CharField(max_length=50,blank=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    
-  
 
 class Lesson(models.Model):
     LESSON_CHOICES =[
