@@ -132,6 +132,9 @@ class LessonModelTestCase(TestCase):
         self.lesson.additional_information = "asdfhf!@$£"
         self._lesson_is_valid()
 
+    def test_lesson_model_to_string_follows_format(self):
+        self.assertEqual(self.lesson.__str__(), f'{self.lesson.lesson_name} - {self.lesson.student_availability}')
+
     '''Functions for valid/invalid object'''
     def _lesson_is_valid(self):
         try:
