@@ -1,7 +1,7 @@
 [
     {
       "model": "lessons.Student",
-      "pk": 1,
+      "pk": 3,
       "fields": {
           "username": "Sherlock.Holmes@example.org",
           "first_name": "Sherlock",
