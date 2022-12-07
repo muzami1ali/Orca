@@ -13,13 +13,16 @@ from lessons.models import Lesson, LessonRequest, Student, Invoice, BankTransfer
 
 @login_required
 def admin_panel(request):
-    if request.method=="POST":
-        return redirect('admin_panel')
+    if request.user.is_staff:
+        if request.method=="POST":
+            return redirect('admin_panel')
+        else:
+            lesson_request = LessonRequest.objects.all()
+            invoice=Invoice.objects.all()
+            bank_transfer=BankTransfer.objects.all()
+            return render(request,'admin_panel.html', {'lesson_request': lesson_request,'invoices':invoice,'bank_transfer':bank_transfer})
     else:
-        lesson_request = LessonRequest.objects.all()
-        invoice=Invoice.objects.all()
-        bank_transfer=BankTransfer.objects.all()
-        return render(request,'admin_panel.html', {'lesson_request': lesson_request,'invoices':invoice,'bank_transfer':bank_transfer})
+        return redirect('request_lessons')
 
 @login_required
 def approve_lesson(request,LessonRequestID):
