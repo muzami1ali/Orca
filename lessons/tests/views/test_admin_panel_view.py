@@ -38,5 +38,8 @@ class AdminPanelViewTestCase(TestCase):
             response = self.client.get(self.url, follow=True)
             self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
             self.assertTemplateUsed(response, 'log_in.html')
+            
+    def test_admin_cannot_be_superuser_alone(self):
+        self.assertFalse(self.superuser.is_superuser and self.superuser.is_staff==False)
     
-    
+  
