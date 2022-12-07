@@ -53,12 +53,8 @@ class Migration(migrations.Migration):
                 ('account_number', models.CharField(max_length=8, validators=[django.core.validators.RegexValidator(message='Account Number can only contain eight numbers', regex='^[0-9]{8,}')])),
                 ('sort_code', models.CharField(max_length=6, validators=[django.core.validators.RegexValidator(message='Sort Code can only contain six numbers', regex='^[0-9]{6,}')])),
                 ('amount', models.PositiveSmallIntegerField(default=0, validators=[django.core.validators.MinValueValidator(limit_value=0, message='Amount cannot be negative')])),
-<<<<<<< HEAD
-                ('approved', models.BooleanField(default=False)),
-=======
                 ('status', models.CharField(default='unpaid', max_length=20)),
                 ('is_approved', models.BooleanField(default=False)),
->>>>>>> main
             ],
         ),
         migrations.CreateModel(
