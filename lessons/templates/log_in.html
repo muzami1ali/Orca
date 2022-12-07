@@ -8,7 +8,7 @@
       {%for message in messages %}
         <p><b> {{message}}</b></p>
       {% endfor %}
-      <form action = "{%url 'log_in' %}" method="post">
+      <form action = "{%url 'login' %}" method="post">
         {% csrf_token %}
         {% include 'partials/bootsrap_form.html' with form=form %}
         <input type = "submit" value = "Log in" class = "btn btn-lg custom-button" >

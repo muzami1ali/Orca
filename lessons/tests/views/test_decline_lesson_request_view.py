@@ -32,15 +32,15 @@ class DeclineTestCase(TestCase):
 
     ''' Test cases for the cancel lesson view. '''
     def test_url_is_valid(self):
-        
+
         self.assertEqual(self.url, f'decline/{self.lesson_request.id}')
 
-    
+
     def test_redirect_if_not_logged_in(self):
-        redirect_url = reverse_with_next('log_in', self.url)
+        redirect_url = reverse_with_next('login', self.url)
         response = self.client.get(self.url, follow=True)
         self.assertEqual(response.status_code, 404)
-    
+
     def test_decline_listed_lesson(self):
         self.client.login(username=self.student.username, password='Password123')
         response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id})
@@ -50,7 +50,5 @@ class DeclineTestCase(TestCase):
         self.client.login(username=self.student.username, password='Password123')
         response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id})
         response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id}, follow=True)
-        
-        self.assertTrue(response.status_code==404)
 
-    
+        self.assertTrue(response.status_code==404)

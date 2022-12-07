@@ -30,7 +30,7 @@ from lessons.models import Student, Lesson, LessonRequest
 #         self.assertEqual(self.url, f'/booking/request/{self.lesson.id}')
 #
 #     def test_redirect_if_not_logged_in(self):
-#         redirect_url = reverse_with_next('log_in', self.url)
+#         redirect_url = reverse_with_next('login', self.url)
 #         response = self.client.get(self.url, follow=True)
 #         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
 #         self.assertTemplateUsed(response, 'log_in.html')

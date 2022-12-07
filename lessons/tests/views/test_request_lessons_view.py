@@ -32,7 +32,7 @@ class RequestLessonsViewTestCase(TestCase):
     ''' Unit test cases '''
 
     def test_webpage_redirects_when_student_not_logged_in(self):
-        redirect_url = reverse_with_next('log_in', self.url)
+        redirect_url = reverse_with_next('login', self.url)
         response = self.client.get(self.url, follow=True)
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'log_in.html')
