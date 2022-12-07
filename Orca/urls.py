@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from lessons import views
-from lessons.views_folder import LessonStatus, LessonRequest, AdminPanel, AccessViews
+from lessons.views_folder import LessonStatus, LessonRequest, AdminPanel, AccessViews, BankTransfer
 
 
 admin.site.site_title='Music Admin'
@@ -34,7 +34,7 @@ urlpatterns = [
     path('sign_up/',AccessViews.sign_up, name='sign_up'),
     path('booking/',views.booking, name='booking'),
     path('booking/request/', LessonRequest.request_lessons, name='request_lessons'),
-    path('booking/bank_transfer/', views.bank_transfer, name='bank_transfer'),
+    path('booking/bank_transfer/', BankTransfer.bank_transfer, name='bank_transfer'),
     path('booking/status/', LessonStatus.request_status, name='request_status'),
     path('booking/status/edit/<int:LessonRequestID>/', LessonStatus.edit_lesson, name='edit_lesson'),
     path('booking/status/cancel/<int:LessonRequestID>/', LessonStatus.cancel_lesson, name='cancel_lesson'),

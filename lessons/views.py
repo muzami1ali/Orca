@@ -30,16 +30,7 @@ def getRefNumber(student_id):
 
 
 
-@login_required(login_url='log_in')
-def bank_transfer(request):
-    if request.method == 'POST':
-        form= BankTransferForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('bank_transfer')
-    else:
-        form = BankTransferForm()
-    return render(request, 'bank_transfer.html', {'form': form})
+
 
 @login_required(login_url='log_in')
 def invoice(request):
