@@ -45,3 +45,4 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
 
 ]
+handler404 = "lessons.views_folder.page_not_found_view.page_not_found_view"

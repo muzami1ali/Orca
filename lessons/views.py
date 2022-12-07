@@ -10,6 +10,7 @@ from django.db.models import Max
 import lessons.views_folder.admin_panel as admin
 
 
+
 def home(request):
     return render(request,'index.html')
 
@@ -77,7 +78,7 @@ def invoice(request):
     logged_in_user=request.user
     invoices = Invoice.objects.filter(student_id=logged_in_user.id).all()
     filter_invoices= invoices.filter(is_fulfilled = False).all()
-   
+
     totalPrice = 50 * len(filter_invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
