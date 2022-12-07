@@ -57,5 +57,5 @@ class LessonRequestForm(forms.ModelForm):
 class BankTransferForm(forms.ModelForm):
     class Meta:
         model = BankTransfer
-        fields = ['invoice', 'first_name', 'last_name', 'account_number', 'sort_code', 'amount']
+        fields = ['invoice','first_name','last_name','account_number','sort_code','amount']
         

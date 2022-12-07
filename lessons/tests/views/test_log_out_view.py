@@ -8,7 +8,7 @@ from lessons.tests.helpers import LogInTester
 class LogOutViewTestCase(TestCase, LogInTester):
 
     def setUp(self):
-        self.url = reverse('log_out')
+        self.url = reverse('logout')
         self.user = Student.objects.create_user(
             username = "@johndoe",
             first_name='John',
@@ -20,7 +20,7 @@ class LogOutViewTestCase(TestCase, LogInTester):
         )
 
     def test_log_out_url(self):
-        self.assertEqual(self.url,'/log_out/')
+        self.assertEqual(self.url,'/logout/')
 
     def test_get_log_out(self):
         self.client.login(username='@johndoe', password='Password123')
