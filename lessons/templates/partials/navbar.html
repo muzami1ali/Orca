@@ -24,7 +24,7 @@
           <a class="nav-link" href="{%url 'bank_transfer'%}">Payment </a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="{%url 'contact'%}">Contact </a>
+          <a class="nav-link" href="{%url 'contact-us'%}">Contact </a>
         </li>
 
 
@@ -32,9 +32,9 @@
       <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
           <a>Welcome :{{user.username}}!</a>
       </ul>
-  
+
       <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-        <a class="nav-link " href="{%url 'log_out'%}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link " href="{%url 'logout'%}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class = "bi-person-circle"> Log Out</span>
         </a>
     </ul>
@@ -55,13 +55,12 @@
     </button>
       <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
         <li class="nav-item active">
-          <a class="nav-link" href="{%url 'contact'%}">Contact</a>
+          <a class="nav-link" href="{%url 'contact-us'%}">Contact</a>
         </li>
-        <a class="nav-link " href="{%url 'log_out'%}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link " href="{%url 'logout'%}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class = "bi-person-circle"> Log Out</span>
         </a>
     </ul>
   {% endif%}
   </div>
 </nav>
-

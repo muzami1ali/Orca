@@ -13,7 +13,7 @@ from lessons.models import Lesson, LessonRequest,Invoice
 from lessons.forms import LessonRequestForm
 
 
-@login_required(login_url='log_in')
+@login_required
 def request_lessons(request):
     if request.method == "POST":
         if LessonRequest.objects.filter(student_id=request.user.id).exists():

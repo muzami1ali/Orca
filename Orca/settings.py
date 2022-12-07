@@ -136,3 +136,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+# DO NOT REMOVE
+# login url used to redirect users to login page
+LOGIN_URL = '/login/'

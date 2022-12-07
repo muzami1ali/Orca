@@ -8,6 +8,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from lessons.forms import SignUpForms, LogInForm
+from django.contrib import messages
 
 def log_in(request):
     if request.method == 'POST':
@@ -37,7 +38,7 @@ def sign_up(request):
         context['form']= SignUpForms(request.POST)
         if context['form'].is_valid():
             context['form'].save()
-            return redirect('log_in')
+            return redirect('login')
     else:
         context['form'] =SignUpForms()
     return render(request,'sign_up.html',context)

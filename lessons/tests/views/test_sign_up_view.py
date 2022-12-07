@@ -9,7 +9,7 @@ from ..helpers import LogInTester
 class SignUpViewTestCase(TestCase, LogInTester):
 
     def setUp(self):
-        self.url = reverse('sign_up')
+        self.url = reverse('sign-up')
         self.form_input = {
             'username': 'janedoe@example.org',
             'first_name': 'Jane',
@@ -19,7 +19,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
         }
 
     def test_sign_up_url(self):
-        self.assertEqual(self.url,'/sign_up/')
+        self.assertEqual(self.url,'/sign-up/')
 
     def test_get_sign_up(self):
         response = self.client.get(self.url)
@@ -47,7 +47,7 @@ class SignUpViewTestCase(TestCase, LogInTester):
         response = self.client.post(self.url, self.form_input, follow=True)
         after_count = Student.objects.count()
         self.assertEqual(after_count, before_count+1)
-        response_url = reverse('log_in')
+        response_url = reverse('login')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'log_in.html')
         user = Student.objects.get(username='janedoe@example.org')

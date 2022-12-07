@@ -7,6 +7,6 @@ ContactUs contains the views to display the contact us message.
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-@login_required(login_url='log_in')
+@login_required
 def contact(request):
     return render(request,'contact.html')

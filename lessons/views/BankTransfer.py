@@ -9,7 +9,7 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from lessons.forms import BankTransferForm
 
-@login_required(login_url='log_in')
+@login_required
 def bank_transfer(request):
     if request.method == 'POST':
         form= BankTransferForm(request.POST)
