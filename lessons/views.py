@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db import IntegrityError
 from django.db.models import Max
+import lessons.views_folder.admin_panel as admin
 
 
 def home(request):
@@ -22,6 +23,15 @@ def contact(request):
     return render(request,'contact.html')
 
 
+<<<<<<< HEAD
+=======
+
+def getRefNumber(student_id):
+    inv= Invoice.objects.create()
+    max = str(Invoice.objects.all().aggregate(Max('id')).get('id__max')).zfill(3)
+    return str(student_id).zfill(4) + "-" + max
+
+>>>>>>> e9e16217fad06736f3f541abfbe8d33bc87073c4
 def log_in(request):
     if request.method == 'POST':
         form = LogInForm(request.POST)
@@ -30,15 +40,20 @@ def log_in(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
-                if user.is_superuser is True:
-                    return redirect('deal_requests')
+                if user.is_superuser or user.is_staff:
+                    login(request,user)
+                    return redirect('admin_panel')
                 login(request, user)
                 return redirect('request_lessons')
         messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
     form = LogInForm()
     return render(request, 'log_in.html', {'form': form})
 
+<<<<<<< HEAD
 
+=======
+@login_required
+>>>>>>> e9e16217fad06736f3f541abfbe8d33bc87073c4
 def log_out(request):
     logout(request)
     return redirect('home')
@@ -50,7 +65,7 @@ def sign_up(request):
         context['form']= SignUpForms(request.POST)
         if context['form'].is_valid():
             context['form'].save()
-            return redirect('sign_up')
+            return redirect('log_in')
     else:
         context['form'] =SignUpForms()
     return render(request,'sign_up.html',context)
@@ -70,8 +85,11 @@ def bank_transfer(request):
 
 @login_required(login_url='log_in')
 def invoice(request):
-    invoices = Invoice.objects.all()
-    totalPrice = 50 * len(invoices)
+    logged_in_user=request.user
+    invoices = Invoice.objects.filter(student_id=logged_in_user.id).all()
+    filter_invoices= invoices.filter(is_fulfilled = False).all()
+   
+    totalPrice = 50 * len(filter_invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 
 
@@ -83,7 +101,6 @@ def deal_requests(request):
 
 @login_required(login_url='log_in')
 def authorise(request,nid):
-
     LessonRequest.objects.filter(id=nid).update(is_authorised=True)
     lr = LessonRequest.objects.filter(id=nid).first()
     Invoice.objects.create(student_id=lr.student.id, lesson_id=lr.lesson.id)

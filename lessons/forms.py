@@ -6,7 +6,7 @@ class SignUpForms(forms.ModelForm):
     class Meta:
         model=Student
         fields=['username','first_name','last_name']
-        
+
     new_password=forms.CharField(
         label="Password",
         widget=forms.PasswordInput(),
