@@ -51,7 +51,7 @@ class CancelLessonViewTestCase(TestCase):
     def test_cannot_cancel_the_same_lesson_twice(self):
         self.client.login(username=self.student.username, password='Password123')
         response = self.client.post(self.url, data=self.form_data)
-        response = self.client.post(self.url, data=self.form_data, follow=True)
+        response = self.client.post(self.url, data=self.form_data)
         self.assertTrue(response.status_code==400)
 
     def test_cannot_cancel_lesson_belonging_to_other_student(self):
@@ -69,9 +69,9 @@ class CancelLessonViewTestCase(TestCase):
 
     def test_cannot_cancel_non_existent_lesson(self):
         self.client.login(username=self.student.username, password='Password123')
-        response = self.client.post(self.url, data={'LessonRequestID': 1000})
-        self.assertEqual(LessonRequest.objects.count(), 1)
-        self.assertTrue(response.status_code!=200)
+        response = self.client.post(self.url, data=self.form_data)
+        response = self.client.post(self.url, data=self.form_data)
+        self.assertTrue(response.status_code==400)
 
     def test_that_administrator_redirected_to_admin_panel(self):
         self.administrator = Student.objects.get(username='Petra.Pickles@example.org')
@@ -85,7 +85,6 @@ class CancelLessonViewTestCase(TestCase):
     def test_that_director_redirected_to_admin_panel(self):
         self.director = Student.objects.get(username='Marty.Major@example.org')
         self.client.login(username=self.director.username, password='Password123')
-        print(self.director.is_staff)
         response = self.client.post(self.url, data=self.form_data, follow=True)
         response_url = reverse('admin_panel')
         self.assertRedirects(response, response_url, status_code=302, target_status_code=200)

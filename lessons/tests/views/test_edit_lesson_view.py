@@ -131,7 +131,7 @@ class EditLessonViewTestCase(TestCase):
         self._create_other_lesson_request()
         self.other_url = reverse('edit_lesson', kwargs={'LessonRequestID': self.other_lesson_request.id})
         response = self.client.get(self.other_url, data=self.other_form_data, follow=True)
-        self.assertFalse(response.status_code == 200)
+        self.assertTrue(response.status_code==403)
 
     ''' Administrator and Director login tests '''
 

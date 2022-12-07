@@ -28,31 +28,37 @@ def request_status(request):
 def edit_lesson(request, LessonRequestID):
     try:
         lesson_request = LessonRequest.objects.filter(id=LessonRequestID).get()
-    except ObjectDoesNotExist:
-        return HttpResponseBadRequest(HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
-
-    logged_in_user = Student.objects.get(id=request.user.id)
-    if lesson_request.student_id != request.user.id and logged_in_user.is_staff == False and logged_in_user.is_superuser == False:
-        return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+    except LessonRequest.DoesNotExist:
+        return HttpResponseBadRequest(_HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
 
     if request.method == 'POST':
         if lesson_request.is_authorised:
             return HttpResponseForbidden(LESSON_AUTHORISED_MSG)
+
+        if not request.user.is_staff:
+            if lesson_request.student_id != request.user.id:
+                return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+
+        update_lesson = Lesson.objects.filter(id=lesson_request.lesson_id).update(
+            lesson_name = request.POST.get('lesson_name'),
+            student_availability = request.POST.get('student_availability'),
+            number_of_lessons = request.POST.get('number_of_lessons'),
+            interval = request.POST.get('interval'),
+            duration = request.POST.get('duration'),
+            term_period = request.POST.get('term_period'),
+            additional_information = request.POST.get('additional_information')
+        )
+
+        if request.user.is_staff:
+            return redirect('admin_panel')
         else:
-            update_lesson = Lesson.objects.filter(id=lesson_request.lesson_id).update(
-                lesson_name = request.POST.get('lesson_name'),
-                student_availability = request.POST.get('student_availability'),
-                number_of_lessons = request.POST.get('number_of_lessons'),
-                interval = request.POST.get('interval'),
-                duration = request.POST.get('duration'),
-                term_period = request.POST.get('term_period'),
-                additional_information = request.POST.get('additional_information')
-            )
-            if logged_in_user.is_staff == True or logged_in_user.is_superuser == True:
-                return redirect('admin_panel')
-            else:
-                return redirect('request_status')
+            return redirect('request_status')
+
     else:
+        if not request.user.is_staff:
+            if lesson_request.student_id != request.user.id:
+                return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+
         edit_form = LessonRequestForm(
             initial={
                 'lesson_name':lesson_request.lesson.lesson_name,
@@ -64,35 +70,25 @@ def edit_lesson(request, LessonRequestID):
                 'additional_information':lesson_request.lesson.additional_information,
                 }
             )
-
         return render(request, 'edit_lesson.html', {'edit_lesson_form': edit_form, 'lessonID': LessonRequestID})
 
 
 @login_required
 def cancel_lesson(request, LessonRequestID):
     try:
-        lesson_request = LessonRequest.objects.filter(id=LessonRequestID)
+        lesson_request = LessonRequest.objects.filter(id=LessonRequestID).get(id=LessonRequestID)
     except LessonRequest.DoesNotExist:
-        return HttpResponseBadRequest(HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
+        return HttpResponseBadRequest(_HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
 
-
-    if not lesson_request.exists():
-        return HttpResponseBadRequest(LESSON_CANNOT_CANCEL_TWICE_MSG)
-    elif lesson_request.get().student_id != request.user.id:
-        return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
-    elif lesson_request.get().is_authorised:
+    if lesson_request.is_authorised:
         return HttpResponseForbidden(LESSON_AUTHORISED_MSG)
-    else:
-        logged_in_user = Student.objects.get(id=request.user.id)
-        lesson_request = lesson_request.get(student_id=logged_in_user.id)
-        student_user = (logged_in_user.is_staff == False and logged_in_user.is_superuser == False)
 
-        if student_user and lesson_request.student_id != logged_in_user.id:
+    if request.user.is_staff:
+        lesson_request.delete()
+        return redirect('admin_panel')
+    else:
+        if lesson_request.student_id != request.user.id:
             return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
         else:
             lesson_request.delete()
-
-    if not student_user:
-        return redirect('admin_panel')
-    else:
-        return redirect('request_status')
+            return redirect('request_status')
