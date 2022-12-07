@@ -14,7 +14,7 @@
         <table class="table table-bordered border-dark">
             <thead class="table-light">
                     <tr>
-                        <th>ID</th> 
+                        <th>Request ID</th> 
                         <th>User</th>
                         <th>Lesson</th>
                         <th>Authorised?</th>
@@ -44,7 +44,7 @@
                         </td>
 
                         <td>
-                            {%if request.is_authorised == False%}
+                            {%if request.is_authorised == False or user.is_superuser%}
                             <form action="{% url 'delete_booking' request.id %}" method="post">
                                 {%csrf_token%}
                                 <input type="submit" value="Delete" class="lessons btn small-button">
