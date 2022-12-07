@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db import IntegrityError
 from django.db.models import Max
-import lessons.views_folder.admin_panel as admin
+import lessons.views_folder.AdminPanel as admin
 
 
 def home(request):
@@ -15,7 +15,7 @@ def home(request):
 
 def booking(request):
     return render(request,'booking.html')
-    
+
 @login_required(login_url='log_in')
 def contact(request):
     return render(request,'contact.html')
@@ -77,7 +77,7 @@ def invoice(request):
     logged_in_user=request.user
     invoices = Invoice.objects.filter(student_id=logged_in_user.id).all()
     filter_invoices= invoices.filter(is_fulfilled = False).all()
-   
+
     totalPrice = 50 * len(filter_invoices)
     return render(request, 'invoice.html', {'invoices':invoices, 'totalPrice': totalPrice})
 

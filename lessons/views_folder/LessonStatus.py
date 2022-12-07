@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.auth.decorators import login_required
 from lessons.models import Lesson, LessonRequest, Student
 from lessons.forms import LessonRequestForm
-from lessons.views_folder import HttpResponseConstantMsg
+from lessons.views_folder import _HttpResponseConstantMsg
 
 ''' Constant Messages '''
 LESSON_AUTHORISED_MSG = "Lesson has been authorised and cannot be edited."
@@ -32,13 +32,13 @@ def edit_lesson(request, LessonRequestID):
     try:
         lesson_request = LessonRequest.objects.filter(id=LessonRequestID).get()
     except ObjectDoesNotExist:
-        return HttpResponseBadRequest(HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
+        return HttpResponseBadRequest(_HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
     except MultipleObjectsReturned:
-        return HttpResponseBadRequest(HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
+        return HttpResponseBadRequest(_HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
 
     logged_in_user = Student.objects.get(id=request.user.id)
     if lesson_request.student_id != request.user.id and logged_in_user.is_staff == False and logged_in_user.is_superuser == False:
-        return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+        return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
 
     if request.method == 'POST':
         if lesson_request.is_authorised:
@@ -55,7 +55,7 @@ def edit_lesson(request, LessonRequestID):
             )
             if logged_in_user.is_staff == True or logged_in_user.is_superuser == True:
                 return redirect('admin_panel')
-            else:                    
+            else:
                 return redirect('request_status')
     else:
         edit_form = LessonRequestForm(
@@ -68,8 +68,8 @@ def edit_lesson(request, LessonRequestID):
                 'term_period':lesson_request.lesson.term_period,
                 'additional_information':lesson_request.lesson.additional_information,
                 }
-            )   
-        
+            )
+
         return render(request, 'edit_lesson.html', {'edit_lesson_form': edit_form, 'lessonID': LessonRequestID})
 
 
@@ -78,29 +78,29 @@ def cancel_lesson(request, LessonRequestID):
     try:
         lesson_request = LessonRequest.objects.filter(id=LessonRequestID)
     except ObjectDoesNotExist:
-        return HttpResponseBadRequest(HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
+        return HttpResponseBadRequest(_HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
     except MultipleObjectsReturned:
-        return HttpResponseBadRequest(HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
+        return HttpResponseBadRequest(_HttpResponseConstantMsg.MULTIPLE_RECORDS_FOUND_MSG)
 
-    
+
 
     if request.method == 'POST':
         if not lesson_request.exists():
             return HttpResponseBadRequest(LESSON_CANNOT_CANCEL_TWICE_MSG)
         elif lesson_request.get().student_id != request.user.id:
-            return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+            return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
         elif lesson_request.get().is_authorised:
             return HttpResponseForbidden(LESSON_AUTHORISED_MSG)
         else:
-        
+
             logged_in_user = Student.objects.get(id=request.user.id)
             lesson_request = lesson_request.get(student_id=logged_in_user.id)
             if lesson_request.student_id != request.user.id and logged_in_user.is_staff == False and logged_in_user.is_superuser == False:
-                return HttpResponseForbidden(HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+                return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
             else:
                 lesson_request.delete()
-    
+
     if logged_in_user.is_staff == True or logged_in_user.is_superuser == True:
         return redirect('admin_panel')
-    else:                    
+    else:
         return redirect('request_status')
