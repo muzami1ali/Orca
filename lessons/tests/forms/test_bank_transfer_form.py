@@ -9,14 +9,14 @@ class BankTransferFormTestCase(TestCase):
 
     def setUp(self):
         self.form_input = {
-            "invoice": "001-01", 
+            "invoice": "001-01",
             "first_name":"John",
             "last_name": "Doe",
             "account_number": "12345678",
             "sort_code": "123456",
             "amount": "50"
         }
-    
+
     def test_valid_bank_transfer_form(self):
         form = BankTransferForm(data=self.form_input)
         self.assertTrue(form.is_valid())
@@ -94,4 +94,7 @@ class BankTransferFormTestCase(TestCase):
         self.assertEqual(bank_transfer.sort_code, '123456')
         self.assertEqual(bank_transfer.amount, 50)
 
-        
+    ''' Functions for test case '''
+    def _form_is_valid(self):
+        self.form = BankTransferForm(data=self.form_data)
+        self.assertTrue(self.form.is_valid())
