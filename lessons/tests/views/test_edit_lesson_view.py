@@ -17,6 +17,8 @@ class EditLessonViewTestCase(TestCase):
         'lessons/tests/fixtures/default_lesson.json',
         'lessons/tests/fixtures/other_student.json',
         'lessons/tests/fixtures/other_lesson.json',
+        'lessons/tests/fixtures/default_administrator_user.json',
+        'lessons/tests/fixtures/default_director_user.json',
     ]
 
     def setUp(self):
@@ -130,6 +132,25 @@ class EditLessonViewTestCase(TestCase):
         self.other_url = reverse('edit_lesson', kwargs={'LessonRequestID': self.other_lesson_request.id})
         response = self.client.get(self.other_url, data=self.other_form_data, follow=True)
         self.assertFalse(response.status_code == 200)
+
+    ''' Administrator and Director login tests '''
+
+    def test_that_administrator_redirected_to_admin_panel(self):
+        self.administrator = Student.objects.get(username='Petra.Pickles@example.org')
+        self.client.login(username=self.administrator.username, password='Password123')
+        response = self.client.post(self.url, data=self.form_data, follow=True)
+        response_url = reverse('admin_panel')
+        self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'admin_panel.html')
+
+
+    def test_that_director_redirected_to_admin_panel(self):
+        self.director = Student.objects.get(username='Marty.Major@example.org')
+        self.client.login(username=self.director.username, password='Password123')
+        response = self.client.post(self.url, data=self.form_data, follow=True)
+        response_url = reverse('admin_panel')
+        self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'admin_panel.html')
 
 
     ''' Functions for test class '''

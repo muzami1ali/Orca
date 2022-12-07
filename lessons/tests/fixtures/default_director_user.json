@@ -1,6 +1,6 @@
 [
   {
-    "model": "lessons.student",
+    "model": "lessons.Student",
     "pk": 4,
     "fields": {
         "username": "Marty.Major@example.org",

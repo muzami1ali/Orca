@@ -72,27 +72,27 @@ def edit_lesson(request, LessonRequestID):
 def cancel_lesson(request, LessonRequestID):
     try:
         lesson_request = LessonRequest.objects.filter(id=LessonRequestID)
-    except ObjectDoesNotExist:
+    except LessonRequest.DoesNotExist:
         return HttpResponseBadRequest(HttpResponseConstantMsg.DOES_NOT_EXIST_MSG)
 
 
-    if request.method == 'POST':
-        if not lesson_request.exists():
-            return HttpResponseBadRequest(LESSON_CANNOT_CANCEL_TWICE_MSG)
-        elif lesson_request.get().student_id != request.user.id:
+    if not lesson_request.exists():
+        return HttpResponseBadRequest(LESSON_CANNOT_CANCEL_TWICE_MSG)
+    elif lesson_request.get().student_id != request.user.id:
+        return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
+    elif lesson_request.get().is_authorised:
+        return HttpResponseForbidden(LESSON_AUTHORISED_MSG)
+    else:
+        logged_in_user = Student.objects.get(id=request.user.id)
+        lesson_request = lesson_request.get(student_id=logged_in_user.id)
+        student_user = (logged_in_user.is_staff == False and logged_in_user.is_superuser == False)
+
+        if student_user and lesson_request.student_id != logged_in_user.id:
             return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
-        elif lesson_request.get().is_authorised:
-            return HttpResponseForbidden(LESSON_AUTHORISED_MSG)
         else:
+            lesson_request.delete()
 
-            logged_in_user = Student.objects.get(id=request.user.id)
-            lesson_request = lesson_request.get(student_id=logged_in_user.id)
-            if lesson_request.student_id != request.user.id and logged_in_user.is_staff == False and logged_in_user.is_superuser == False:
-                return HttpResponseForbidden(_HttpResponseConstantMsg.OTHER_USER_RECORD_MSG)
-            else:
-                lesson_request.delete()
-
-    if logged_in_user.is_staff == True or logged_in_user.is_superuser == True:
+    if not student_user:
         return redirect('admin_panel')
     else:
         return redirect('request_status')
