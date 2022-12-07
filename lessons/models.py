@@ -11,11 +11,7 @@ class Student(AbstractUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     
-    def generate_invoice_number(self):
-      random_uuid=str(uuid.uuid4())
-      
-      return f'{self.id}-{random_uuid}'
-
+  
 
 class Lesson(models.Model):
     LESSON_CHOICES =[

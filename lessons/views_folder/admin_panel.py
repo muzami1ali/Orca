@@ -1,9 +1,8 @@
 
-from lessons.models import Lesson,LessonRequest,Student,Invoice,BankTransfer
-from django.views import View
+from lessons.models import LessonRequest,Invoice,BankTransfer,Lesson,Student
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
-from django.urls import reverse
+
 
 
 @login_required(login_url='log_in')
@@ -17,7 +16,8 @@ def admin_panel(request):
         invoice=Invoice.objects.all()
         # bank_transfer=BankTransfer.objects.filter(is_approved=False).all()
         bank_transfer=BankTransfer.objects.all()
-        return render(request,'admin_panel.html', {'lesson_request': lesson_request,'invoices':invoice,'bank_transfer':bank_transfer})
+        curent_user=request.user
+        return render(request,'admin_panel.html', {'lesson_request': lesson_request,'invoices':invoice,'bank_transfer':bank_transfer,'user':curent_user})
 
 @login_required(login_url='log_in')
 def approve_lesson(request,LessonRequestID):
@@ -30,11 +30,22 @@ def approve_lesson(request,LessonRequestID):
     reference=f'{user.id}-{inv.id}'
     inv.invoice=reference
     Invoice.objects.filter(id=inv.id).update(invoice=reference)
+   
+          
     return redirect('admin_panel')
 
 @login_required(login_url='log_in')
 def delete_booking(request,LessonRequestID):
-    LessonRequest.objects.filter(id=LessonRequestID).delete()
+    lesson_request=LessonRequest.objects.filter(id=LessonRequestID).get()
+    user=lesson_request.student
+    lessons=lesson_request.lesson
+    if lesson_request.is_authorised==False:
+         LessonRequest.objects.filter(id=LessonRequestID).delete()
+    else:
+          LessonRequest.objects.filter(id=LessonRequestID).delete()
+          Invoice.objects.filter(lesson=lessons,student=user).delete()
+        
+        
     return redirect('admin_panel')
 
 @login_required(login_url='log_in')
