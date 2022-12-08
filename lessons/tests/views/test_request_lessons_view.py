@@ -7,7 +7,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.core.exceptions import ValidationError
-from lessons.models import Student, Lesson
+from lessons.models import Student, Lesson, LessonRequest
 from lessons.tests.helpers import reverse_with_next
 from django.db import IntegrityError
 
@@ -37,10 +37,13 @@ class RequestLessonsViewTestCase(TestCase):
         self.assertRedirects(response, redirect_url, status_code=302, target_status_code=200)
         self.assertTemplateUsed(response, 'log_in.html')
 
-    def test_can_book_valid_lesson(self):
+    def test_can_book_unique_lesson(self):
         self.client.login(username=self.student.username, password='Password123')
-        response = self.client.post(self.url, data=self.form_data)
+        response = self.client.post(self.url, data=self.form_data, follow=True)
         self.assertEqual(Lesson.objects.count(), 1)
+        self.assertEqual(LessonRequest.objects.count(), 1)
+        self.assertRedirects(response, reverse('request_lessons'), status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'request_lessons.html')
 
     def test_can_book_lesson_without_additional_information(self):
         self.client.login(username=self.student.username, password='Password123')
@@ -55,7 +58,7 @@ class RequestLessonsViewTestCase(TestCase):
         self.assertTrue(response.status_code==400)
         self.assertEqual(Lesson.objects.count(), 0)
 
-    def test_cannot_book_same_lesson_twice(self):
+    def test_cannot_book_duplicate_lesson(self):
         self.client.login(username=self.student.username, password='Password123')
         self.client.post(self.url, data=self.form_data)
         response = self.client.post(self.url, data=self.form_data)
@@ -69,11 +72,14 @@ class RequestLessonsViewTestCase(TestCase):
         self.assertTrue(response.status_code==400)
         self.assertEqual(Lesson.objects.count(), 0)
 
-    def test_can_book_other_lesson_when_have_booked_lessons(self):
+    def test_can_book_another_lesson_when_have_booked_lessons(self):
         self.client.login(username=self.student.username, password='Password123')
-        response = self.client.post(self.url, data=self._other_lesson_form_data())
+        self.client.post(self.url, data=self.form_data)
+        self.form_data = self._blank_additional_information_form_data()
         response = self.client.post(self.url, data=self.form_data)
-        self.assertEqual(Lesson.objects.count(), 1)
+        print(response)
+        self.assertEqual(Lesson.objects.count(), 2)
+        self.assertEqual(LessonRequest.objects.count(), 2)
 
     ''' Functions for test class '''
 
@@ -104,15 +110,5 @@ class RequestLessonsViewTestCase(TestCase):
             "interval": 0,
             "duration": 0,
             "term_period": "",
-            "additional_information": ""
-            }
-
-    def _other_lesson_form_data(self):
-        {"lesson_name": "MUSIC_THEORY",
-            "student_availability": "MON",
-            "number_of_lessons": 7,
-            "interval": 1,
-            "duration": 30,
-            "term_period": "TERM4",
             "additional_information": ""
             }
