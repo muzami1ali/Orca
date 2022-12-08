@@ -2,8 +2,8 @@
 Invoice contains the views for the invoice webpage and includes authorise, decline,
 and a view to list the requests.
 
-@author Xiangyi Li
-@version 07/12/2022
+@author Xiangyi Li, Dean Whitbread
+@version 08/12/2022
 '''
 from django.shortcuts import render, redirect
 from django.views import View

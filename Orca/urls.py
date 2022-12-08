@@ -46,4 +46,4 @@ urlpatterns = [
 
 
 ]
-handler404 = "lessons.views.page_not_found_view.page_not_found_view"
+handler404 = "lessons.views._page_not_found_view.page_not_found_view"
