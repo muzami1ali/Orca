@@ -3,18 +3,14 @@
 <div class="container vh-100">
     <h1>Admin Panel</h1>
 
-    {% with messages=messages %}
-    {% for message in messages %}
-        {{ message }}
-    {% endfor %}
 {% endwith %}
     <h2>Lesson Request</h2>
     <div class="card card-body">
-        
+
         <table class="table table-bordered border-dark">
             <thead class="table-light">
                     <tr>
-                        <th>Request ID</th> 
+                        <th>Request ID</th>
                         <th>User</th>
                         <th>Lesson</th>
                         <th>Authorised?</th>
@@ -24,10 +20,10 @@
                     </tr>
             </thead>
             <tbody>
-            
+
                 {%for request in lesson_request%}
                     <tr>
-                        <td>{{request.id}}</td> 
+                        <td>{{request.id}}</td>
                         <td>{{request.student}}</td>
                         <td>{{request.lesson}}</td>
                         <td>{{request.is_authorised}}</td>
@@ -53,15 +49,15 @@
                                 <p>Contact director</p>
                             {%endif%}
                         </td>
-                    
+
                     </tr>
-                    
+
                 {%endfor%}
             <tbody>
         </table>
 
 </div>
-    
+
 
     <h2>All On going invoices</h2>
     <div class="card card-body">
@@ -121,7 +117,7 @@
                 <td>{{bank.amount}}</td>
                 <td>{{bank.status}}</td>
                 <td>{{bank.is_approved}}</td>
-               
+
                 <td>
                     {%if bank.amount == 50 and bank.is_approved == False%}
                     <form action="{% url 'approve_payment' bank.id %}" method="post">
@@ -136,7 +132,7 @@
                         {%endif%}
                     {%endif%}
                 </td>
-                
+
             </tr>
             {%endfor%}
         </tbody>

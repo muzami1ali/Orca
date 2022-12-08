@@ -6,7 +6,9 @@
     <div class="col-12 my-auto">
         <p class="p1"><a href='{%url 'home'%}'class = "btn "> Back </a> </p>
       <h1>Log in please</h1>
-
+      {% for message in messages %}
+          {{ message }}
+      {% endfor %}
       <form action = "{%url 'login' %}" method="post">
         {% csrf_token %}
         {% include 'partials/bootsrap_form.html' with form=form %}
