@@ -33,9 +33,13 @@
                         <td>{{request.lesson}}</td>
                         <td>{{request.is_authorised}}</td>
                         <td>
+                            {%if request.is_authorised%}
+                            <p> Cannot approve twice</p>
+                            {%else%}
                             <form action="{% url 'edit_lesson' request.id %}" method="get">
                                 <input type="submit" value="Edit" class="lessons btn small-button">
                             </form>
+                            {%endif%}
                         </td>
                         <td>
                             <form action="{% url 'approve_lesson' request.id %}" method="post">
