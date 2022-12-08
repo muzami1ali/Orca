@@ -29,19 +29,17 @@ class DealRequestTestCase(TestCase):
 
         self.url = ('authorise/' + str(self.lesson_request.id))
 
-    
+
     def test_lesson_request_is_valid(self):
-        
+
         self.assertIsNotNone(self.lesson_request)
 
-    
-    def test_lesson_request_count(self):   
+
+    def test_lesson_request_count(self):
         self.assertEqual(LessonRequest.objects.all().count(), 1)
-    
-    def test_lesson_request_authorise(self):   
+
+    def test_lesson_request_authorise(self):
         self.assertEqual(LessonRequest.objects.filter(is_authorised = False).all().count(), 1)
-    
-    def test_lesson_request_decline(self):   
+
+    def test_lesson_request_decline(self):
         self.assertEqual(LessonRequest.objects.filter(is_authorised = True).count(), 0)
-    
-    

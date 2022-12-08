@@ -23,7 +23,7 @@ def log_in(request):
                     return redirect('admin_panel')
                 login(request, user)
                 return redirect('request_lessons')
-            messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
+        messages.add_message(request, messages.ERROR, "The credentials provided were invalid!")
     form = LogInForm()
     return render(request, 'log_in.html', {'form': form})
 
