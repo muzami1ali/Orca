@@ -29,7 +29,7 @@ def request_lessons(request):
                     book_lesson = book_lesson.save()
                     LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
                 except ValueError:
-                    pass
+                    return HttpResponseBadRequest("Form cannot be incomplete.")
             else:
                 return HttpResponseBadRequest("Class cannot be booked twice")
 
@@ -39,7 +39,7 @@ def request_lessons(request):
                 book_lesson = book_lesson.save()
                 LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
             except ValueError:
-                pass
+                return HttpResponseBadRequest("Form cannot be incomplete.")
         return redirect('request_lessons')
     else:
         form = LessonRequestForm()
