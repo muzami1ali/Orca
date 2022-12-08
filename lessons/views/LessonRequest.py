@@ -13,21 +13,33 @@ from lessons.views._HttpResponseConstantMsg import CANNOT_BOOK_TWICE_MSG
 @login_required
 def request_lessons(request):
     if request.method == "POST":
-        for previous_lesson in LessonRequest.objects.filter(id=request.user.id):
-            if previous_lesson.lesson.equal_to(request):
-                return HttpResponseBadRequest(CANNOT_BOOK_TWICE_MSG)
+        if LessonRequest.objects.filter(student_id=request.user.id).exists():
+            student_booked_lessons = LessonRequest.objects.filter(student_id=request.user.id)
+            duplicate_lesson = False
 
-        # for previous_lesson in Lesson.objects.all():
-        #     if previous_lesson.lesson.equal_to(request):
-        #         return HttpResponseBadRequest(CANNOT_BOOK_TWICE_MSG)
+            for lesson_request in student_booked_lessons:
+                lesson = Lesson.objects.get(id=lesson_request.lesson_id)
+                if lesson.equal_to(request):
+                    duplicate_lesson = True
+                    break
 
-        try:
-            book_lesson = LessonRequestForm(request.POST)
-            book_lesson = book_lesson.save()
-            LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
-        except ValueError:
-            return HttpResponseBadRequest("Cannot submit incomplete form.")
+            if not duplicate_lesson:
+                try:
+                    book_lesson = LessonRequestForm(request.POST)
+                    book_lesson = book_lesson.save()
+                    LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
+                except ValueError:
+                    return HttpResponseBadRequest("Form cannot be incomplete.")
+            else:
+                return HttpResponseBadRequest("Class cannot be booked twice")
 
+        else:
+            try:
+                book_lesson = LessonRequestForm(request.POST)
+                book_lesson = book_lesson.save()
+                LessonRequest.objects.create(student_id=request.user.id, lesson_id=book_lesson.id)
+            except ValueError:
+                return HttpResponseBadRequest("Form cannot be incomplete.")
         return redirect('request_lessons')
     else:
         form = LessonRequestForm()

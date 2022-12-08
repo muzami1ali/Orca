@@ -31,7 +31,6 @@ class AuthoriseTestCase(TestCase):
 
 
     def test_url_is_valid(self):
-
         self.assertEqual(self.url, f'authorise/{self.lesson_request.id}')
 
 
