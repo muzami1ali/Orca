@@ -17,19 +17,22 @@
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th scope="col">Number</th>
+          <th scope='col'>Invoice</th>
           <th scope="col">Student Name</th>
           <th scope="col">Lesson Name</th>
-        <th scope="col">Price</th>
+          
+          <th scope="col">Price</th>
 
           </tr>
         </thead>
         <tbody>
           {% for t in invoices %}
-          <tr>
-              <th>{{t.id}}</th>
+          <tr> 
+            <td>{{t.invoice}}
+              
               <td>{{t.student.username}}</td>
               <td>{{t.lesson.lesson_name}}</td>
+             
               <td>50</td>
 
             </tr>
