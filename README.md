@@ -9,7 +9,7 @@ The members of the team are:
 - *Harshit Sharma*
 
 ## Project structure
-The project is called `msms` (Music School Management System).  It currently consists of a single app `lessons` where all functionality resides.
+The project is called `Orca` (Music School Management System).  It currently consists of a single app `lessons` where all functionality resides.
 
 ## Deployed version of the application
 The deployed version of the application can be found at http://harrysharma1.pythonanywhere.com/
