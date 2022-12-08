@@ -11,12 +11,12 @@ class UserAdmin(admin.ModelAdmin):
        elif request.user.is_superuser:
            return qs
        return qs.filter(author=request.user)
-    
-    
+
+
    list_display=[
        'id','username','first_name','last_name','is_active','password','is_staff','is_superuser',
    ]
-   
+
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
@@ -31,14 +31,14 @@ class BankTransferAdmin(admin.ModelAdmin):
     list_display=[
         'invoice', 'first_name', 'last_name', 'account_number', 'sort_code', 'amount' ,'is_approved'
     ]
-   
+
 
 @admin.register(LessonRequest)
 class LessonRequestAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'student_id', 'student', 'lesson_id', 'lesson','is_authorised',
     ]
-    
+
     actions=['enable_selected','disable_selected']
     def enable_selected(self,request,queryset):
         queryset.update(is_authorised=True)
@@ -46,8 +46,8 @@ class LessonRequestAdmin(admin.ModelAdmin):
         queryset.update(is_authorised=False)
     enable_selected.short_description="Authorise the lessons"
     disable_selected.short_description="Revoke the lesson's authorisation"
-   
-        
+
+
 
 
 @admin.register(Invoice)
@@ -55,4 +55,3 @@ class Invoice(admin.ModelAdmin):
     list_display=[
         'id','student_id', 'student', 'lesson','invoice',
     ]
-
