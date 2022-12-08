@@ -2,14 +2,7 @@
 AdminPanel contains the views for administartor and director views.
 @author Harry Sharma
 @version 06/12/2022
-<<<<<<< HEAD
 '''
-=======
-@author Harry Sharma
-@version 06/12/2022
-'''
-
->>>>>>> 2a1a349eed0a541a81d71987c8183ed13c380075
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
 from lessons.models import Lesson, LessonRequest, Student, Invoice, BankTransfer
