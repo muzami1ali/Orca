@@ -3,16 +3,16 @@ html,body{
 }
 body{height:100vh;
       padding-top: 65px;
-
     }
-div{
-  overflow:hidden;
-}
+
 
 #cover-image {
 
-  background : url('images/background.jpg');
-  background-size: 100% 100%;
+  background : url('images/background.jpg')100% no-repeat fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: 100%;
+  -o-background-size: cover;
 }
 #nav-icon {
   height:50px;
