@@ -20,25 +20,29 @@
           <th scope='col'>Invoice</th>
           <th scope="col">Student Name</th>
           <th scope="col">Lesson Name</th>
-          
+
           <th scope="col">Price</th>
 
           </tr>
         </thead>
         <tbody>
+        {% if totalPrice > 0 %}
           {% for t in invoices %}
-          <tr> 
+          <tr>
             <td>{{t.invoice}}
-              
+
               <td>{{t.student.username}}</td>
               <td>{{t.lesson.lesson_name}}</td>
-             
+
               <td>50</td>
 
             </tr>
           {% endfor %}
-
-
+        {% else %}
+        <tr>
+          <td>{{ message }}
+        </tr>
+        {% endif %}
         </tbody>
       </table>
     </div>
