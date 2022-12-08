@@ -43,7 +43,7 @@ class InvoiceViewTestClass(TestCase):
 
     def test_no_invoice_shows_when_invoice_is_fulfilled(self):
         self.client.login(username=self.student.username, password='Password123')
-        self.invoice.is_fulfilled = True
+        Invoice.objects.filter(id=self.invoice.id).update(is_fulfilled=True)
         response = self.client.get(self.url)
         self.assertTrue(response.status_code==200)
         self.assertEqual(response.context['totalPrice'], 0)
