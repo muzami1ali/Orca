@@ -12,8 +12,8 @@ class AdminPanelViewTestCase(TestCase):
        'lessons/tests/fixtures/admin_user_superuser_other.json',
        'lessons/tests/fixtures/default_student.json',
        'lessons/tests/fixtures/default_lesson.json'
-
     ]
+    
     def setUp(self):
         self.url=reverse('admin_panel')
         self.student=Student.objects.get(username='John.Doe@example.org')
@@ -22,14 +22,12 @@ class AdminPanelViewTestCase(TestCase):
         self.superuser=Student.objects.get(username='Sherlock.Holmes@example.org')
         self.other_superuser=Student.objects.get(username='James.Moriarty@example.org')
 
-
     def test_only_valid_users_can_access_admin(self):
         self.assertTrue(self.staff_user.is_staff)
         self.assertTrue(self.other_staff_user.is_staff)
         self.assertTrue(self.superuser.is_superuser and self.superuser.is_staff)
         self.assertTrue(self.other_superuser.is_superuser and self.other_superuser.is_staff)
         self.assertFalse(self.student.is_superuser or self.student.is_staff or( self.student.is_superuser and self.student.is_staff))
-
 
     def test_url_is_valid(self):
          self.assertEqual(self.url, f'/dashboard/admin/')
