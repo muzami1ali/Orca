@@ -1,3 +1,4 @@
 [run]
 branch = True
-omit = *__init__.py,manage.py,*migrations*,*settings.py,*tests*
+omit = *__init__.py,manage.py,*migrations*,*settings.py,*tests*,
+        lessons/admin.py,lessons/views/_*,Orca/urls.py,lessons/apps.py,

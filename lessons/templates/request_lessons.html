@@ -3,10 +3,22 @@
 {% block content%}
 <div class="container vh-100">
   <h1>Request Lessons</h1>
+  <table style = "width: 100%;border-collapse: separate;border-spacing: 0 15px; ">
+  {%for message in lesson_form %}
+  <tr >
+    <td style = "font-size:20px";>
+      {{message.label_tag}}
+    </td>
+    <td>
+        {{message}}
+    </td>
+
+  </tr>
+  {% endfor %}
+</table>
   <form action="{% url 'request_lessons' %}" method="post">
     {% csrf_token %}
-    {{ lesson_form.as_p }}
-    <input type="submit" value="Book" class = "btn small-button" > 
+    <input type="submit" value="Book" class = "btn small-button" >
   </form>
 </div>
 {% endblock%}

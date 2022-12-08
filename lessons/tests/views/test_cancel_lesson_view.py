@@ -18,6 +18,8 @@ class CancelLessonViewTestCase(TestCase):
         'lessons/tests/fixtures/default_lesson.json',
         'lessons/tests/fixtures/other_student.json',
         'lessons/tests/fixtures/other_lesson.json',
+        'lessons/tests/fixtures/default_administrator_user.json',
+        'lessons/tests/fixtures/default_director_user.json',
     ]
 
     def setUp(self):
@@ -28,6 +30,7 @@ class CancelLessonViewTestCase(TestCase):
             lesson_id = self.lesson.id,
             is_authorised = False,
         )
+        self.form_data = {'LessonRequestID':self.lesson_request.id}
         self.url = reverse('cancel_lesson', kwargs={'LessonRequestID': self.lesson_request.id})
 
     ''' Test cases for the cancel lesson view. '''
@@ -42,13 +45,13 @@ class CancelLessonViewTestCase(TestCase):
 
     def test_can_cancel_listed_lesson(self):
         self.client.login(username=self.student.username, password='Password123')
-        response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id})
+        response = self.client.post(self.url, data=self.form_data)
         self.assertEqual(LessonRequest.objects.count(), 0)
 
     def test_cannot_cancel_the_same_lesson_twice(self):
         self.client.login(username=self.student.username, password='Password123')
-        response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id})
-        response = self.client.post(self.url, data={'LessonRequestID':self.lesson_request.id}, follow=True)
+        response = self.client.post(self.url, data=self.form_data)
+        response = self.client.post(self.url, data=self.form_data)
         self.assertTrue(response.status_code==400)
 
     def test_cannot_cancel_lesson_belonging_to_other_student(self):
@@ -63,6 +66,30 @@ class CancelLessonViewTestCase(TestCase):
         LessonRequest.objects.filter(id=self.lesson_request.id).update(is_authorised=True)
         response = self.client.post(self.url, follow=True)
         self.assertFalse(response.status_code==200)
+
+    def test_cannot_cancel_non_existent_lesson(self):
+        self.client.login(username=self.student.username, password='Password123')
+        response = self.client.post(self.url, data=self.form_data)
+        response = self.client.post(self.url, data=self.form_data)
+        self.assertTrue(response.status_code==400)
+
+    def test_that_administrator_redirected_to_admin_panel(self):
+        self.administrator = Student.objects.get(username='Petra.Pickles@example.org')
+        self.client.login(username=self.administrator.username, password='Password123')
+        response = self.client.post(self.url, data=self.form_data, follow=True)
+        response_url = reverse('admin_panel')
+        self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'admin_panel.html')
+
+
+    def test_that_director_redirected_to_admin_panel(self):
+        self.director = Student.objects.get(username='Marty.Major@example.org')
+        self.client.login(username=self.director.username, password='Password123')
+        response = self.client.post(self.url, data=self.form_data, follow=True)
+        response_url = reverse('admin_panel')
+        self.assertRedirects(response, response_url, status_code=302, target_status_code=200)
+        self.assertTemplateUsed(response, 'admin_panel.html')
+
 
     ''' Functions for test class '''
     def _create_other_lesson_request(self):

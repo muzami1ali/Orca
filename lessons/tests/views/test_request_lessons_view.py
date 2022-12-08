@@ -51,24 +51,29 @@ class RequestLessonsViewTestCase(TestCase):
     def test_cannot_book_invalid_lesson(self):
         self.client.login(username=self.student.username, password='Password123')
         self.form_data = self._incorrect_form_data()
-        with self.assertRaises(ValueError):
-            response = self.client.post(self.url, data=self.form_data)
-            self.assertEqual(Lesson.objects.count(), 0)
+        response = self.client.post(self.url, data=self.form_data)
+        self.assertTrue(response.status_code==400)
+        self.assertEqual(Lesson.objects.count(), 0)
 
     def test_cannot_book_same_lesson_twice(self):
         self.client.login(username=self.student.username, password='Password123')
-        response = self.client.post(self.url, data=self.form_data)
+        self.client.post(self.url, data=self.form_data)
         response = self.client.post(self.url, data=self.form_data)
         self.assertEqual(Lesson.objects.count(), 1)
-        self.assertFalse(response.status_code==200)
+        self.assertTrue(response.status_code==400)
 
     def test_cannot_submit_empty_form(self):
         self.client.login(username=self.student.username, password='Password123')
         self.form_data = self._empty_form_data()
-        with self.assertRaises(ValueError):
-            response = self.client.post(self.url, data=self.form_data)
-            self.assertEqual(Lesson.objects.count(), 0)
+        response = self.client.post(self.url, data=self.form_data)
+        self.assertTrue(response.status_code==400)
+        self.assertEqual(Lesson.objects.count(), 0)
 
+    def test_can_book_other_lesson_when_have_booked_lessons(self):
+        self.client.login(username=self.student.username, password='Password123')
+        response = self.client.post(self.url, data=self._other_lesson_form_data())
+        response = self.client.post(self.url, data=self.form_data)
+        self.assertEqual(Lesson.objects.count(), 1)
 
     ''' Functions for test class '''
 
@@ -99,5 +104,15 @@ class RequestLessonsViewTestCase(TestCase):
             "interval": 0,
             "duration": 0,
             "term_period": "",
+            "additional_information": ""
+            }
+
+    def _other_lesson_form_data(self):
+        {"lesson_name": "MUSIC_THEORY",
+            "student_availability": "MON",
+            "number_of_lessons": 7,
+            "interval": 1,
+            "duration": 30,
+            "term_period": "TERM4",
             "additional_information": ""
             }

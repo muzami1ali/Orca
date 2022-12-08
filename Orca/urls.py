@@ -38,8 +38,6 @@ urlpatterns = [
     path('booking/status/edit/<int:LessonRequestID>/', LessonStatus.edit_lesson, name='edit_lesson'),
     path('booking/status/cancel/<int:LessonRequestID>/', LessonStatus.cancel_lesson, name='cancel_lesson'),
     path('booking/invoice/', Invoice.invoice, name='invoice'),
-    path('deal_requests/', Invoice.deal_requests, name='deal_requests'),
-    path('deal_requests/authorise/<int:nid>', Invoice.authorise, name='authorise'),
-    path('deal_requests/decline/<int:nid>', Invoice.decline, name='decline'),
     path('contact-us/', ContactUs.contact, name='contact-us')
 ]
+handler404 = "lessons.views._page_not_found_view.page_not_found_view"
