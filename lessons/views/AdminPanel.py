@@ -2,11 +2,7 @@
 AdminPanel contains the views for administartor and director views.
 @author Harry Sharma
 @version 06/12/2022
-@author Harry Sharma
-@version 06/12/2022
 '''
-
-from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
 from lessons.models import Lesson, LessonRequest, Student, Invoice, BankTransfer
@@ -22,10 +18,10 @@ def admin_panel(request):
             invoice=Invoice.objects.all()
             bank_transfer=BankTransfer.objects.all()
             current_user=request.user
-        
         return render(request,'admin_panel.html', {'lesson_request': lesson_request,'invoices':invoice,'bank_transfer':bank_transfer,'user':current_user})
     else:
-        return redirect('request_lessons')       
+        return redirect('request_lessons')
+
 
 @login_required
 def approve_lesson(request,LessonRequestID):
